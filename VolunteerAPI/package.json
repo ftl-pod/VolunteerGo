@@ -1,0 +1,25 @@
+{
+  "name": "volunteergo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./server.js"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ftl-pod/VolunteerGo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ftl-pod/VolunteerGo/issues"
+  },
+  "homepage": "https://github.com/ftl-pod/VolunteerGo#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

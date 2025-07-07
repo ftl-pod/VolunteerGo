@@ -13,8 +13,8 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <Router>
-      <div>
+    <Router>  
+      <div className="App">        
         {/* Navigation Links */}
         <nav>
           <Link to="/">HomePage</Link> |{' '}

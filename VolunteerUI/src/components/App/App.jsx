@@ -1,34 +1,40 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import './App.css'
+
+import HomePage from '../HomePage/HomePage'
+import SearchPage from '../SearchPage/SearchPage'
+import LoginPage from '../LoginPage/LoginPage'
+import SignupPage from '../SignupPage/SignupPage'
+import ProfilePage from '../ProfilePage/ProfilePage'
+import Leaderboard from '../Leaderboard/Leaderboard'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
+    <Router>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        {/* Navigation Links */}
+        <nav>
+          <Link to="/">HomePage</Link> |{' '}
+          <Link to="/search">SearchPage</Link> |{' '}
+          <Link to="/login">LoginPage</Link> |{' '}
+          <Link to="/signup">SignupPage</Link> |{' '}
+          <Link to="/profile">ProfilePage</Link> |{' '}
+          <Link to="/leaderboard">Leaderboard</Link>
+        </nav>
+        {/* Routes */}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </Router>
   )
 }
 

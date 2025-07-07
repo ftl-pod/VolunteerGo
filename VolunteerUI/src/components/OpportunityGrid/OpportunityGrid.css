@@ -1,0 +1,135 @@
+h1{
+    font-family: 'Poppins', sans-serif;
+}
+
+.opportunities-section {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    width: 100%;
+}
+
+.section-title {
+  color: var(--header-color);
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.opportunity-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.opportunity-card {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease;
+}
+
+.opportunity-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.card-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.card-org {
+    color: var(--subtitle-color);
+    font-size: 1rem;
+    margin-top: 0.25rem;
+    font-weight: bold;
+}
+
+.card-type {
+    background-color: var(--tertiary-color);
+    color: var(--secondary-color);
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.card-description {
+    color: var(--text-color);
+    font-size: 1rem;
+    line-height: 1.4;
+    margin: 5px 0px 20px 0px;
+}
+
+.card-details {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+  color: var(--subtitle-color);
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.card-tag {
+  background-color: var(--tertiary-color);
+  color: var(--secondary-color);;
+  padding: 0.3rem 0.7rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+}
+
+.card-actions {
+  display: flex;
+  gap: 1rem;
+  max-width: 300px;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    flex-grow: 1;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-grow: 1;
+}
+
+.btn-secondary:hover {
+    background-color: var(--tertiary-color);
+}

@@ -1,20 +1,39 @@
 import './NavBar.css'
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { FaUserCircle } from "react-icons/fa";
 
-function NavBar() {
+function Navbar() {
+    const [isLoggedIn, setIsLoggedIn] = useState(true); // TEMP for example
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        // TODO: Call your actual logout logic (e.g. clear token, reset auth context)
+        setIsLoggedIn(false);
+        navigate('/login');
+    };
+
     return (
         <nav className="navbar">
-            <div className="navbar-content">
-                <div className="logo">OpportunityHub</div>
-                <ul className="nav-links">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#search">Search</a></li>
-                    <li><a href="#login">Login</a></li>
-                    <li><a href="#signup">Signup</a></li>
-                    <li><a href="#profile">Profile</a></li>
-                </ul>
-            </div>
+        <NavLink to="/" className="nav-link">Home</NavLink>
+        <NavLink to="/search" className="nav-link">Search</NavLink>
+        <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
+
+        {isLoggedIn ? (
+            <>
+            <NavLink to="/profile" className="profile-icon">
+                <FaUserCircle size={20} />
+            </NavLink>
+            <button className="logout-button" onClick={handleLogout}>Logout</button>
+            </>
+        ) : (
+            <>
+            <NavLink to="/login" className="nav-link">Login</NavLink>
+            <NavLink to="/signup" className="nav-link">Sign Up</NavLink>
+            </>
+        )}
         </nav>
     );
-}
+    }
 
-export default NavBar
+export default Navbar;

@@ -51,7 +51,7 @@ h1{
 
 .card-org {
     color: var(--subtitle-color);
-    font-size: 1rem;
+    font-size: 1.25rem;
     margin-top: 0.25rem;
     font-weight: bold;
 }

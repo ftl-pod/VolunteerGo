@@ -22,7 +22,6 @@ function OpportunityGrid() {
                                 <h3 className="card-title">{opportunity.title}</h3>
                                 <p className="card-org">{opportunity.organization}</p>
                             </div>
-                            <span className="card-type">{opportunity.type}</span>
                         </div>
                         <div className="card-details">
                             <span> {opportunity.location} | </span>

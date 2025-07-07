@@ -1,0 +1,25 @@
+.navbar {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  align-items: center;
+}
+
+.navbar a, .navbar button {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.profile-icon {
+  display: flex;
+  align-items: center;
+}
+
+.logout-button {
+  color: red;
+  font-weight: bold;
+}

@@ -1,8 +1,9 @@
-import "./SearchHeader.css"
+import "./SearchHeader.css";
+import { useState } from 'react';
 
-import { useState } from 'react'
 function SearchHeader() {
     const [searchTerm, setSearchTerm] = useState('');
+    const [city, setCity] = useState('');
 
     return (
         <div className="search-header">
@@ -13,17 +14,26 @@ function SearchHeader() {
                 <div className="search-form">
                     <input
                         type="text"
+                        placeholder="City"
+                        className="search-input city-input"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                    />
+
+                    <input
+                        type="text"
                         placeholder="Search by organizations or keywords..."
-                        className="search-input"
+                        className="search-input main-input"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
+
                     <button className="search-button">Search</button>
+                    <button className="smart-search-button">Smart Search</button>
                 </div>
-                
             </div>
         </div>
     );
 }
 
-export default SearchHeader
+export default SearchHeader;

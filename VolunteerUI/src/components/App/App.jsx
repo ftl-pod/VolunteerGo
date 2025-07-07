@@ -8,6 +8,7 @@ import LoginPage from '../LoginPage/LoginPage'
 import SignupPage from '../SignupPage/SignupPage'
 import ProfilePage from '../ProfilePage/ProfilePage'
 import Leaderboard from '../Leaderboard/Leaderboard'
+import NavBar from '../NavBar/NavBar'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -16,14 +17,18 @@ function App() {
     <Router>  
       <div className="App">        
         {/* Navigation Links */}
-        {/* <nav>
+
+        {<nav>
           <Link to="/">HomePage</Link> |{' '}
           <Link to="/search">SearchPage</Link> |{' '}
           <Link to="/login">LoginPage</Link> |{' '}
           <Link to="/signup">SignupPage</Link> |{' '}
           <Link to="/profile">ProfilePage</Link> |{' '}
           <Link to="/leaderboard">Leaderboard</Link>
-        </nav> */}
+        </nav>}
+
+        <NavBar/>
+
         {/* Routes */}
         <Routes>
           <Route path="/" element={<HomePage />} />

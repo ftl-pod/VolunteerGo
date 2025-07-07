@@ -24,7 +24,7 @@ function Navbar() {
             {isLoggedIn ? (
             <>
                 <NavLink to="/profile" className="profile-icon">
-                <FaUserCircle size={20} />
+                <FaUserCircle size={40} />
                 </NavLink>
                 <button className="logout-button" onClick={handleLogout}>Logout</button>
             </>

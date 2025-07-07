@@ -6,10 +6,3 @@ html, body, #root {
   padding: 0px;
   margin: 0px;
 }
-
-.App {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; 
-  align-items: center; 
-}

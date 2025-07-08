@@ -31,7 +31,7 @@ const chatHandler = async(req, res) => {
             messages: messages,
         })
 
-        const chatResponse = completion.choices[0].messages.content.trim()
+        const chatResponse = completion.choices[0].message.content.trim()
 
         const newConversationId = conversationId || Date.now().toString()
         await saveChatMessage(newConversationId, prompt, chatResponse)

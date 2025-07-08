@@ -16,7 +16,7 @@ datasource db {
 model Organization {
   id         Int           @id @default(autoincrement())
   name       String
-  tags       String[]      // Org tags
+  tags       String[]      @default([]) //makes it optional
   location   String
   opportunities Opportunity[]
 }
@@ -28,7 +28,7 @@ model Opportunity {
   description      String?       
   date             DateTime?     
   createdAt        DateTime      @default(now())
-  venue            String?       
+  location            String?       
   skills           String[]      @default([])
   imageUrl         String?     
   volunteersNeeded Int?          
@@ -42,7 +42,7 @@ model Opportunity {
 model User {
   id           Int           @id @default(autoincrement())
   avatarUrl    String?
-  username     String?       @unique
+  username     String       @unique
   password     String
   skills       String[]      @default([])
   training     String[]      @default([])
@@ -51,7 +51,7 @@ model User {
   points       Int           @default(0)
   age          Int?
   opportunities Opportunity[] @relation("UserOpportunities")
-  leaderboardRank Int?
+  leaderboardRank Int         @default(0)
 }
 
 model Chat {

@@ -1,5 +1,6 @@
 import "./HomeHeader.css";
 import { FaRegPaperPlane } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 
 function HomeHeader() {
   return (
@@ -13,8 +14,12 @@ function HomeHeader() {
         </div>
       </div>
       <div className="buttons-for-access header-right">
-        <button className="login">L O G I N</button>
-        <button className="register">Register</button>
+        <NavLink to="/login" className="nav-link">
+          <button className="login">L O G I N</button>
+        </NavLink>
+        <NavLink to="/signup" className="nav-link">
+          <button className="register">Register</button>
+        </NavLink>
       </div>
     </div>
   );

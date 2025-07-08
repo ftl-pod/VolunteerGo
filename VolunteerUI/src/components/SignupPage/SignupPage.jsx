@@ -1,13 +1,17 @@
 import "./Signup.css";
 import { useNavigate } from "react-router-dom";
 
-function Signup() {
+function SignupPage() {
   const navigate = useNavigate();
   return (
     <>
-      <div className="modal-overlay auth">
-        <div className="modal-content auth-content">
-          <h3>Register</h3>
+        <div className="auth-page-container">
+        <div className="auth-left">
+            <img src="src/assets/Screenshot 2025-07-08 at 11.09.00 AM.png" alt="logo-placeholder" className="logo-placeholder"/>
+        </div>
+      <div className="auth-right">
+        <div className="auth-content">
+          <h1>Register</h1>
           <form>
             <div className="form-group">
               <label htmlFor="name">Name</label>
@@ -61,8 +65,9 @@ function Signup() {
           </div>
         </div>
       </div>
+      </div>
     </>
   );
 }
 
-export default Signup;
+export default SignupPage;

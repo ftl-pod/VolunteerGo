@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Opportunity" ALTER COLUMN "description" DROP NOT NULL,
+ALTER COLUMN "date" DROP NOT NULL,
+ALTER COLUMN "volunteersNeeded" DROP NOT NULL,
+ALTER COLUMN "points" SET DEFAULT 0;

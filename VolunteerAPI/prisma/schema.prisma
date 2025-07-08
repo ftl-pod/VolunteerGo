@@ -23,26 +23,26 @@ model Organization {
 }
 
 model Opportunity {
-  id              Int           @id @default(autoincrement())
-  name            String
-  tags            String[]      @default([])
-  description     String
-  date            DateTime
-  createdAt       DateTime      @default(now())
-  venue           String?       
-  skills          String[]      @default([])
-  imageUrl        String?     
-  volunteersNeeded Int
-  status          String        @default("active")
-  points          Int
-  organization    Organization  @relation(fields: [organizationId], references: [id])
-  organizationId  Int
-  users           User[]         @relation("UserOpportunities")
+  id               Int           @id @default(autoincrement())
+  name             String
+  tags             String[]      @default([])
+  description      String?       
+  date             DateTime?     
+  createdAt        DateTime      @default(now())
+  venue            String?       
+  skills           String[]      @default([])
+  imageUrl         String?     
+  volunteersNeeded Int?          
+  status           String        @default("active")
+  points           Int           @default(0) 
+  organization     Organization  @relation(fields: [organizationId], references: [id])
+  organizationId   Int
+  users            User[]        @relation("UserOpportunities")
 }
 
 model User {
   id           Int           @id @default(autoincrement())
-  avatarUrl    String
+  avatarUrl    String?
   username     String?       @unique
   password     String
   skills       String[]      @default([])
@@ -50,7 +50,7 @@ model User {
   createdAt    DateTime      @default(now())
   location     String?
   points       Int           @default(0)
-  age          Int
+  age          Int?
   opportunities Opportunity[] @relation("UserOpportunities")
   leaderboardRank Int?
 }

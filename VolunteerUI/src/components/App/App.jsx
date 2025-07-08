@@ -9,6 +9,7 @@ import SignupPage from '../SignupPage/SignupPage'
 import ProfilePage from '../ProfilePage/ProfilePage'
 import Leaderboard from '../Leaderboard/Leaderboard'
 import NavBar from '../NavBar/NavBar'
+import OpportunityPage from '../OpportunityPage/OpportunityPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -16,17 +17,6 @@ function App() {
   return (
     <Router>  
       <div className="App">        
-        {/* Navigation Links */}
-
-        {<nav>
-          <Link to="/">HomePage</Link> |{' '}
-          <Link to="/search">SearchPage</Link> |{' '}
-          <Link to="/login">LoginPage</Link> |{' '}
-          <Link to="/signup">SignupPage</Link> |{' '}
-          <Link to="/profile">ProfilePage</Link> |{' '}
-          <Link to="/leaderboard">Leaderboard</Link>
-        </nav>}
-
         <NavBar/>
 
         {/* Routes */}
@@ -37,6 +27,7 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/opportunity/:id" element={<OpportunityPage />} />
         </Routes>
       </div>
     </Router>

@@ -7,7 +7,8 @@ import { IoCalendarSharp } from "react-icons/io5";
 import { BsBookmarkHeartFill } from "react-icons/bs";
 import { TbTargetArrow } from "react-icons/tb";
 import { PiCertificateFill } from "react-icons/pi";
-
+import { FaFireFlameCurved } from "react-icons/fa6";
+import { BiSolidDonateHeart } from "react-icons/bi";
 
 
 function ProfilePage() {
@@ -88,12 +89,14 @@ function ProfilePage() {
                 <div className="section">
                     <div className="box">
                         <div className="box-header">
-                            <b>whatever yall want here + icon</b>
+                            <FaFireFlameCurved className="icon"/>
+                            <b>Leaderboard status</b>
                             </div>
                         <div className="box-content"></div>
                     </div>
                     <div className="section2">
                         <div className="s2-header">
+                            <BiSolidDonateHeart className="icon"/>
                             <b>You Have Made A Difference With</b>
                             </div>
                         <div className="s2-content">

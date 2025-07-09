@@ -17,6 +17,20 @@ function App() {
   return (
     <Router>  
       <div className="App">        
+
+        {/* Navigation Links */}
+
+
+        {/* {<nav>
+          <Link to="/">HomePage</Link> |{' '}
+          <Link to="/search">SearchPage</Link> |{' '}
+          <Link to="/login">LoginPage</Link> |{' '}
+          <Link to="/signup">SignupPage</Link> |{' '}
+          <Link to="/profile">ProfilePage</Link> |{' '}
+          <Link to="/leaderboard">Leaderboard</Link>
+        </nav>} */}
+
+
         <NavBar/>
 
         {/* Routes */}

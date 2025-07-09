@@ -1,5 +1,4 @@
 const prisma  = require("../db/db");
-const orgController = require('../organizationController');
 
 exports.getAll = async (req, res) => {
     console.log("Query params received:", req.query);
@@ -122,6 +121,12 @@ exports.create = async (req, res) => {
             },
         };
 
+        if (users.length > 0) {
+            data.users = {
+                connect: users.map((id) => ({ id })),
+            };
+        }
+
         const newOpportunity = await prisma.opportunity.create({ data });
         res.status(201).json(newOpportunity);
     } catch (err) {
@@ -149,10 +154,3 @@ exports.remove = async (req, res) => {
     res.status(204).end();
 }
 
-module.exports = {
-    getAll,
-    getById,
-    create,
-    update,
-    remove,
-}

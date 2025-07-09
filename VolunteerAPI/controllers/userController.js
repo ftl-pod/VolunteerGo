@@ -130,7 +130,7 @@ try {
         // exclude pass
         const { password: _, ...userWithoutPassword } = user;
         // generate JWT token
-        const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET);
         return res.json({ user: userWithoutPassword, token });
     } else {
         return res.status(401).json({ error : "Invalid username or password" });

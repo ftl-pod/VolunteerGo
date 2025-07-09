@@ -1,5 +1,3 @@
-import opportunities from "../../VolunteerUI/src/data/opportunities";
-
 // Get all organizations
 exports.getAll = async (req, res) => {
     try {
@@ -81,11 +79,3 @@ exports.remove = async (req, res) => {
         res.status(500).json({ error: "Delete failed" });
     }
 };
-
-module.exports = {
-    getAll,
-    getById,
-    create,
-    update,
-    remove,
-}

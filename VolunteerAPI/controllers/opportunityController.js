@@ -75,7 +75,7 @@ exports.create = async (req, res) => {
         tags = [],
         description,
         date,
-        venue,
+        location,
         skills = [],
         imageUrl,
         volunteersNeeded,
@@ -96,11 +96,11 @@ exports.create = async (req, res) => {
 
         // Create new organization
         if (!organization) {
-        organization = await prisma.organization.create({
+            organization = await prisma.organization.create({
             data: {
                 name: organizationName,
                 tags: [], 
-                location: ""
+                location: location
             },
         });
         }
@@ -110,7 +110,7 @@ exports.create = async (req, res) => {
             tags,
             description,
             date: date ? new Date(date) : undefined,
-            venue,
+            location,
             skills,
             imageUrl,
             volunteersNeeded,

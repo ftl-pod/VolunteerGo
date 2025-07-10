@@ -7,6 +7,7 @@ exports.getAllUsers = async (req, res) => {
         const users = await prisma.user.findMany({
         include: {
             opportunities: true, // include related opps
+            savedOpportunities: true,
         },
     });
     if (users.length === 0) {
@@ -26,6 +27,7 @@ exports.getUserById = async (req, res) => {
         where : {id : userId},
         include: {
             opportunities: true,
+            savedOpportunities: true, 
         }
     });
     if (!user) {
@@ -62,7 +64,6 @@ exports.createUser = async (req, res) => {
                 age,
                 leaderboardRank : 0, // all new users start at 0
                 avatarUrl, 
-                savedOpportunities: []
                 // when creating a user, they will have no opportunities initially
             },
         })
@@ -99,8 +100,8 @@ exports.updateUser = async (req, res) => {
                     connect: opportunities.map(oppId => ({ id: Number(oppId) }))
                 },
                 savedOpportunities: {
-                    connect: savedOpportunities.map(oppId => ({ id: Number(oppId) }))
-                },
+                    connect: opportunities.map(oppId => ({ id: Number(oppId) }))
+                }
             }
         })
         // excluding pass from response

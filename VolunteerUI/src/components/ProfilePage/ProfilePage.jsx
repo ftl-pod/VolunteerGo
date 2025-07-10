@@ -20,7 +20,7 @@ function ProfilePage() {
                         <div className="name">first lastname</div>
                         <div className="img-container">
                             {/* hardcoded for now, user will have 12 options */}
-                            <img src="https://i.postimg.cc/0QPzP9Rj/Screenshot-2025-07-07-at-4-12-50-PM.png" alt="Profile" className="profile-img" />
+                            <img src="https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png" alt="Profile" className="profile-img" />
                         </div>
                         <div className="bio">
                             <div className="info">

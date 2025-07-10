@@ -7,6 +7,7 @@ exports.getAllUsers = async (req, res) => {
         const users = await prisma.user.findMany({
         include: {
             opportunities: true, // include related opps
+            savedOpportunities: true,
         },
     });
     if (users.length === 0) {
@@ -24,6 +25,10 @@ exports.getUserById = async (req, res) => {
     const userId = Number(req.params.id);
     const user = await prisma.user.findUnique({
         where : {id : userId},
+        include: {
+            opportunities: true,
+            savedOpportunities: true, 
+        }
     });
     if (!user) {
         return res.status(404).json({ error : "User not found" });
@@ -37,12 +42,18 @@ exports.getUserById = async (req, res) => {
 
 exports.createUser = async (req, res) => {
     try {
-        const { username, password, training, skills, location, age, leaderboardRank, avatarUrl} = req.body;
-        if (!username || !password || !Array.isArray(training) || training.length === 0 || !Array.isArray(skills) || skills.length === 0 || !location || !age || !leaderboardRank) {
+        const { username, password, training, skills, location, age,  avatarUrl} = req.body;
+        if (!username || !password || !Array.isArray(training) || training.length === 0 || !Array.isArray(skills) || skills.length === 0 || !location || !age ) {
             return res.status(400).json({ error : "Missing required field!" });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        //console.log(password, hashedPassword);
+        await prisma.user.updateMany({
+            data: {
+                leaderboardRank: {
+                    increment: 1 // when a user joins, everyone else move up
+                }
+            }
+        });
         const user = await prisma.user.create({
             data : {
                 username,
@@ -51,8 +62,9 @@ exports.createUser = async (req, res) => {
                 skills,
                 location,
                 age,
-                leaderboardRank,
-                avatarUrl
+                leaderboardRank : 0, // all new users start at 0
+                avatarUrl, 
+                // when creating a user, they will have no opportunities initially
             },
         })
         // excluding pass from response
@@ -67,8 +79,8 @@ exports.createUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
     try {
         const userId = Number(req.params.id);
-        const {username, password, training, location, age, leaderboardRank, opportunities} = req.body;
-        if (!username || !password || !Array.isArray(training) || training.length === 0 || !Array.isArray(skills) || skills.length === 0 || !location || !age || !leaderboardRank) {
+        const {username, password, training, skills, location, age, leaderboardRank, opportunities, savedOpportunities, avatarUrl} = req.body;
+        if (!username || !password || !Array.isArray(training) || training.length === 0 || !Array.isArray(skills) || skills.length === 0 || !location || typeof age !== 'number' || typeof leaderboardRank !== 'number') {
             return res.status(400).json({ error : "Missing required field!" });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -83,7 +95,11 @@ exports.updateUser = async (req, res) => {
                 age,
                 leaderboardRank,
                 avatarUrl,
+                // pass in opportunities by arrary of ids : [1,2] -> adding opps 1 & 2
                 opportunities: {
+                    connect: opportunities.map(oppId => ({ id: Number(oppId) }))
+                },
+                savedOpportunities: {
                     connect: opportunities.map(oppId => ({ id: Number(oppId) }))
                 }
             }

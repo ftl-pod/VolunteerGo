@@ -38,5 +38,210 @@
     "name": "Literacy Coalition",
     "tags": ["literacy", "education", "reading", "tutoring"],
     "location": "San Jose, CA"
+  },
+  {
+    "name": "Bay Area Healthcare Volunteers",
+    "tags": ["healthcare", "hospitals", "patient support", "medical"],
+    "location": "San Francisco, CA"
+  },
+  {
+    "name": "Arts for All Foundation",
+    "tags": ["arts", "creativity", "community", "murals"],
+    "location": "San Francisco, CA"
+  },
+  {
+    "name": "Hope & Healing Center",
+    "tags": ["homeless", "food service", "compassion", "social services"],
+    "location": "San Jose, CA"
+  },
+  {
+    "name": "Financial Freedom Initiative",
+    "tags": [
+      "financial literacy",
+      "taxes",
+      "economic empowerment",
+      "nonprofit"
+    ],
+    "location": "Fremont, CA"
+  },
+  {
+    "name": "Children's Joy Foundation",
+    "tags": ["children", "hospitals", "entertainment", "healthcare"],
+    "location": "Oakland, CA"
+  },
+  {
+    "name": "Urban Harvest Collective",
+    "tags": ["urban farming", "agriculture", "sustainability", "food"],
+    "location": "Berkeley, CA"
+  },
+  {
+    "name": "Digital Inclusion Network",
+    "tags": ["technology", "seniors", "digital literacy", "inclusion"],
+    "location": "Palo Alto, CA"
+  },
+  {
+    "name": "Red Cross Bay Area",
+    "tags": ["healthcare", "blood donation", "emergency response", "nonprofit"],
+    "location": "San Mateo, CA"
+  },
+  {
+    "name": "New Beginnings Refugee Services",
+    "tags": ["refugees", "immigration", "cultural support", "integration"],
+    "location": "Fremont, CA"
+  },
+  {
+    "name": "Bay Area Wildlife Rescue",
+    "tags": ["wildlife", "rehabilitation", "conservation", "animals"],
+    "location": "San Rafael, CA"
+  },
+  {
+    "name": "Santa Clara Community Events",
+    "tags": ["events", "community", "festivals", "coordination"],
+    "location": "Santa Clara, CA"
+  },
+  {
+    "name": "Bay Area Emergency Response",
+    "tags": ["emergency", "disaster relief", "preparedness", "safety"],
+    "location": "San Jose, CA"
+  },
+  {
+    "name": "Adult Learning Center",
+    "tags": ["education", "literacy", "adults", "tutoring"],
+    "location": "Oakland, CA"
+  },
+  {
+    "name": "Therapeutic Riding Center",
+    "tags": ["therapy", "horses", "disabilities", "animal assisted"],
+    "location": "Woodside, CA"
+  },
+  {
+    "name": "Nature Education Alliance",
+    "tags": ["environment", "education", "nature", "conservation"],
+    "location": "Redwood City, CA"
+  },
+  {
+    "name": "Veterans Community Support",
+    "tags": ["veterans", "military", "support services", "community"],
+    "location": "San Francisco, CA"
+  },
+  {
+    "name": "Creative Youth Initiative",
+    "tags": ["youth", "arts", "creativity", "at-risk"],
+    "location": "Richmond, CA"
+  },
+  {
+    "name": "Coastal Conservation Society",
+    "tags": ["environment", "conservation", "coastal", "restoration"],
+    "location": "Pacifica, CA"
+  },
+  {
+    "name": "Senior Nutrition Network",
+    "tags": ["seniors", "nutrition", "meal delivery", "health"],
+    "location": "Sunnyvale, CA"
+  },
+  {
+    "name": "Peninsula Community Theater",
+    "tags": ["theater", "arts", "community", "performance"],
+    "location": "San Mateo, CA"
+  },
+  {
+    "name": "Bikes for All Collective",
+    "tags": ["bicycles", "transportation", "sustainability", "repair"],
+    "location": "San Francisco, CA"
+  },
+  {
+    "name": "Crisis Support Network",
+    "tags": ["mental health", "crisis intervention", "support", "counseling"],
+    "location": "Palo Alto, CA"
+  },
+  {
+    "name": "Community Harvest Project",
+    "tags": ["gardening", "fruit trees", "community", "food"],
+    "location": "San Jose, CA"
+  },
+  {
+    "name": "Street Outreach Coalition",
+    "tags": ["homeless", "outreach", "social services", "support"],
+    "location": "Berkeley, CA"
+  },
+  {
+    "name": "Pollinator Protection Alliance",
+    "tags": ["environment", "pollinators", "conservation", "gardening"],
+    "location": "Mountain View, CA"
+  },
+  {
+    "name": "Senior Digital Stories",
+    "tags": ["seniors", "technology", "storytelling", "digital skills"],
+    "location": "Cupertino, CA"
+  },
+  {
+    "name": "Food Rescue Network",
+    "tags": ["food waste", "sustainability", "food recovery", "environment"],
+    "location": "Milpitas, CA"
+  },
+  {
+    "name": "Adaptive Sports Bay Area",
+    "tags": ["sports", "disabilities", "adaptive", "athletics"],
+    "location": "San Francisco, CA"
+  },
+  {
+    "name": "Community Resource Hub",
+    "tags": ["tools", "community", "sharing", "resources"],
+    "location": "Oakland, CA"
+  },
+  {
+    "name": "Second Chance Education",
+    "tags": ["education", "rehabilitation", "prison", "social justice"],
+    "location": "San Rafael, CA"
+  },
+  {
+    "name": "Ocean Protection Society",
+    "tags": ["marine", "conservation", "ocean", "research"],
+    "location": "Half Moon Bay, CA"
+  },
+  {
+    "name": "Community Solar Initiative",
+    "tags": ["solar", "renewable energy", "sustainability", "community"],
+    "location": "Richmond, CA"
+  },
+  {
+    "name": "Healing Hearts Support Center",
+    "tags": ["grief", "support", "counseling", "mental health"],
+    "location": "San Mateo, CA"
+  },
+  {
+    "name": "Urban Bee Collective",
+    "tags": [
+      "beekeeping",
+      "urban agriculture",
+      "sustainability",
+      "pollinators"
+    ],
+    "location": "Berkeley, CA"
+  },
+  {
+    "name": "Golden Years Digital",
+    "tags": ["seniors", "technology", "training", "digital literacy"],
+    "location": "Fremont, CA"
+  },
+  {
+    "name": "Zero Waste Community",
+    "tags": ["composting", "sustainability", "waste reduction", "environment"],
+    "location": "Palo Alto, CA"
+  },
+  {
+    "name": "Healing Arts Center",
+    "tags": ["art therapy", "mental health", "creativity", "healing"],
+    "location": "San Francisco, CA"
+  },
+  {
+    "name": "Community Garden Network",
+    "tags": ["gardening", "seeds", "sustainability", "community"],
+    "location": "Santa Clara, CA"
+  },
+  {
+    "name": "Community Emergency Response Team",
+    "tags": ["disaster response", "emergency", "training", "preparedness"],
+    "location": "San Jose, CA"
   }
 ]

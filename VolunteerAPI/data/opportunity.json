@@ -157,5 +157,588 @@
     "status": "active",
     "points": 10,
     "organizationName": "Youth Mentorship Network"
+  },
+  {
+    "name": "Hospital Patient Support",
+    "tags": ["healthcare", "companionship", "hospital", "support"],
+    "description": "Provide comfort and companionship to patients in local hospitals. Help with reading, conversation, and light activities.",
+    "location": "San Francisco, CA",
+    "skills": ["empathy", "communication", "patience", "emotional support"],
+    "imageUrl": "https://example.com/hospital-support.jpg",
+    "volunteersNeeded": 12,
+    "status": "active",
+    "points": 8,
+    "organizationName": "Bay Area Healthcare Volunteers"
+  },
+  {
+    "name": "Community Mural Painting",
+    "tags": ["art", "community", "creativity", "beautification"],
+    "description": "Help paint a vibrant community mural that celebrates local culture and brings neighborhoods together through art.",
+    "location": "San Francisco, CA",
+    "skills": [
+      "artistic ability",
+      "creativity",
+      "teamwork",
+      "attention to detail"
+    ],
+    "imageUrl": "https://example.com/mural-painting.jpg",
+    "volunteersNeeded": 15,
+    "status": "active",
+    "points": 7,
+    "organizationName": "Arts for All Foundation"
+  },
+  {
+    "name": "Homeless Shelter Meal Service",
+    "tags": ["food service", "homeless", "compassion", "community"],
+    "description": "Serve meals to individuals experiencing homelessness. Help provide not just food, but dignity and human connection.",
+    "location": "San Jose, CA",
+    "skills": ["food service", "compassion", "teamwork", "reliability"],
+    "imageUrl": "https://example.com/meal-service.jpg",
+    "volunteersNeeded": 10,
+    "status": "active",
+    "points": 6,
+    "organizationName": "Hope & Healing Center"
+  },
+  {
+    "name": "Tax Preparation Assistance",
+    "tags": ["taxes", "financial literacy", "community service", "accounting"],
+    "description": "Help low-income families prepare their tax returns for free. Training provided for basic tax situations.",
+    "location": "Fremont, CA",
+    "skills": [
+      "math skills",
+      "attention to detail",
+      "patience",
+      "computer literacy"
+    ],
+    "imageUrl": "https://example.com/tax-prep.jpg",
+    "volunteersNeeded": 8,
+    "status": "active",
+    "points": 9,
+    "organizationName": "Financial Freedom Initiative"
+  },
+  {
+    "name": "Children's Hospital Entertainment",
+    "tags": ["children", "hospital", "entertainment", "joy"],
+    "description": "Bring smiles to young patients through games, crafts, and entertainment activities. Help make hospital stays a little brighter.",
+    "location": "Oakland, CA",
+    "skills": ["child interaction", "creativity", "enthusiasm", "patience"],
+    "imageUrl": "https://example.com/hospital-entertainment.jpg",
+    "volunteersNeeded": 6,
+    "status": "active",
+    "points": 8,
+    "organizationName": "Children's Joy Foundation"
+  },
+  {
+    "name": "Urban Farm Volunteer",
+    "tags": ["agriculture", "farming", "sustainability", "education"],
+    "description": "Help tend to crops at an urban farm that provides fresh produce to local food banks and teaches sustainable farming.",
+    "location": "Berkeley, CA",
+    "skills": [
+      "gardening",
+      "physical work",
+      "sustainability knowledge",
+      "teaching"
+    ],
+    "imageUrl": "https://example.com/urban-farm.jpg",
+    "volunteersNeeded": 12,
+    "status": "active",
+    "points": 6,
+    "organizationName": "Urban Harvest Collective"
+  },
+  {
+    "name": "Senior Technology Support",
+    "tags": ["seniors", "technology", "teaching", "digital literacy"],
+    "description": "Help seniors learn to use smartphones, tablets, and video calling to stay connected with family and friends.",
+    "location": "Palo Alto, CA",
+    "skills": ["technology skills", "patience", "teaching", "communication"],
+    "imageUrl": "https://example.com/senior-tech.jpg",
+    "volunteersNeeded": 7,
+    "status": "active",
+    "points": 8,
+    "organizationName": "Digital Inclusion Network"
+  },
+  {
+    "name": "Blood Drive Coordinator",
+    "tags": [
+      "healthcare",
+      "blood donation",
+      "coordination",
+      "community health"
+    ],
+    "description": "Help organize and run community blood drives. Assist with registration, donor support, and event coordination.",
+    "location": "San Mateo, CA",
+    "skills": [
+      "organization",
+      "people skills",
+      "multitasking",
+      "healthcare interest"
+    ],
+    "imageUrl": "https://example.com/blood-drive.jpg",
+    "volunteersNeeded": 5,
+    "status": "active",
+    "points": 7,
+    "organizationName": "Red Cross Bay Area"
+  },
+  {
+    "name": "Refugee Family Support",
+    "tags": ["refugees", "cultural exchange", "family support", "integration"],
+    "description": "Help newly arrived refugee families navigate their new community. Assist with shopping, appointments, and cultural orientation.",
+    "location": "Fremont, CA",
+    "skills": [
+      "cultural sensitivity",
+      "patience",
+      "organization",
+      "bilingual helpful"
+    ],
+    "imageUrl": "https://example.com/refugee-support.jpg",
+    "volunteersNeeded": 10,
+    "status": "active",
+    "points": 9,
+    "organizationName": "New Beginnings Refugee Services"
+  },
+  {
+    "name": "Wildlife Rehabilitation Assistant",
+    "tags": ["wildlife", "rehabilitation", "animal care", "conservation"],
+    "description": "Assist with care of injured and orphaned wildlife. Help with feeding, cleaning, and preparing animals for release.",
+    "location": "San Rafael, CA",
+    "skills": [
+      "animal handling",
+      "attention to detail",
+      "patience",
+      "physical stamina"
+    ],
+    "imageUrl": "https://example.com/wildlife-rehab.jpg",
+    "volunteersNeeded": 8,
+    "status": "active",
+    "points": 10,
+    "organizationName": "Bay Area Wildlife Rescue"
+  },
+  {
+    "name": "Community Festival Volunteer",
+    "tags": ["events", "community", "festival", "coordination"],
+    "description": "Help organize and run annual community festivals. Assist with setup, vendor coordination, and visitor services.",
+    "location": "Santa Clara, CA",
+    "skills": ["event planning", "customer service", "teamwork", "flexibility"],
+    "imageUrl": "https://example.com/festival-volunteer.jpg",
+    "volunteersNeeded": 20,
+    "status": "active",
+    "points": 5,
+    "organizationName": "Santa Clara Community Events"
+  },
+  {
+    "name": "Disaster Relief Preparation",
+    "tags": ["disaster relief", "emergency", "preparation", "community safety"],
+    "description": "Help prepare emergency supply kits and disaster relief materials for community emergency response.",
+    "location": "San Jose, CA",
+    "skills": [
+      "organization",
+      "attention to detail",
+      "teamwork",
+      "reliability"
+    ],
+    "imageUrl": "https://example.com/disaster-prep.jpg",
+    "volunteersNeeded": 15,
+    "status": "active",
+    "points": 8,
+    "organizationName": "Bay Area Emergency Response"
+  },
+  {
+    "name": "Adult Literacy Tutoring",
+    "tags": ["literacy", "education", "adults", "tutoring"],
+    "description": "Help adults improve their reading and writing skills. Make a profound impact on someone's ability to navigate daily life.",
+    "location": "Oakland, CA",
+    "skills": ["teaching", "patience", "communication", "literacy"],
+    "imageUrl": "https://example.com/adult-literacy.jpg",
+    "volunteersNeeded": 12,
+    "status": "active",
+    "points": 9,
+    "organizationName": "Adult Learning Center"
+  },
+  {
+    "name": "Therapeutic Horse Care",
+    "tags": ["horses", "therapy", "animal care", "special needs"],
+    "description": "Help care for therapy horses used in programs for individuals with disabilities. Assist with grooming, feeding, and facility maintenance.",
+    "location": "Woodside, CA",
+    "skills": ["animal handling", "physical work", "patience", "reliability"],
+    "imageUrl": "https://example.com/horse-therapy.jpg",
+    "volunteersNeeded": 6,
+    "status": "active",
+    "points": 11,
+    "organizationName": "Therapeutic Riding Center"
+  },
+  {
+    "name": "Environmental Education Guide",
+    "tags": ["environment", "education", "nature", "guiding"],
+    "description": "Lead nature walks and environmental education programs for school groups and families at local parks.",
+    "location": "Redwood City, CA",
+    "skills": [
+      "environmental knowledge",
+      "public speaking",
+      "teaching",
+      "outdoor skills"
+    ],
+    "imageUrl": "https://example.com/nature-guide.jpg",
+    "volunteersNeeded": 8,
+    "status": "active",
+    "points": 7,
+    "organizationName": "Nature Education Alliance"
+  },
+  {
+    "name": "Veteran Support Services",
+    "tags": ["veterans", "support", "counseling", "community service"],
+    "description": "Provide companionship and support to veterans. Help with transportation, errands, and social activities.",
+    "location": "San Francisco, CA",
+    "skills": ["empathy", "reliability", "communication", "respect"],
+    "imageUrl": "https://example.com/veteran-support.jpg",
+    "volunteersNeeded": 10,
+    "status": "active",
+    "points": 8,
+    "organizationName": "Veterans Community Support"
+  },
+  {
+    "name": "Youth Art Workshop Leader",
+    "tags": ["youth", "art", "creativity", "mentorship"],
+    "description": "Lead art workshops for at-risk youth. Help young people express themselves through various artistic mediums.",
+    "location": "Richmond, CA",
+    "skills": [
+      "artistic ability",
+      "youth mentorship",
+      "creativity",
+      "patience"
+    ],
+    "imageUrl": "https://example.com/youth-art.jpg",
+    "volunteersNeeded": 5,
+    "status": "active",
+    "points": 9,
+    "organizationName": "Creative Youth Initiative"
+  },
+  {
+    "name": "Habitat Restoration",
+    "tags": ["environment", "restoration", "conservation", "outdoor"],
+    "description": "Help restore natural habitats by removing invasive species and planting native vegetation in local parks and preserves.",
+    "location": "Pacifica, CA",
+    "skills": [
+      "environmental awareness",
+      "physical work",
+      "plant identification",
+      "teamwork"
+    ],
+    "imageUrl": "https://example.com/habitat-restoration.jpg",
+    "volunteersNeeded": 18,
+    "status": "active",
+    "points": 6,
+    "organizationName": "Coastal Conservation Society"
+  },
+  {
+    "name": "Senior Meal Delivery",
+    "tags": ["seniors", "food delivery", "community service", "nutrition"],
+    "description": "Deliver nutritious meals to homebound seniors. Provide not just food, but a friendly face and welfare check.",
+    "location": "Sunnyvale, CA",
+    "skills": ["driving", "reliability", "compassion", "time management"],
+    "imageUrl": "https://example.com/meal-delivery.jpg",
+    "volunteersNeeded": 12,
+    "status": "active",
+    "points": 7,
+    "organizationName": "Senior Nutrition Network"
+  },
+  {
+    "name": "Community Theater Production",
+    "tags": ["theater", "arts", "community", "performance"],
+    "description": "Help with community theater productions. Assist with costumes, set building, lighting, or backstage support.",
+    "location": "San Mateo, CA",
+    "skills": ["theater arts", "creativity", "teamwork", "reliability"],
+    "imageUrl": "https://example.com/theater-production.jpg",
+    "volunteersNeeded": 8,
+    "status": "active",
+    "points": 6,
+    "organizationName": "Peninsula Community Theater"
+  },
+  {
+    "name": "Bicycle Repair Workshop",
+    "tags": ["bicycles", "repair", "transportation", "sustainability"],
+    "description": "Help repair donated bicycles for low-income families and individuals. Teach basic bike maintenance skills.",
+    "location": "San Francisco, CA",
+    "skills": [
+      "mechanical skills",
+      "bicycle knowledge",
+      "teaching",
+      "problem solving"
+    ],
+    "imageUrl": "https://example.com/bike-repair.jpg",
+    "volunteersNeeded": 6,
+    "status": "active",
+    "points": 8,
+    "organizationName": "Bikes for All Collective"
+  },
+  {
+    "name": "Crisis Hotline Support",
+    "tags": ["crisis support", "mental health", "counseling", "phone support"],
+    "description": "Provide emotional support and crisis intervention through phone and chat services. Extensive training provided.",
+    "location": "Palo Alto, CA",
+    "skills": [
+      "active listening",
+      "empathy",
+      "crisis intervention",
+      "communication"
+    ],
+    "imageUrl": "https://example.com/crisis-hotline.jpg",
+    "volunteersNeeded": 15,
+    "status": "active",
+    "points": 12,
+    "organizationName": "Crisis Support Network"
+  },
+  {
+    "name": "Community Orchard Care",
+    "tags": ["gardening", "fruit trees", "community", "sustainability"],
+    "description": "Help maintain community fruit orchards through pruning, harvesting, and general care. Share the bounty with local food banks.",
+    "location": "San Jose, CA",
+    "skills": ["gardening", "tree care", "physical work", "sustainability"],
+    "imageUrl": "https://example.com/orchard-care.jpg",
+    "volunteersNeeded": 10,
+    "status": "active",
+    "points": 6,
+    "organizationName": "Community Harvest Project"
+  },
+  {
+    "name": "Homeless Outreach Team",
+    "tags": ["homeless", "outreach", "social services", "compassion"],
+    "description": "Join outreach teams that connect with individuals experiencing homelessness to provide resources and support services.",
+    "location": "Berkeley, CA",
+    "skills": ["social work", "compassion", "communication", "resilience"],
+    "imageUrl": "https://example.com/homeless-outreach.jpg",
+    "volunteersNeeded": 8,
+    "status": "active",
+    "points": 10,
+    "organizationName": "Street Outreach Coalition"
+  },
+  {
+    "name": "Pollinator Garden Creation",
+    "tags": ["gardening", "pollinators", "environment", "conservation"],
+    "description": "Help create and maintain pollinator gardens that support bees, butterflies, and other essential pollinators.",
+    "location": "Mountain View, CA",
+    "skills": [
+      "gardening",
+      "environmental knowledge",
+      "plant care",
+      "conservation"
+    ],
+    "imageUrl": "https://example.com/pollinator-garden.jpg",
+    "volunteersNeeded": 12,
+    "status": "active",
+    "points": 7,
+    "organizationName": "Pollinator Protection Alliance"
+  },
+  {
+    "name": "Digital Storytelling Workshop",
+    "tags": ["technology", "storytelling", "seniors", "digital skills"],
+    "description": "Help seniors create digital stories about their lives using simple video and audio editing tools.",
+    "location": "Cupertino, CA",
+    "skills": ["technology", "storytelling", "patience", "creativity"],
+    "imageUrl": "https://example.com/digital-storytelling.jpg",
+    "volunteersNeeded": 5,
+    "status": "active",
+    "points": 9,
+    "organizationName": "Senior Digital Stories"
+  },
+  {
+    "name": "Food Recovery Program",
+    "tags": ["food waste", "sustainability", "food rescue", "environment"],
+    "description": "Collect surplus food from restaurants and grocery stores to redistribute to food banks and pantries.",
+    "location": "Milpitas, CA",
+    "skills": ["organization", "driving", "food safety", "efficiency"],
+    "imageUrl": "https://example.com/food-recovery.jpg",
+    "volunteersNeeded": 10,
+    "status": "active",
+    "points": 8,
+    "organizationName": "Food Rescue Network"
+  },
+  {
+    "name": "Adaptive Sports Coach",
+    "tags": ["sports", "disabilities", "adaptive", "coaching"],
+    "description": "Coach adaptive sports programs for individuals with disabilities. Help athletes develop skills and confidence.",
+    "location": "San Francisco, CA",
+    "skills": ["coaching", "sports knowledge", "patience", "adaptability"],
+    "imageUrl": "https://example.com/adaptive-sports.jpg",
+    "volunteersNeeded": 6,
+    "status": "active",
+    "points": 11,
+    "organizationName": "Adaptive Sports Bay Area"
+  },
+  {
+    "name": "Community Tool Library",
+    "tags": ["tools", "community", "sharing", "sustainability"],
+    "description": "Help run a community tool library where residents can borrow tools and equipment for home projects.",
+    "location": "Oakland, CA",
+    "skills": [
+      "tool knowledge",
+      "organization",
+      "customer service",
+      "maintenance"
+    ],
+    "imageUrl": "https://example.com/tool-library.jpg",
+    "volunteersNeeded": 4,
+    "status": "active",
+    "points": 5,
+    "organizationName": "Community Resource Hub"
+  },
+  {
+    "name": "Prison Education Program",
+    "tags": ["education", "rehabilitation", "teaching", "social justice"],
+    "description": "Teach basic education or life skills classes to incarcerated individuals preparing for reentry into society.",
+    "location": "San Rafael, CA",
+    "skills": ["teaching", "patience", "communication", "empathy"],
+    "imageUrl": "https://example.com/prison-education.jpg",
+    "volunteersNeeded": 8,
+    "status": "active",
+    "points": 12,
+    "organizationName": "Second Chance Education"
+  },
+  {
+    "name": "Marine Conservation Volunteer",
+    "tags": ["marine", "conservation", "ocean", "research"],
+    "description": "Assist with marine conservation research and education programs. Help protect ocean ecosystems and marine life.",
+    "location": "Half Moon Bay, CA",
+    "skills": [
+      "marine knowledge",
+      "research",
+      "data collection",
+      "conservation"
+    ],
+    "imageUrl": "https://example.com/marine-conservation.jpg",
+    "volunteersNeeded": 7,
+    "status": "active",
+    "points": 9,
+    "organizationName": "Ocean Protection Society"
+  },
+  {
+    "name": "Community Solar Project",
+    "tags": ["solar", "renewable energy", "sustainability", "community"],
+    "description": "Help install and maintain community solar projects that provide clean energy to low-income households.",
+    "location": "Richmond, CA",
+    "skills": [
+      "electrical knowledge",
+      "physical work",
+      "sustainability",
+      "technical skills"
+    ],
+    "imageUrl": "https://example.com/solar-project.jpg",
+    "volunteersNeeded": 8,
+    "status": "active",
+    "points": 10,
+    "organizationName": "Community Solar Initiative"
+  },
+  {
+    "name": "Grief Support Group Facilitator",
+    "tags": ["grief", "support", "counseling", "mental health"],
+    "description": "Facilitate support groups for individuals coping with loss and grief. Provide a safe space for healing and sharing.",
+    "location": "San Mateo, CA",
+    "skills": [
+      "counseling",
+      "empathy",
+      "group facilitation",
+      "emotional support"
+    ],
+    "imageUrl": "https://example.com/grief-support.jpg",
+    "volunteersNeeded": 4,
+    "status": "active",
+    "points": 11,
+    "organizationName": "Healing Hearts Support Center"
+  },
+  {
+    "name": "Urban Beekeeping Assistant",
+    "tags": ["beekeeping", "urban agriculture", "sustainability", "education"],
+    "description": "Assist with urban beekeeping projects that support pollinator health and produce local honey for the community.",
+    "location": "Berkeley, CA",
+    "skills": [
+      "beekeeping",
+      "agriculture",
+      "attention to detail",
+      "calm demeanor"
+    ],
+    "imageUrl": "https://example.com/beekeeping.jpg",
+    "volunteersNeeded": 6,
+    "status": "active",
+    "points": 8,
+    "organizationName": "Urban Bee Collective"
+  },
+  {
+    "name": "Elderly Tech Training",
+    "tags": ["seniors", "technology", "training", "digital literacy"],
+    "description": "Provide one-on-one technology training to help elderly individuals use modern devices and stay connected.",
+    "location": "Fremont, CA",
+    "skills": ["technology", "patience", "teaching", "empathy"],
+    "imageUrl": "https://example.com/elderly-tech.jpg",
+    "volunteersNeeded": 10,
+    "status": "active",
+    "points": 7,
+    "organizationName": "Golden Years Digital"
+  },
+  {
+    "name": "Community Composting Program",
+    "tags": ["composting", "sustainability", "waste reduction", "environment"],
+    "description": "Help manage community composting sites and teach residents about waste reduction and sustainable practices.",
+    "location": "Palo Alto, CA",
+    "skills": [
+      "sustainability",
+      "teaching",
+      "organization",
+      "environmental knowledge"
+    ],
+    "imageUrl": "https://example.com/composting.jpg",
+    "volunteersNeeded": 8,
+    "status": "active",
+    "points": 6,
+    "organizationName": "Zero Waste Community"
+  },
+  {
+    "name": "Therapeutic Art Sessions",
+    "tags": ["art therapy", "mental health", "creativity", "healing"],
+    "description": "Facilitate therapeutic art sessions for individuals dealing with trauma, addiction, or mental health challenges.",
+    "location": "San Francisco, CA",
+    "skills": [
+      "art therapy",
+      "creativity",
+      "empathy",
+      "mental health awareness"
+    ],
+    "imageUrl": "https://example.com/art-therapy.jpg",
+    "volunteersNeeded": 5,
+    "status": "active",
+    "points": 10,
+    "organizationName": "Healing Arts Center"
+  },
+  {
+    "name": "Community Seed Library",
+    "tags": ["gardening", "seeds", "sustainability", "community"],
+    "description": "Help maintain a community seed library where residents can share and exchange seeds for home gardens.",
+    "location": "Santa Clara, CA",
+    "skills": [
+      "gardening",
+      "organization",
+      "plant knowledge",
+      "community building"
+    ],
+    "imageUrl": "https://example.com/seed-library.jpg",
+    "volunteersNeeded": 4,
+    "status": "active",
+    "points": 5,
+    "organizationName": "Community Garden Network"
+  },
+  {
+    "name": "Disaster Response Training",
+    "tags": [
+      "disaster response",
+      "emergency",
+      "training",
+      "community preparedness"
+    ],
+    "description": "Learn and help teach community disaster response skills including first aid, emergency communication, and evacuation procedures.",
+    "location": "San Jose, CA",
+    "skills": ["emergency response", "first aid", "teaching", "leadership"],
+    "imageUrl": "https://example.com/disaster-training.jpg",
+    "volunteersNeeded": 12,
+    "status": "active",
+    "points": 9,
+    "organizationName": "Community Emergency Response Team"
   }
 ]

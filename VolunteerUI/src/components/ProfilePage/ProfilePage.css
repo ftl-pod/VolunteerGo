@@ -55,7 +55,7 @@
     align-items: center;
 }
 
-img {
+.profile-img {
     border-radius: 50%;
     object-fit: cover;
     width: 70%;

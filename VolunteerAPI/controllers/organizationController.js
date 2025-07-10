@@ -1,3 +1,4 @@
+const prisma  = require("../db/db");
 // Get all organizations
 exports.getAll = async (req, res) => {
     try {

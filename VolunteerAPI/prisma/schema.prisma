@@ -18,7 +18,7 @@ model Organization {
   name       String
   tags       String[]      @default([]) //makes it optional
   location   String
-  opportunities Opportunity[]
+  opportunities Opportunity[] 
 }
 
 model Opportunity {
@@ -34,15 +34,16 @@ model Opportunity {
   volunteersNeeded Int?          
   status           String        @default("active")
   points           Int           @default(0) 
-  organization     Organization  @relation(fields: [organizationId], references: [id])
+  organization     Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId   Int
   users            User[]        @relation("UserOpportunities")
+  savedByUsers     User[]        @relation("SavedOpportunities")
 }
 
 model User {
   id           Int           @id @default(autoincrement())
-  avatarUrl    String?
-  username     String       @unique
+  avatarUrl    String?       @default("https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png")
+  username     String        @unique
   password     String
   skills       String[]      @default([])
   training     String[]      @default([])
@@ -51,7 +52,8 @@ model User {
   points       Int           @default(0)
   age          Int?
   opportunities Opportunity[] @relation("UserOpportunities")
-  leaderboardRank Int         @default(0)
+  savedOpportunities     Opportunity[] @relation("SavedOpportunities")
+  leaderboardRank Int         
 }
 
 model Chat {

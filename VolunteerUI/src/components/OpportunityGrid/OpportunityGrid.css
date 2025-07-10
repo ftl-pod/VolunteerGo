@@ -112,6 +112,8 @@ h1{
     cursor: pointer;
     transition: background-color 0.2s ease;
     flex-grow: 1;
+      font-family: 'Poppins';
+
 }
 
 .btn-primary:hover {
@@ -128,6 +130,8 @@ h1{
     cursor: pointer;
     transition: all 0.2s ease;
     flex-grow: 1;
+      font-family: 'Poppins';
+
 }
 
 .btn-secondary:hover {

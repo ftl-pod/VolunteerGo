@@ -19,6 +19,7 @@ function Navbar() {
         <div className="navbar-links">
             <NavLink to="/" exact className="nav-link">Home</NavLink>
             <NavLink to="/search" className="nav-link">Search</NavLink>
+            <NavLink to="/saved" className="nav-link">Saved</NavLink>
             <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
             <NavLink to="/map" className="nav-link">Map</NavLink>
         </div>

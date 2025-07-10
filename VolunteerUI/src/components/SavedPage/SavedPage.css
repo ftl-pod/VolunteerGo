@@ -1,0 +1,172 @@
+/* SavedPage.css */
+
+.saved-section {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.saved-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.saved-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  transition: box-shadow 0.2s ease;
+}
+
+.saved-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.saved-card-header {
+  margin-bottom: 15px;
+}
+
+.saved-card-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.saved-card-org {
+  color: #666;
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.saved-card-details {
+  color: #888;
+  font-size: 0.85em;
+  margin-bottom: 12px;
+}
+
+.saved-card-description {
+  color: #555;
+  line-height: 1.4;
+  margin-bottom: 15px;
+}
+
+.saved-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 15px;
+    align-items: center;
+}
+
+.saved-card-tag {
+  background: var(--tertiary-color);
+  padding: 4px 8px;
+  border-radius: 40px;
+  font-size: 0.8em;
+  color: var(--secondary-color);
+}
+
+.saved-card-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Link styling */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.suggested-section {
+    margin-bottom: 40px;
+}
+
+.suggested-section h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+.saved-cards-section h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+.suggested-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.suggested-card {
+  background: var(--primary-color);
+  color: white;
+  border-radius: 12px;
+  padding: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.suggested-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.suggested-card .btn-primary {
+  background: var(--background-color);
+  color: var(--text-color);
+  border: none;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease;
+}
+
+.suggested-card .btn-primary:hover {
+  background: var(--tertiary-color);
+}
+
+.suggested-card .btn-secondary {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 8px 16px;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease;
+}
+
+.suggested-card .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.suggested-card .saved-card-title {
+  color: white;
+}
+
+.suggested-card .saved-card-org {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.suggested-card .saved-card-details {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.suggested-card .saved-card-description {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.suggested-card .saved-card-tag {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}

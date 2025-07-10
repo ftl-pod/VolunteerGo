@@ -1,0 +1,161 @@
+[
+  {
+    "name": "Food Sorting and Packaging",
+    "tags": ["food", "sorting", "warehouse", "teamwork"],
+    "description": "Help sort and package food donations for distribution to families in need. No experience required, just enthusiasm to help!",
+    "location": "San Jose, CA",
+    "skills": ["organization", "teamwork", "attention to detail"],
+    "imageUrl": "https://example.com/food-sorting.jpg",
+    "volunteersNeeded": 12,
+    "status": "active",
+    "points": 5,
+    "organizationName": "San Jose Food Bank"
+  },
+  {
+    "name": "Dog Walking and Socialization",
+    "tags": ["dogs", "exercise", "animal care", "outdoor"],
+    "description": "Take rescued dogs for walks and help with socialization. Perfect for animal lovers who want to make a difference in a pet's life.",
+    "location": "Palo Alto, CA",
+    "skills": ["animal handling", "patience", "physical fitness"],
+    "imageUrl": "https://example.com/dog-walking.jpg",
+    "volunteersNeeded": 8,
+    "status": "active",
+    "points": 4,
+    "organizationName": "Bay Area Animal Rescue"
+  },
+  {
+    "name": "Computer Skills Workshop Assistant",
+    "tags": ["teaching", "technology", "seniors", "computer skills"],
+    "description": "Assist seniors in learning basic computer skills and internet navigation. Help bridge the digital divide in our community.",
+    "location": "Mountain View, CA",
+    "skills": ["computer literacy", "patience", "teaching", "communication"],
+    "imageUrl": "https://example.com/computer-workshop.jpg",
+    "volunteersNeeded": 6,
+    "status": "active",
+    "points": 8,
+    "organizationName": "Tech4Good Foundation"
+  },
+  {
+    "name": "Community Garden Cleanup",
+    "tags": ["gardening", "environment", "outdoor", "cleanup"],
+    "description": "Join us for a community garden cleanup day. We'll be weeding, planting, and preparing beds for the upcoming season.",
+    "location": "Berkeley, CA",
+    "skills": ["gardening", "physical work", "teamwork"],
+    "imageUrl": "https://example.com/garden-cleanup.jpg",
+    "volunteersNeeded": 15,
+    "status": "active",
+    "points": 6,
+    "organizationName": "Green Earth Initiative"
+  },
+  {
+    "name": "House Building - Roofing Team",
+    "tags": ["construction", "building", "housing", "skilled labor"],
+    "description": "Help install roofing on a new home for a family in need. Construction experience preferred but not required - we'll provide training!",
+    "location": "San Francisco, CA",
+    "skills": [
+      "construction",
+      "physical strength",
+      "teamwork",
+      "safety awareness"
+    ],
+    "imageUrl": "https://example.com/roofing.jpg",
+    "volunteersNeeded": 10,
+    "status": "active",
+    "points": 12,
+    "organizationName": "Habitat for Humanity - Bay Area"
+  },
+  {
+    "name": "After School Tutoring",
+    "tags": ["tutoring", "education", "youth", "mentorship"],
+    "description": "Provide homework help and academic support to elementary school students. Make a lasting impact on a child's education.",
+    "location": "Oakland, CA",
+    "skills": ["tutoring", "patience", "communication", "subject knowledge"],
+    "imageUrl": "https://example.com/tutoring.jpg",
+    "volunteersNeeded": 20,
+    "status": "active",
+    "points": 7,
+    "organizationName": "Youth Mentorship Network"
+  },
+  {
+    "name": "Senior Companion Visits",
+    "tags": ["seniors", "companionship", "social", "conversation"],
+    "description": "Spend quality time with elderly residents at local care facilities. Share stories, play games, or simply provide friendly conversation.",
+    "location": "Santa Clara, CA",
+    "skills": ["empathy", "communication", "patience", "social skills"],
+    "imageUrl": "https://example.com/senior-visits.jpg",
+    "volunteersNeeded": 5,
+    "status": "active",
+    "points": 6,
+    "organizationName": "Senior Care Connect"
+  },
+  {
+    "name": "Reading Program for Kids",
+    "tags": ["reading", "children", "literacy", "education"],
+    "description": "Read to groups of children at the local library and help foster a love of reading. Perfect for book lovers and aspiring teachers.",
+    "location": "San Jose, CA",
+    "skills": ["reading", "public speaking", "child interaction", "enthusiasm"],
+    "imageUrl": "https://example.com/reading-program.jpg",
+    "volunteersNeeded": 4,
+    "status": "active",
+    "points": 5,
+    "organizationName": "Literacy Coalition"
+  },
+  {
+    "name": "Animal Shelter Cleaning",
+    "tags": ["animals", "cleaning", "shelter", "maintenance"],
+    "description": "Help maintain a clean and healthy environment for rescued animals. Tasks include cleaning kennels, washing bedding, and general upkeep.",
+    "location": "Palo Alto, CA",
+    "skills": [
+      "cleaning",
+      "physical work",
+      "attention to detail",
+      "reliability"
+    ],
+    "imageUrl": "https://example.com/shelter-cleaning.jpg",
+    "volunteersNeeded": 6,
+    "status": "active",
+    "points": 4,
+    "organizationName": "Bay Area Animal Rescue"
+  },
+  {
+    "name": "Beach Cleanup Day",
+    "tags": ["environment", "cleanup", "ocean", "conservation"],
+    "description": "Join our monthly beach cleanup to remove trash and debris from our beautiful coastline. Help protect marine life and keep beaches clean.",
+    "location": "Half Moon Bay, CA",
+    "skills": ["environmental awareness", "physical activity", "teamwork"],
+    "imageUrl": "https://example.com/beach-cleanup.jpg",
+    "volunteersNeeded": 25,
+    "status": "active",
+    "points": 5,
+    "organizationName": "Green Earth Initiative"
+  },
+  {
+    "name": "Mobile Food Distribution",
+    "tags": ["food", "distribution", "community", "outreach"],
+    "description": "Help distribute food to underserved communities through our mobile food pantry program. Great way to directly impact families in need.",
+    "location": "East San Jose, CA",
+    "skills": [
+      "organization",
+      "customer service",
+      "lifting",
+      "bilingual helpful"
+    ],
+    "imageUrl": "https://example.com/mobile-food.jpg",
+    "volunteersNeeded": 8,
+    "status": "active",
+    "points": 6,
+    "organizationName": "San Jose Food Bank"
+  },
+  {
+    "name": "Youth Basketball Coaching",
+    "tags": ["youth", "sports", "coaching", "mentorship"],
+    "description": "Coach youth basketball teams and help develop both athletic skills and character. Previous coaching experience preferred but not required.",
+    "location": "Oakland, CA",
+    "skills": ["coaching", "sports knowledge", "leadership", "mentorship"],
+    "imageUrl": "https://example.com/basketball-coaching.jpg",
+    "volunteersNeeded": 3,
+    "status": "active",
+    "points": 10,
+    "organizationName": "Youth Mentorship Network"
+  }
+]

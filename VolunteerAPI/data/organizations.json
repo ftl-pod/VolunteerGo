@@ -1,0 +1,42 @@
+[
+  {
+    "name": "San Jose Food Bank",
+    "tags": ["food", "hunger", "community", "nonprofit"],
+    "location": "San Jose, CA"
+  },
+  {
+    "name": "Bay Area Animal Rescue",
+    "tags": ["animals", "rescue", "shelter", "pets"],
+    "location": "Palo Alto, CA"
+  },
+  {
+    "name": "Tech4Good Foundation",
+    "tags": ["technology", "education", "digital literacy", "nonprofit"],
+    "location": "Mountain View, CA"
+  },
+  {
+    "name": "Green Earth Initiative",
+    "tags": ["environment", "sustainability", "conservation", "climate"],
+    "location": "Berkeley, CA"
+  },
+  {
+    "name": "Habitat for Humanity - Bay Area",
+    "tags": ["housing", "construction", "community", "building"],
+    "location": "San Francisco, CA"
+  },
+  {
+    "name": "Youth Mentorship Network",
+    "tags": ["youth", "mentorship", "education", "development"],
+    "location": "Oakland, CA"
+  },
+  {
+    "name": "Senior Care Connect",
+    "tags": ["seniors", "elderly", "healthcare", "companionship"],
+    "location": "Santa Clara, CA"
+  },
+  {
+    "name": "Literacy Coalition",
+    "tags": ["literacy", "education", "reading", "tutoring"],
+    "location": "San Jose, CA"
+  }
+]

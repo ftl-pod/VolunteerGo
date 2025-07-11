@@ -6,7 +6,7 @@ function HomeHeader() {
   return (
     <div className="home-header">
       <div className="header-left">
-        <div className="logo-placeholder">
+        <div className="logo-placeholder-1">
           <FaRegPaperPlane />
         </div>
         <div className="org-name">

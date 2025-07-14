@@ -25,10 +25,11 @@ model Opportunity {
   id               Int           @id @default(autoincrement())
   name             String
   tags             String[]      @default([])
+  requirements     String[]      @default([])
   description      String?       
   date             DateTime?     
   createdAt        DateTime      @default(now())
-  location            String?       
+  location         String?       
   skills           String[]      @default([])
   imageUrl         String?     
   volunteersNeeded Int?          
@@ -50,10 +51,11 @@ model User {
   createdAt    DateTime      @default(now())
   location     String?
   points       Int           @default(0)
+  level        Int           @default(1)
   age          Int?
   opportunities Opportunity[] @relation("UserOpportunities")
-  savedOpportunities     Opportunity[] @relation("SavedOpportunities")
-  leaderboardRank Int         
+  savedOpportunities   Opportunity[] @relation("SavedOpportunities")
+  leaderboardRank Int         @unique    
 }
 
 model Chat {

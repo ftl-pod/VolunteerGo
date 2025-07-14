@@ -1,8 +1,23 @@
 import "./LocationPage.css";
+import React, {useEffect, useState, useRef, useCallback} from 'react';
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
+// import {
+//   AdvancedMarker,
+//   MapCameraChangedEvent,
+//   Pin
+// } from '@vis.gl/react-google-maps';
+  // need to import cluster stuff if i wanna do that
+
+
+
+// const locations = [
+//     {lo1},
+//     {lo2},
+// ];
 
 function LocationPage () {
     //add a search bar here to search for locations and let user know its showing their current location on default
+
     return (
         <>
         <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} onLoad={ () => console.log("Google Maps API loaded :)")}>
@@ -13,6 +28,7 @@ function LocationPage () {
                 onCameraChanged={(ev) =>
                 console.log('camera changed:', ev.detail.center, 'zoom:', ev.detail.zoom)}
                 >
+                    {/* <PoiMarkers pois={locations} /> */}
                 </Map>
             </div>
         </APIProvider>   

@@ -11,16 +11,27 @@ import { FaFireFlameCurved } from "react-icons/fa6";
 import { BiSolidDonateHeart } from "react-icons/bi";
 
 
-function ProfilePage() {
+function ProfilePage({user}) {
+    
+      if (!user) {
+        return (
+        <div className="page-container">
+            <div className="section">
+            <p>Please log in to view your profile.</p>
+            </div>
+        </div>
+        );
+    }
+
     return (
         <>
             <div className="page-container">
                 <div className="section">
                     <div className="profile">
-                        <div className="name">user.name</div>
+                        <div className="name">{user.username}</div>
                         <div className="img-container">
                             {/* hardcoded for now, user will have 12 options */}
-                            <img src="https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png" alt="Profile" className="profile-img" />
+                            <img src={user.avatarUrl} alt="Profile" className="profile-img" />
                         </div>
                         <div className="bio">
                             <div className="info">
@@ -42,11 +53,11 @@ function ProfilePage() {
                             </div>
                             <div className="info">
                                 {/* this stuff will come from the db after user registers */}
-                                <div>location</div>
-                                <div>age</div>
-                                <div>points</div>
-                                <div>level</div>
-                                <div>joined</div>
+                                <div>{user.location}</div>
+                                <div>{user.age}</div>
+                                <div>{user.points}</div>
+                                <div>{user.level}</div>
+                                <div>{new Date(user.createdAt).toLocaleDateString()}</div>
                             </div>
                         </div>
                     </div>
@@ -70,9 +81,13 @@ function ProfilePage() {
                             <b>Skills</b>
                             </div>
                         <div className="box-content">
-                            <div>thing1</div>
-                            <div>thing2</div>
-                            <div>thing3</div>
+                        {user.skills && user.skills.length > 0 ? (
+                            user.skills.map((skill, index) => (
+                            <div key={index}>{skill}</div>
+                            ))
+                        ) : (
+                            <div>No skills listed.</div>
+                        )}
                         </div>
                      </div>
                       <div className="box">
@@ -80,10 +95,13 @@ function ProfilePage() {
                             <PiCertificateFill className="icon"/>
                             <b>Certifications</b></div>
                         <div className="box-content">
-                            <div>thing1</div>
-                            <div>thing2</div>
-                            <div>thing3</div>
-                        </div>
+                        {user.training && user.training.length > 0 ? (
+                            user.training.map((training, index) => (
+                            <div key={index}>{training}</div>
+                            ))
+                        ) : (
+                            <div>No skills listed.</div>
+                        )}                        </div>
                       </div>
                 </div>
                 <div className="section">
@@ -92,7 +110,11 @@ function ProfilePage() {
                             <FaFireFlameCurved className="icon"/>
                             <b>Leaderboard status</b>
                             </div>
-                        <div className="box-content"></div>
+                            <div className="box-content">
+                            <div className="rank-label">
+                                Leaderboard Rank: #{user.leaderboardRank}
+                            </div>
+                            </div>
                     </div>
                     <div className="section2">
                         <div className="s2-header">

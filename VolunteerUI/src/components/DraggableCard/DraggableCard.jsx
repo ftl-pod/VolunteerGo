@@ -137,8 +137,8 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
       </div>
       <div className="opportunity-info">
         <button className="back-button" onClick={() => window.history.back()}>← Back</button>
-        <h1>{opportunity?.title || 'Sample Opportunity'}</h1>
-        <p className="organization">By: {opportunity?.organization || 'Sample Organization'}</p>
+        <h1>{opportunity?.name || 'Sample Opportunity'}</h1>
+        <p className="organization">By: {opportunity?.organization.name || 'Sample Organization'}</p>
         <p className="location-date">
           {opportunity?.location || 'Sample Location'} | {formatDate ? formatDate(opportunity?.date) : 'Jan 1, 2024'}
         </p>

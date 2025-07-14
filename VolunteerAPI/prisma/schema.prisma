@@ -55,7 +55,7 @@ model User {
   age          Int?
   opportunities Opportunity[] @relation("UserOpportunities")
   savedOpportunities   Opportunity[] @relation("SavedOpportunities")
-  leaderboardRank Int         @unique    
+  leaderboardRank Int          
 }
 
 model Chat {

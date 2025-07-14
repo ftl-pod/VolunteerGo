@@ -79,7 +79,7 @@ exports.createUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
     try {
         const userId = Number(req.params.id);
-        const {username, password, training, skills, location, age, leaderboardRank, opportunities, savedOpportunities, avatarUrl} = req.body;
+        const {username, password, training, skills, location, age, leaderboardRank, opportunities, savedOpportunities, avatarUrl, level} = req.body;
         if (!username || !password || !Array.isArray(training) || training.length === 0 || !Array.isArray(skills) || skills.length === 0 || !location || typeof age !== 'number' || typeof leaderboardRank !== 'number') {
             return res.status(400).json({ error : "Missing required field!" });
         }
@@ -95,6 +95,7 @@ exports.updateUser = async (req, res) => {
                 age,
                 leaderboardRank,
                 avatarUrl,
+                level,
                 // pass in opportunities by arrary of ids : [1,2] -> adding opps 1 & 2
                 opportunities: {
                     connect: opportunities.map(oppId => ({ id: Number(oppId) }))

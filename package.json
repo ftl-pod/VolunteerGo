@@ -2,6 +2,7 @@
   "dependencies": {
     "@googlemaps/markerclusterer": "^2.6.2",
     "@vis.gl/react-google-maps": "^1.5.4",
+    "axios": "^1.10.0",
     "express": "^5.1.0",
     "nodemon": "^3.1.10",
     "prisma": "^6.11.1",

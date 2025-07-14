@@ -17,7 +17,7 @@ function ProfilePage() {
             <div className="page-container">
                 <div className="section">
                     <div className="profile">
-                        <div className="name">first lastname</div>
+                        <div className="name">user.name</div>
                         <div className="img-container">
                             {/* hardcoded for now, user will have 12 options */}
                             <img src="https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png" alt="Profile" className="profile-img" />

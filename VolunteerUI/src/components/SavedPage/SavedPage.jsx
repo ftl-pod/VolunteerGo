@@ -1,8 +1,9 @@
 import './SavedPage.css'
-import opportunities from '../../data/opportunities';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react'
 
 function SavedPage() {
+    const [opps, setOpps] = useState([]);
     const formatDate = (dateStr) => {
         const date = new Date(dateStr);
         return date.toLocaleDateString('en-US', {
@@ -12,8 +13,28 @@ function SavedPage() {
         });
     };
 
-    const suggestedCards = opportunities.slice(0, 3);
-    const remainingCards = opportunities.slice(3);
+    useEffect(() => {
+    const fetchOpps = async () => {
+        try {
+        const url = `${import.meta.env.VITE_API_BASE_URL}/opportunities`;
+        const res = await fetch(url);
+
+        if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+
+        const data = await res.json();
+        setOpps(data);
+        } catch (err) {
+        console.error("Failed to fetch opportunities:", err);
+        }
+    };
+
+    fetchOpps();
+    }, []);
+
+    const suggestedCards = opps.slice(0, 3);
+    const remainingCards = opps.slice(3);
 
     return (
         <div className="saved-section">
@@ -27,7 +48,7 @@ function SavedPage() {
                                 <div className="saved-card-header">
                                     <div className="saved-card-header-left">
                                         <h3 className="saved-card-title">{opportunity.title}</h3>
-                                        <p className="saved-card-org">{opportunity.organization}</p>
+                                        <p className="saved-card-org">{opportunity.organization.name}</p>
                                     </div>
                                 </div>
                                 <div className="saved-card-details">
@@ -63,7 +84,7 @@ function SavedPage() {
                                 <div className="saved-card-header">
                                     <div className="saved-card-header-left">
                                         <h3 className="saved-card-title">{opportunity.title}</h3>
-                                        <p className="saved-card-org">{opportunity.organization}</p>
+                                        <p className="saved-card-org">{opportunity.organization.name}</p>
                                     </div>
                                 </div>
                                 <div className="saved-card-details">

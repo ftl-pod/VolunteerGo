@@ -2,6 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const fs = require("fs");
 const path = require("path");
+const bcrypt = require("bcrypt");
 
 async function seed() {
   try {
@@ -79,18 +80,18 @@ async function seed() {
     console.log("\n👤 Seeding users...");
     for (let i = 0; i < userData.length; i++) {
       const user = userData[i];
-
+      const hashedPassword = await bcrypt.hash(user.password, 10); // hash pass
       await prisma.user.create({
         data: {
           username: user.username,
-          password: user.password, // unhashed for seed simplicity
+          password: hashedPassword,
           skills: user.skills,
           training: user.training,
           location: user.location,
           age: user.age,
           level: user.level ?? 1,
           points: user.points ?? 0,
-          leaderboardRank: i, // ensure this is unique and not null
+          leaderboardRank: i + 1, // ensure this is unique and not null
           avatarUrl: user.avatarUrl ??
           "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
         },

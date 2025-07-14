@@ -42,18 +42,12 @@ exports.getUserById = async (req, res) => {
 
 exports.createUser = async (req, res) => {
     try {
+        const newRank = await prisma.user.count() + 1; // new user will be at the end of the leaderboard
         const { username, password, training, skills, location, age,  avatarUrl} = req.body;
         if (!username || !password || !Array.isArray(training) || training.length === 0 || !Array.isArray(skills) || skills.length === 0 || !location || !age ) {
             return res.status(400).json({ error : "Missing required field!" });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        await prisma.user.updateMany({
-            data: {
-                leaderboardRank: {
-                    increment: 1 // when a user joins, everyone else move up
-                }
-            }
-        });
         const user = await prisma.user.create({
             data : {
                 username,
@@ -62,7 +56,7 @@ exports.createUser = async (req, res) => {
                 skills,
                 location,
                 age,
-                leaderboardRank : 0, // all new users start at 0
+                leaderboardRank : newRank, // all new users start at 0
                 avatarUrl, 
                 // when creating a user, they will have no opportunities initially
             },

@@ -43,7 +43,7 @@ function Leaderboard() {
                                 <div className="rank">
                                     <div className="circle">{u.leaderboardRank}</div>
                                 </div>
-                                <div className="name">
+                                <div className="user-name">
                                     <div className="pfp">
                                         <div className="circle">
                                             <img className="pfp-img" src={u.avatarUrl} alt="Profile" />

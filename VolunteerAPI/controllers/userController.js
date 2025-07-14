@@ -105,7 +105,7 @@ exports.updateUser = async (req, res) => {
                 }
             }
         })
-        // excluding pass from response
+        // excluding pass from responsegi t
         const { password: _, ...userWithoutPassword } = updatedUser;
         return res.json(userWithoutPassword);
     } catch (error) {

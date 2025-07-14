@@ -21,6 +21,10 @@ async function seed() {
       fs.readFileSync(path.join(__dirname, "./data/organizations.json"), "utf8")
     );
 
+    const userData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "./data/user.json"), "utf8")
+    );
+
     console.log("📋 Seeding organizations...");
     for (const org of organizationData) {
       await prisma.organization.create({
@@ -36,11 +40,10 @@ async function seed() {
     // Fetch all organizations to get their IDs
     const organizations = await prisma.organization.findMany();
 
-    // Seed opportunities
     console.log("\n🎯 Seeding opportunities...");
     for (let i = 0; i < opportunityData.length; i++) {
       const opportunity = opportunityData[i];
-      // Find the organization by name (assuming your opportunityData has organizationName)
+
       if (!opportunity.organizationId && opportunity.organizationName) {
         const org = organizations.find(
           (o) => o.name === opportunity.organizationName
@@ -53,9 +56,9 @@ async function seed() {
           );
         }
       } else if (!opportunity.organizationId) {
-        // fallback: assign round-robin
         opportunity.organizationId = organizations[i % organizations.length].id;
       }
+
       await prisma.opportunity.create({
         data: {
           name: opportunity.name,
@@ -72,6 +75,28 @@ async function seed() {
       });
     }
     console.log(`✅ Created ${opportunityData.length} opportunities`);
+
+    console.log("\n👤 Seeding users...");
+    for (let i = 0; i < userData.length; i++) {
+      const user = userData[i];
+
+      await prisma.user.create({
+        data: {
+          username: user.username,
+          password: user.password, // unhashed for seed simplicity
+          skills: user.skills,
+          training: user.training,
+          location: user.location,
+          age: user.age,
+          level: user.level ?? 1,
+          points: user.points ?? 0,
+          leaderboardRank: i, // ensure this is unique and not null
+          avatarUrl: user.avatarUrl ??
+          "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
+        },
+      });
+    }
+    console.log(`✅ Created ${userData.length} users`);
 
     console.log("\n🎉 Seeding complete!");
   } catch (err) {

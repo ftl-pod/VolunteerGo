@@ -1,5 +1,4 @@
 import './OpportunityGrid.css'
-import opportunities from '../../data/opportunities';
 import { Link } from 'react-router-dom';
 import {useEffect, useState} from 'react';
 function OpportunityGrid() {

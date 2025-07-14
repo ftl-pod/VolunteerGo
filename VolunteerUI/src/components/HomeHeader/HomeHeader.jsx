@@ -6,7 +6,7 @@ function HomeHeader() {
   return (
     <div className="home-header">
       <div className="header-left">
-        <div className="logo-placeholder">
+        <div className="logo-placeholder-1">
           <FaRegPaperPlane />
         </div>
         <div className="org-name">
@@ -15,7 +15,7 @@ function HomeHeader() {
       </div>
       <div className="buttons-for-access header-right">
         <NavLink to="/login" className="nav-link">
-          <button className="login">L O G I N</button>
+          <button className="login">LOGIN</button>
         </NavLink>
         <NavLink to="/signup" className="nav-link">
           <button className="register">Register</button>

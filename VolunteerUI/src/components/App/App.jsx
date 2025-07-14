@@ -1,7 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import './App.css'
-
 import HomePage from '../HomePage/HomePage'
 import SearchPage from '../SearchPage/SearchPage'
 import LoginPage from '../LoginPage/LoginPage'
@@ -12,36 +10,34 @@ import NavBar from '../NavBar/NavBar'
 import OpportunityPage from '../OpportunityPage/OpportunityPage'
 import LocationPage from '../LocationPage/LocationPage'
 import SavedPage from '../SavedPage/SavedPage'
+import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState(null);
+
+  // Ensure the user persists on page reload
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem('user'));
+    if (savedUser) setUser(savedUser);
+  }, []);
+
+  const handleLogin = (user) => {
+    setUser(user);
+    localStorage.setItem('user', JSON.stringify(user));
+    alert(`Welcome ${user.username}!`);
+  };
 
   return (
     <Router>  
       <div className="App">        
-
-        {/* Navigation Links */}
-
-
-        {/* {<nav>
-          <Link to="/">HomePage</Link> |{' '}
-          <Link to="/search">SearchPage</Link> |{' '}
-          <Link to="/login">LoginPage</Link> |{' '}
-          <Link to="/signup">SignupPage</Link> |{' '}
-          <Link to="/profile">ProfilePage</Link> |{' '}
-          <Link to="/leaderboard">Leaderboard</Link>
-        </nav>} */}
-
-
-        <NavBar/>
-
+        <NavBar user={user} setUser={setUser}/>
         {/* Routes */}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile" element={<ProfilePage user={user} />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/saved" element={<SavedPage />} />
           <Route path="/opportunity/:id" element={<OpportunityPage />} />

@@ -5,19 +5,21 @@ import { FaUserCircle } from "react-icons/fa";
 
 
 
-function Navbar() {
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
+function Navbar({setUser, user}) {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        setIsLoggedIn(false);
-        navigate('/login');
+        localStorage.removeItem('token');
+        setUser(null);                 
+        navigate('/login');               
     };
+    
+    const isLoggedIn = !!user;
 
     return (
         <nav className="navbar">
         <div className="navbar-links">
-            <NavLink to="/" exact className="nav-link">Home</NavLink>
+            <NavLink to="/" className="nav-link">Home</NavLink>
             <NavLink to="/search" className="nav-link">Search</NavLink>
             <NavLink to="/saved" className="nav-link">Saved</NavLink>
             <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
@@ -28,7 +30,15 @@ function Navbar() {
             {isLoggedIn ? (
             <>
                 <NavLink to="/profile" className="profile-icon">
-                <FaUserCircle size={40} />
+                {user.avatarUrl ? (
+                    <img 
+                    src={user.avatarUrl} 
+                    alt={`${user.username}'s avatar`} 
+                    style={{ width: 60, height: 60, borderRadius: '50%' }} 
+                    />
+                ) : (
+                    <FaUserCircle size={60} />
+                )}
                 </NavLink>
                 <button className="logout-button" onClick={handleLogout}>Logout</button>
             </>

@@ -143,6 +143,11 @@ try {
     const user = await prisma.user.findUnique({
         where: { username },
     });
+    if (!user) {
+      console.warn(`Login failed: user "${username}" not found.`);
+      return res.status(401).json({ error: "Invalid username or password." });
+    }
+
     if (user && (await bcrypt.compare(password, user.password))) {
         // exclude pass
         const { password: _, ...userWithoutPassword } = user;
@@ -150,11 +155,12 @@ try {
         const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET);
         return res.json({ user: userWithoutPassword, token });
     } else {
+        console.warn(`Login failed: incorrect password for user "${username}".`);
         return res.status(401).json({ error : "Invalid username or password" });
     }
 
 } catch (error) {
-    console.error("Erro logging in:", error);
+    console.error("Error logging in:", error);
     return res.status(500).json({ error : "Internal server error" });
 }
 };

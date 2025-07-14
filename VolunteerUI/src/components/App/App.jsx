@@ -10,6 +10,8 @@ import ProfilePage from '../ProfilePage/ProfilePage'
 import Leaderboard from '../Leaderboard/Leaderboard'
 import NavBar from '../NavBar/NavBar'
 import OpportunityPage from '../OpportunityPage/OpportunityPage'
+import LocationPage from '../LocationPage/LocationPage'
+import SavedPage from '../SavedPage/SavedPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -41,7 +43,9 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/opportunity/:id" element={<OpportunityPage />} />
+          <Route path="/saved" element={<SavedPage />} />
+          <Route path="/opportunity/:id" element={<OpportunityPage />} />
+          <Route path="/map" element={<LocationPage/>} />
         </Routes>
       </div>
     </Router>

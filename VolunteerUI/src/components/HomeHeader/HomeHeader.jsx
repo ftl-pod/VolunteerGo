@@ -15,7 +15,7 @@ function HomeHeader() {
       </div>
       <div className="buttons-for-access header-right">
         <NavLink to="/login" className="nav-link">
-          <button className="login">L O G I N</button>
+          <button className="login">LOGIN</button>
         </NavLink>
         <NavLink to="/signup" className="nav-link">
           <button className="register">Register</button>

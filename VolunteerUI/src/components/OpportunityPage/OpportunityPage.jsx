@@ -15,5 +15,4 @@ const OpportunityPage = () => {
     />
   );
 };
-
 export default OpportunityPage;

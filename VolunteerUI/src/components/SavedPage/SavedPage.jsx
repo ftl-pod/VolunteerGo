@@ -83,7 +83,7 @@ function SavedPage() {
                             <div className="saved-card">
                                 <div className="saved-card-header">
                                     <div className="saved-card-header-left">
-                                        <h3 className="saved-card-title">{opportunity.title}</h3>
+                                        <h3 className="saved-card-title">{opportunity.name}</h3>
                                         <p className="saved-card-org">{opportunity.organization.name}</p>
                                     </div>
                                 </div>

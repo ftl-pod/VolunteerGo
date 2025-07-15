@@ -13,7 +13,7 @@ function LoginPage() {
         </div>
         <div className="auth-right">
           <div className="w-full h-full flex items-center justify-center">
-            <SignIn/>
+            <SignIn signUpUrl="/signup"/>
           </div>
         </div>
       </div>

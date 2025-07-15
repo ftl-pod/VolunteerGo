@@ -10,38 +10,41 @@ import NavBar from '../NavBar/NavBar'
 import OpportunityPage from '../OpportunityPage/OpportunityPage'
 import LocationPage from '../LocationPage/LocationPage'
 import SavedPage from '../SavedPage/SavedPage'
+import Onboarding from '../Onboarding/Onboarding'
+
+import { useUser } from "@clerk/clerk-react";
 import './App.css'
 
 function App() {
-  const [user, setUser] = useState(null);
+  const { user, isLoaded, isSignedIn } = useUser();
 
   // Ensure the user persists on page reload
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem('user'));
-    if (savedUser) setUser(savedUser);
-  }, []);
+    if (isSignedIn) {
+      console.log("User signed in:", user);
+      alert(`Welcome ${user.username || user.firstName || "volunteer"}!`);
+          console.log("Full Clerk user object:", user);
 
-  const handleLogin = (user) => {
-    setUser(user);
-    localStorage.setItem('user', JSON.stringify(user));
-    alert(`Welcome ${user.username}!`);
-  };
+    }
+  }, [isSignedIn]);
+
 
   return (
     <Router>  
       <div className="App">        
-        <NavBar user={user} setUser={setUser}/>
+        <NavBar user={user}/>
         {/* Routes */}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/profile" element={<ProfilePage user={user} />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/saved" element={<SavedPage />} />
           <Route path="/opportunity/:id" element={<OpportunityPage />} />
           <Route path="/map" element={<LocationPage/>} />
+          <Route path="/onboarding" element={<Onboarding/>} />
         </Routes>
       </div>
     </Router>

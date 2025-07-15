@@ -100,7 +100,7 @@
 }
 
 .cl-footerActionLink:hover {
-  color: rgba(var(--primary-rgb, 0, 123, 255), 0.8) ;
+  color: rgba(var(--tertiary-color, 0, 123, 255), 0.8) ;
   text-decoration: underline ;
 }
 

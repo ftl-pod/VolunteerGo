@@ -1,9 +1,11 @@
 import "./Signup.css";
 import { useNavigate } from "react-router-dom";
-import { SignUp } from '@clerk/clerk-react';
+import { SignUp, useSignUp } from '@clerk/clerk-react';
 
 function SignupPage() {
   const navigate = useNavigate();
+  const { isLoaded, signUp } = useSignUp();
+
   return (
     <>
       <div className="auth-page-container">
@@ -12,7 +14,10 @@ function SignupPage() {
         </div>
         <div className="auth-right">
           <div className="w-full h-full flex items-center justify-center">
-            <SignUp/>
+          <SignUp
+            signInUrl="/login"
+            fallbackRedirectUrl="/onboarding" 
+          />
           </div>
         </div>
       </div>

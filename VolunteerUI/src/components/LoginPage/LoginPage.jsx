@@ -1,8 +1,35 @@
 import "./LoginPage.css";
 import { useNavigate } from "react-router-dom";
-
-function LoginPage() {
+import axios from 'axios';
+import {useEffect, useState } from "react";
+function LoginPage({ onLogin }) {
     const navigate = useNavigate();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleLogin = async (e) => {
+      e.preventDefault();
+      try {
+        const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/users/login`, {
+          username,
+          password,
+        });
+
+        const { token, user } = res.data;
+
+        // Save token in localStorage or context
+        localStorage.setItem('token', token);
+
+        // Let app know the user is logged in
+        console.log("Login Successful")
+        onLogin(user);
+        navigate("/")
+
+      } catch (err) {
+        console.error('Login failed:', err.response?.data || err.message);
+      }
+    };
+
   return (
     <>
       <div className="auth-page-container">
@@ -12,16 +39,18 @@ function LoginPage() {
         <div className="auth-right">
           <div className="auth-content">
             <h1 className="login">Login</h1>
-            <form>
+            <form onSubmit={handleLogin}>
               <div className="form-group">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="username">Username</label>
                 <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="Enter your email"
+                  type="text"
+                  id="username"
+                  name="username"
+                  placeholder="Enter your username"
                   required
-                  className="email"
+                  className="username"
+                  value={username} 
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
 
@@ -34,6 +63,8 @@ function LoginPage() {
                   placeholder="Enter your password"
                   required
                   className="password"
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
 

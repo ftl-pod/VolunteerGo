@@ -23,7 +23,6 @@ function Navbar() {
                 <NavLink to="/saved" className="nav-link">Saved</NavLink>
                 <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
                 <NavLink to="/map" className="nav-link">Map</NavLink>
-                                <NavLink to="/onboarding" className="nav-link">Onboarding</NavLink>
 
             </div>
 
@@ -31,9 +30,9 @@ function Navbar() {
                 {isLoggedIn ? (
                     <>
                         <NavLink to="/profile" className="profile-icon">
-                            {user.imageUrl ? (
+                            {user.publicMetadata.avatarUrl ? (
                                 <img 
-                                    src={user.imageUrl} 
+                                    src={user.publicMetadata.avatarUrl} 
                                     alt={`${user.username || 'User'}'s avatar`} 
                                     style={{ width: 60, height: 60, borderRadius: '50%' }} 
                                 />

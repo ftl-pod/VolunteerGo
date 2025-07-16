@@ -48,6 +48,7 @@ model User {
   name         String?
   username     String        @unique
   skills       String[]      @default([])
+  interests    String[]      @default([])
   training     String[]      @default([])
   createdAt    DateTime      @default(now())
   location     String?

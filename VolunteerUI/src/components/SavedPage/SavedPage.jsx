@@ -1,9 +1,19 @@
 import './SavedPage.css'
+import RemoveModal from '../RemoveModal/RemoveModal';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react'
 
 function SavedPage() {
+    const [showModal, setShowModal] = useState(false); // animation thing
     const [opps, setOpps] = useState([]);
+    // stuff for modal animation
+    const notInterestedClick = () => {
+        setShowModal(true)
+    };
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
     const formatDate = (dateStr) => {
         const date = new Date(dateStr);
         return date.toLocaleDateString('en-US', {
@@ -43,7 +53,6 @@ function SavedPage() {
                 <h2>Suggested for You</h2>
                 <div className="suggested-grid">
                     {suggestedCards.map(opportunity => (
-                        <Link to={`/opportunity/${opportunity.id}`} key={opportunity.id}>
                             <div className="suggested-card">
                                 <div className="saved-card-header">
                                     <div className="saved-card-header-left">
@@ -66,12 +75,21 @@ function SavedPage() {
                                 
                                 <div className="saved-card-actions">
                                     <button className="btn-primary">I Want to Help</button>
-                                    <button className="btn-secondary">Save</button>
+                                    <button className="btn-secondary"
+                                    onClick={notInterestedClick}
+                                    >Not Interested</button>
                                 </div>
                             </div>
-                        </Link>
                     ))}
                 </div>
+            </div>
+            <div>
+                <RemoveModal 
+                show={showModal}
+                closeModal={closeModal}
+                >
+                </RemoveModal>
+
             </div>
 
             {/* Saved Cards Section */}

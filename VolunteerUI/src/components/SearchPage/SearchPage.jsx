@@ -7,7 +7,6 @@ import './SearchPage.css';
 function SearchPage() {
     return (
         <div className="search-page">
-            {/* <NavBar /> */}
             <div className="search-page-content">
                 <SearchHeader />
                 <OpportunityGrid />

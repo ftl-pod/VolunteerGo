@@ -330,6 +330,13 @@
   }
 }
 
+.profile-button{
+    padding: 1rem 1rem;
+    margin-bottom: 20px;
+    margin-top: auto;
+    max-height: 50px;
+}
+
 @media screen and (max-width: 768px) {
   .page-container {
     padding: 1rem;

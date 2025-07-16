@@ -23,7 +23,6 @@ function Navbar() {
                 <NavLink to="/saved" className="nav-link">Saved</NavLink>
                 <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
                 <NavLink to="/map" className="nav-link">Map</NavLink>
-                                <NavLink to="/onboarding" className="nav-link">Onboarding</NavLink>
 
             </div>
 

@@ -156,13 +156,14 @@ exports.onboarding = async (req, res) => {
         points = 0,
         level = 1,
         leaderboardRank = newRank,
+        interests,
     } = req.body;
 
   try {
-    // 1. Upsert user in your database
+    // Upsert user in your database
     const user = await prisma.user.upsert({
       where: { clerkId },
-      update: { name, username, skills, training, location, age, points, level, leaderboardRank },
+      update: { name, username, skills, training, location, age, points, level, interests },
       create: {
         clerkId,
         name,
@@ -174,12 +175,14 @@ exports.onboarding = async (req, res) => {
         points,
         level,
         leaderboardRank,
+        interests
       },
     });
 
     // 2. Update Clerk user publicMetadata
     await clerkClient.users.updateUserMetadata(clerkId, {
       publicMetadata: {
+        name,
         points,
         level,
         leaderboardRank,
@@ -187,6 +190,7 @@ exports.onboarding = async (req, res) => {
         training,
         location,
         age,
+        interests
       },
     });
 

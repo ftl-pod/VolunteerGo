@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 import './onboarding.css'
 export default function Onboarding() {
   const { user } = useUser();
   const [currentStep, setCurrentStep] = useState(1);
+  
+  // Initialize formData from Clerk user publicMetadata if available
   const [formData, setFormData] = useState({
     avatarUrl: user?.imageUrl || "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
     name: "",
@@ -15,6 +17,24 @@ export default function Onboarding() {
     training: [],
     interests: []
   });
+
+// Update form information
+  useEffect(() => {
+    if (user?.publicMetadata) {
+      const md = user.publicMetadata;
+      setFormData({
+        avatarUrl: md.avatarUrl || user.imageUrl || formData.avatarUrl,
+        name: md.name || "",
+        email: user.emailAddresses[0]?.emailAddress || "",
+        username: user.username || "",
+        location: md.location || "",
+        age: md.age ? String(md.age) : "",
+        skills: Array.isArray(md.skills) ? md.skills : [],
+        training: Array.isArray(md.training) ? md.training : [],
+        interests: Array.isArray(md.interests) ? md.interests : [],
+      });
+    }
+  }, [user]);
 
   const causes = [
     { id: 'environment', label: 'Environmental Protection', icon: '🌍' },

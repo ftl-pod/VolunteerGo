@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 import './onboarding.css'
+import { useNavigate } from "react-router-dom";  
+
 export default function Onboarding() {
   const { user } = useUser();
+  const navigate = useNavigate();  
   const [currentStep, setCurrentStep] = useState(1);
+  
+  // Initialize formData from Clerk user publicMetadata if available
   const [formData, setFormData] = useState({
-    avatarUrl: user?.imageUrl || "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
+    avatarUrl: "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
     name: "",
     email: user?.emailAddresses?.[0]?.emailAddress || "",
     username: user?.username || "",
@@ -15,6 +20,23 @@ export default function Onboarding() {
     training: [],
     interests: []
   });
+
+  useEffect(() => {
+    if (user?.publicMetadata) {
+      const md = user.publicMetadata;
+      setFormData({
+        avatarUrl: md.avatarUrl || formData.avatarUrl,
+        name: md.name || "",
+        email: user.emailAddresses[0]?.emailAddress || "",
+        username: user.username || "",
+        location: md.location || "",
+        age: md.age ? String(md.age) : "",
+        skills: Array.isArray(md.skills) ? md.skills : [],
+        training: Array.isArray(md.training) ? md.training : [],
+        interests: Array.isArray(md.interests) ? md.interests : [],
+      });
+    }
+  }, [user]);
 
   const causes = [
     { id: 'environment', label: 'Environmental Protection', icon: '🌍' },
@@ -54,7 +76,7 @@ export default function Onboarding() {
   };
 
   const nextStep = () => {
-    if (currentStep < 3) setCurrentStep(currentStep + 1);
+    if (currentStep < 4) setCurrentStep(currentStep + 1);
   };
 
   const prevStep = () => {
@@ -81,6 +103,7 @@ export default function Onboarding() {
           location: formData.location,
           age: Number(formData.age),
           interests: formData.interests,
+          avatarUrl: formData.avatarUrl
         }),
       });
 
@@ -88,6 +111,7 @@ export default function Onboarding() {
       if (!response.ok) throw new Error(result.error || "Failed to save user");
 
       alert("Profile updated and saved!");
+      navigate("/profile");
     } catch (err) {
       console.error("Failed onboarding process", err);
       alert("Error during onboarding");
@@ -114,9 +138,13 @@ export default function Onboarding() {
               <div className="step-number">3</div>
               <div className="step-label">Skills</div>
             </div>
+            <div className={`step ${currentStep >= 4 ? 'active' : ''}`}>
+              <div className="step-number">4</div>
+              <div className="step-label">Avatar</div>
+            </div>
           </div>
           <div className="progress-line">
-            <div className="progress-fill" style={{ width: `${((currentStep - 1) / 2) * 100}%` }}></div>
+            <div className="progress-fill" style={{ width: `${((currentStep - 1) / 3) * 100}%` }}></div>
           </div>
         </div>
 
@@ -239,8 +267,29 @@ export default function Onboarding() {
                 />
               </div>
 
+              <div className="button-group">
+                <button type="button" onClick={prevStep} className="btn-secondary">
+                  Back
+                </button>
+                <button type="button" onClick={nextStep} className="btn-primary">
+                  Continue
+                </button>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 4 && (
+            <div className="step-content fade-in">
+              <h2>Choose your profile picture</h2>
+              <p className="step-subtitle">Enter a URL and preview your avatar</p>
+
               <div className="form-group">
-                <label>Profile Picture URL</label>
+                 <div className="avatar-preview">
+                <img src={formData.avatarUrl} alt="Avatar preview" />
+              </div>
+            <label>Profile Picture URL</label>
+
+
                 <input
                   type="url"
                   name="avatarUrl"
@@ -249,6 +298,7 @@ export default function Onboarding() {
                   placeholder="Enter image URL"
                 />
               </div>
+
 
               <div className="button-group">
                 <button type="button" onClick={prevStep} className="btn-secondary">
@@ -262,7 +312,6 @@ export default function Onboarding() {
           )}
         </div>
       </div>
-
     </div>
   );
 }

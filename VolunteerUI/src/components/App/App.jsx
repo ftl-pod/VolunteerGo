@@ -18,17 +18,6 @@ import './App.css'
 function App() {
   const { user, isLoaded, isSignedIn } = useUser();
 
-  // Ensure the user persists on page reload
-  useEffect(() => {
-    if (isSignedIn) {
-      console.log("User signed in:", user);
-      alert(`Welcome ${user.username || user.firstName || "volunteer"}!`);
-          console.log("Full Clerk user object:", user);
-
-    }
-  }, [isSignedIn]);
-
-
   return (
     <Router>  
       <div className="App">        

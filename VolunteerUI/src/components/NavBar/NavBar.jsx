@@ -30,9 +30,9 @@ function Navbar() {
                 {isLoggedIn ? (
                     <>
                         <NavLink to="/profile" className="profile-icon">
-                            {user.imageUrl ? (
+                            {user.publicMetadata.avatarUrl ? (
                                 <img 
-                                    src={user.imageUrl} 
+                                    src={user.publicMetadata.avatarUrl} 
                                     alt={`${user.username || 'User'}'s avatar`} 
                                     style={{ width: 60, height: 60, borderRadius: '50%' }} 
                                 />

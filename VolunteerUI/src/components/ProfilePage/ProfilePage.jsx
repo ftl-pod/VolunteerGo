@@ -27,6 +27,7 @@ function ProfilePage() {
   // Pulling from publicMetadata
   const {
     location,
+    name,
     age,
     points,
     level,
@@ -34,16 +35,16 @@ function ProfilePage() {
     training = [],
     leaderboardRank,
     interests = [],
-    joinedDate,
+    avatarUrl,
   } = user.publicMetadata;
 
   return (
     <div className="page-container">
       <div className="section">
         <div className="profile">
-          <div className="name">{user.username || user.firstName}</div>
+          <div className="name">{name}</div>
           <div className="img-container">
-            <img src={user.imageUrl} alt="Profile" className="profile-img" />
+            <img src={avatarUrl} alt="Profile" className="profile-img" />
           </div>
           <div className="bio">
             <div className="info">
@@ -58,7 +59,7 @@ function ProfilePage() {
               <div>{age || "Unknown"}</div>
               <div>{points || 0}</div>
               <div>{level || "1"}</div>
-              <div>{joinedDate ? new Date(joinedDate).toLocaleDateString() : "N/A"}</div>
+              <div>{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}</div>
             </div>
           </div>
             <button

@@ -156,6 +156,7 @@ exports.onboarding = async (req, res) => {
         points = 0,
         level = 1,
         interests,
+        avatarUrl
     } = req.body;
 
   try {
@@ -169,7 +170,7 @@ exports.onboarding = async (req, res) => {
     // Upsert user in your database
     const user = await prisma.user.upsert({
       where: { clerkId },
-      update: { name, username, skills, training, location, age, points, level, interests },
+      update: { name, username, skills, training, location, age, points, level, interests, avatarUrl },
       create: {
         clerkId,
         name,
@@ -181,7 +182,8 @@ exports.onboarding = async (req, res) => {
         points,
         level,
         leaderboardRank,
-        interests
+        interests,
+        avatarUrl
       },
     });
 
@@ -196,7 +198,8 @@ exports.onboarding = async (req, res) => {
         training,
         location,
         age,
-        interests
+        interests,
+        avatarUrl
       },
     });
 

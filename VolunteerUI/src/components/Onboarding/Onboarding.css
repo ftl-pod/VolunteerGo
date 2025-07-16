@@ -100,11 +100,11 @@
           font-size: 1rem;
         }
 
-        .form-group {
+        .onboarding-card > .form-group {
           margin-bottom: 1.5rem;
         }
 
-        .form-group label {
+        .onboarding-card > .form-group label {
           display: block;
           margin-bottom: 0.5rem;
           color: var(--text-color);
@@ -194,7 +194,7 @@
           margin-top: 2rem;
         }
 
-        .btn-primary, .btn-secondary {
+        .onboarding-card > .btn-primary, .onboarding-card >.btn-secondary {
           padding: 0.75rem 2rem;
           border: none;
           border-radius: 8px;
@@ -205,28 +205,28 @@
           font-family: 'Poppins', sans-serif;
         }
 
-        .btn-primary {
+        onboarding-card > .btn-primary {
           background: var(--primary-color);
           color: white;
         }
 
-        .btn-primary:hover:not(:disabled) {
+        onboarding-card > .btn-primary:hover:not(:disabled) {
           background: var(--primary-hover);
           transform: translateY(-1px);
         }
 
-        .btn-primary:disabled {
+        onboarding-card > .btn-primary:disabled {
           background: var(--tertiary-color);
           cursor: not-allowed;
         }
 
-        .btn-secondary {
+        onboarding-card > .btn-secondary {
           background: transparent;
           color: var(--subtitle-color);
           border: 2px solid var(--tertiary-color);
         }
 
-        .btn-secondary:hover {
+        onboarding-card > .btn-secondary:hover {
           background: var(--tertiary-color);
           color: var(--text-color);
         }
@@ -267,7 +267,7 @@
             flex-direction: column;
           }
 
-          .btn-primary, .btn-secondary {
+          onboarding-card > .btn-primary, onboarding-card > .btn-secondary {
             width: 100%;
           }
         }

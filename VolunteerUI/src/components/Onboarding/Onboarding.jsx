@@ -6,7 +6,7 @@ export default function Onboarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     avatarUrl: user?.imageUrl || "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
-    name: user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : "",
+    name: "",
     email: user?.emailAddresses?.[0]?.emailAddress || "",
     username: user?.username || "",
     location: "",
@@ -135,29 +135,6 @@ export default function Onboarding() {
                   onChange={handleChange}
                   required
                   placeholder="Enter your full name"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Email Address *</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="Enter your email"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Username</label>
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  placeholder="Choose a username"
                 />
               </div>
 

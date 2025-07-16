@@ -112,37 +112,51 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     try {
         const userId = Number(req.params.id);
+
         const user = await prisma.user.findUnique({
             where: { id: userId },
         });
+
         if (!user) {
-            return res.status(404).json({ error : "User not found" });
+            return res.status(404).json({ error: "User not found" });
         }
+
+        // Delete user from Clerk
+        if (user.clerkId) {
+            try {
+                await clerkClient.users.deleteUser(user.clerkId);
+            } catch (clerkError) {
+                console.warn("User deleted in DB but not found in Clerk:", clerkError.message);
+            }
+        }
+
+        // Delete from user database
         await prisma.user.delete({
             where: { id: userId },
         });
-        return res.status(204).send(); // No content
+
+        return res.status(204).send();
     } catch (error) {
         console.error("Error deleting user:", error);
-        res.status(500).json({ error : "Internal server error" });
+        res.status(500).json({ error: "Internal server error" });
     }
 };
 
 // Send information to database and clerk 
 exports.onboarding = async (req, res) => {
-  const {
-    clerkId,
-    email,
-    name,
-    username,
-    skills,
-    training,
-    location,
-    age,
-    points = 0,
-    level = 1,
-    leaderboardRank = 0,
-  } = req.body;
+    const newRank = await prisma.user.count() + 1;
+    const {
+        clerkId,
+        name,
+        username,
+        skills,
+        training,
+        location,
+        age,
+        points = 0,
+        level = 1,
+        leaderboardRank = newRank,
+    } = req.body;
 
   try {
     // 1. Upsert user in your database

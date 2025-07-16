@@ -16,8 +16,8 @@ export default function Onboarding() {
     username: user?.username || "",
     location: "",
     age: "",
-    skills: [],
-    training: [],
+    skills: "",
+    training: "",
     interests: []
   });
 
@@ -58,13 +58,19 @@ export default function Onboarding() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleArrayInput = (e) => {
+    const handleArrayInput = (e) => {
     const { name, value } = e.target;
+
+    const array = value
+        .split(",")
+        .map(item => item.trim())
+        .filter(item => item !== "");
+
     setFormData(prev => ({
-      ...prev,
-      [name]: value.split(",").map(s => s.trim()).filter(Boolean),
+        ...prev,
+        [name]: array
     }));
-  };
+    };
 
   const handleInterestToggle = (interestId) => {
     setFormData(prev => ({
@@ -86,6 +92,16 @@ export default function Onboarding() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("POST to:", `${import.meta.env.VITE_API_BASE_URL}/users/onboarding`);
+    
+    const skillsArray = formData.skills
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s) => s);
+
+    const trainingArray = formData.training
+        .split(",")
+        .map((t) => t.trim())
+        .filter((t) => t);
 
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/onboarding`, {
@@ -98,8 +114,8 @@ export default function Onboarding() {
           email: formData.email,
           name: formData.name,
           username: formData.username,
-          skills: formData.skills,
-          training: formData.training,
+          skills: skillsArray,
+          training: trainingArray,
           location: formData.location,
           age: Number(formData.age),
           interests: formData.interests,
@@ -174,7 +190,7 @@ export default function Onboarding() {
                   value={formData.location}
                   onChange={handleChange}
                   required
-                  placeholder="City, State/Country"
+                  placeholder="City"
                 />
               </div>
 
@@ -250,8 +266,8 @@ export default function Onboarding() {
                 <input
                   type="text"
                   name="skills"
-                  value={formData.skills.join(", ")}
-                  onChange={handleArrayInput}
+                  value={formData.skills}
+                  onChange={handleChange}
                   placeholder="e.g., Teaching, Web Development, Photography"
                 />
               </div>
@@ -261,8 +277,8 @@ export default function Onboarding() {
                 <input
                   type="text"
                   name="training"
-                  value={formData.training.join(", ")}
-                  onChange={handleArrayInput}
+                  value={formData.training}
+                  onChange={handleChange}
                   placeholder="e.g., First Aid, CPR, Project Management"
                 />
               </div>

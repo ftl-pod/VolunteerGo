@@ -155,11 +155,17 @@ exports.onboarding = async (req, res) => {
         age,
         points = 0,
         level = 1,
-        leaderboardRank = newRank,
         interests,
     } = req.body;
 
   try {
+    // Check if user already exists or update leaderboardrank
+    const existingUser = await prisma.user.findUnique({ where: { clerkId } });
+
+    const leaderboardRank = existingUser
+      ? existingUser.leaderboardRank
+      : (await prisma.user.count()) + 1;
+
     // Upsert user in your database
     const user = await prisma.user.upsert({
       where: { clerkId },

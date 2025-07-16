@@ -9,7 +9,7 @@ function SearchPage() {
     return (
         <div className="search-page">
             <div className="search-page-content">
-                <SearchHeader setSearchResults={setSearchResults} />
+                <SearchHeader onSearch={setSearchResults} />
                 <OpportunityGrid searchResults={searchResults} />
             </div>
         </div>

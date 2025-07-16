@@ -31,7 +31,7 @@ function ProfilePage({user}) {
                         <div className="name">{user.username}</div>
                         <div className="img-container">
                             {/* hardcoded for now, user will have 12 options */}
-                            <img src={user.avatarUrl} alt="Profile" className="profile-img" />
+                            <img src={user.imageUrl} alt="Profile" className="profile-img" />
                         </div>
                         <div className="bio">
                             <div className="info">

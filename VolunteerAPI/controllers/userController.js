@@ -1,6 +1,7 @@
 const prisma = require('../db/db'); 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { clerkClient } = require('@clerk/express');
 
 exports.getAllUsers = async (req, res) => {
     try {
@@ -111,50 +112,87 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     try {
         const userId = Number(req.params.id);
+
         const user = await prisma.user.findUnique({
             where: { id: userId },
         });
+
         if (!user) {
-            return res.status(404).json({ error : "User not found" });
+            return res.status(404).json({ error: "User not found" });
         }
+
+        // Delete user from Clerk
+        if (user.clerkId) {
+            try {
+                await clerkClient.users.deleteUser(user.clerkId);
+            } catch (clerkError) {
+                console.warn("User deleted in DB but not found in Clerk:", clerkError.message);
+            }
+        }
+
+        // Delete from user database
         await prisma.user.delete({
             where: { id: userId },
         });
-        return res.status(204).send(); // No content
+
+        return res.status(204).send();
     } catch (error) {
         console.error("Error deleting user:", error);
-        res.status(500).json({ error : "Internal server error" });
+        res.status(500).json({ error: "Internal server error" });
     }
 };
 
-// login 
-exports.loginUser = async (req, res) => {
-try {
-    const {username, password} = req.body;
-    if (!username || !password) {
-        return res.status(400).json({ error : "Username and password are required" });
-    }
-    const user = await prisma.user.findUnique({
-        where: { username },
+// Send information to database and clerk 
+exports.onboarding = async (req, res) => {
+    const newRank = await prisma.user.count() + 1;
+    const {
+        clerkId,
+        name,
+        username,
+        skills,
+        training,
+        location,
+        age,
+        points = 0,
+        level = 1,
+        leaderboardRank = newRank,
+    } = req.body;
+
+  try {
+    // 1. Upsert user in your database
+    const user = await prisma.user.upsert({
+      where: { clerkId },
+      update: { name, username, skills, training, location, age, points, level, leaderboardRank },
+      create: {
+        clerkId,
+        name,
+        username,
+        skills,
+        training,
+        location,
+        age,
+        points,
+        level,
+        leaderboardRank,
+      },
     });
-    if (!user) {
-      console.warn(`Login failed: user "${username}" not found.`);
-      return res.status(401).json({ error: "Invalid username or password." });
-    }
 
-    if (user && (await bcrypt.compare(password, user.password))) {
-        // exclude pass
-        const { password: _, ...userWithoutPassword } = user;
-        // generate JWT token
-        const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET);
-        return res.json({ user: userWithoutPassword, token });
-    } else {
-        console.warn(`Login failed: incorrect password for user "${username}".`);
-        return res.status(401).json({ error : "Invalid username or password" });
-    }
+    // 2. Update Clerk user publicMetadata
+    await clerkClient.users.updateUserMetadata(clerkId, {
+      publicMetadata: {
+        points,
+        level,
+        leaderboardRank,
+        skills,
+        training,
+        location,
+        age,
+      },
+    });
 
-} catch (error) {
-    console.error("Error logging in:", error);
-    return res.status(500).json({ error : "Internal server error" });
-}
+    res.json({ success: true, user });
+  } catch (e) {
+    console.error("Error saving user onboarding data:", e);
+    res.status(500).json({ error: "Failed to save onboarding data" });
+  }
 };

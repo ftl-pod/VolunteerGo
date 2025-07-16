@@ -8,7 +8,7 @@
   
   .auth-left {
     flex: 1;
-    background: #63786c;
+    background: var(--subtitle-color);;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -23,12 +23,15 @@
   .logo-placeholder {
     -webkit-mask-image: linear-gradient(to right, black 65%, transparent 100%); 
     mask-image: linear-gradient(to right, black 65%, transparent 100%);
+    object-fit: cover;
+    object-position: center;
+
   }
   
   
   .auth-right {
     flex: 1;
-    background: #63786c;
+    background: var(--subtitle-color);
     display: flex;
     align-items: center;
     justify-content: center;

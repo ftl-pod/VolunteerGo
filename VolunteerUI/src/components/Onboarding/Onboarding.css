@@ -1,0 +1,274 @@
+  .form-group input{
+    background-color: var(--background-color);
+    color: var(--text-color)
+  }
+  .onboarding-container {
+          min-height: 100vh;
+          background: linear-gradient(135deg, #f6f4f3 0%, #e8e3e0 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem;
+          font-family: 'Poppins', sans-serif;
+        }
+
+        .onboarding-card {
+          background: white;
+          border-radius: 16px;
+          padding: 3rem;
+          max-width: 600px;
+          width: 100%;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+          position: relative;
+        }
+
+        .progress-bar {
+          margin-bottom: 3rem;
+          position: relative;
+        }
+
+        .progress-steps {
+          display: flex;
+          justify-content: space-between;
+          position: relative;
+          z-index: 2;
+        }
+
+        .step {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          flex: 1;
+        }
+
+        .step-number {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: var(--tertiary-color);
+          color: var(--text-color);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+          transition: all 0.3s ease;
+        }
+
+        .step.active .step-number {
+          background: var(--primary-color);
+          color: white;
+        }
+
+        .step-label {
+          font-size: 0.875rem;
+          color: var(--subtitle-color);
+          text-align: center;
+        }
+
+        .step.active .step-label {
+          color: var(--primary-color);
+          font-weight: 600;
+        }
+
+        .progress-line {
+          position: absolute;
+          top: 20px;
+          left: 40px;
+          right: 40px;
+          height: 2px;
+          background: var(--tertiary-color);
+          z-index: 1;
+        }
+
+        .progress-fill {
+          height: 100%;
+          background: var(--primary-color);
+          transition: width 0.3s ease;
+        }
+
+        .step-content h2 {
+          color: var(--header-color);
+          margin-bottom: 0.5rem;
+          font-size: 1.75rem;
+          font-weight: 600;
+        }
+
+        .step-subtitle {
+          color: var(--subtitle-color);
+          margin-bottom: 2rem;
+          font-size: 1rem;
+        }
+
+        .onboarding-card > .form-group {
+          margin-bottom: 1.5rem;
+        }
+
+        .onboarding-card > .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          color: var(--text-color);
+          font-weight: 500;
+        }
+
+        .form-group input {
+          width: 100%;
+          padding: 0.75rem;
+          border: 2px solid var(--tertiary-color);
+          border-radius: 8px;
+          font-size: 1rem;
+          transition: border-color 0.3s ease;
+          font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group input:focus {
+          outline: none;
+          border-color: var(--primary-color);
+        }
+
+        .interests-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1rem;
+          margin-bottom: 2rem;
+        }
+
+        .interest-card {
+          background: white;
+          border: 2px solid var(--tertiary-color);
+          border-radius: 12px;
+          padding: 1.5rem;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+          min-height: 120px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .interest-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .interest-card.selected {
+          border-color: var(--primary-color);
+          background: rgba(99, 128, 111, 0.05);
+        }
+
+        .interest-icon {
+          font-size: 2rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .interest-label {
+          font-size: 0.875rem;
+          color: var(--text-color);
+          font-weight: 500;
+          line-height: 1.3;
+        }
+
+        .check-mark {
+          position: absolute;
+          top: 0.5rem;
+          right: 0.5rem;
+          background: var(--primary-color);
+          color: white;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.75rem;
+          font-weight: bold;
+        }
+
+        .button-group {
+          display: flex;
+          gap: 1rem;
+          justify-content: flex-end;
+          margin-top: 2rem;
+        }
+
+        .onboarding-card > .btn-primary, .onboarding-card >.btn-secondary {
+          padding: 0.75rem 2rem;
+          border: none;
+          border-radius: 8px;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          font-family: 'Poppins', sans-serif;
+        }
+
+        onboarding-card > .btn-primary {
+          background: var(--primary-color);
+          color: white;
+        }
+
+        onboarding-card > .btn-primary:hover:not(:disabled) {
+          background: var(--primary-hover);
+          transform: translateY(-1px);
+        }
+
+        onboarding-card > .btn-primary:disabled {
+          background: var(--tertiary-color);
+          cursor: not-allowed;
+        }
+
+        onboarding-card > .btn-secondary {
+          background: transparent;
+          color: var(--subtitle-color);
+          border: 2px solid var(--tertiary-color);
+        }
+
+        onboarding-card > .btn-secondary:hover {
+          background: var(--tertiary-color);
+          color: var(--text-color);
+        }
+
+        .fade-in {
+          animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .onboarding-container {
+            padding: 1rem;
+          }
+
+          .onboarding-card {
+            padding: 2rem 1.5rem;
+          }
+
+          .interests-grid {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+          }
+
+          .step-content h2 {
+            font-size: 1.5rem;
+          }
+
+          .button-group {
+            flex-direction: column;
+          }
+
+          onboarding-card > .btn-primary, onboarding-card > .btn-secondary {
+            width: 100%;
+          }
+        }
+    

@@ -12,6 +12,22 @@ function SavedPage() {
         day: 'numeric'
         });
     };
+    const [savedOpps, setSavedOpps] = useState([]);
+
+    const handleSavedClick = (e, id) => {
+      e.stopPropagation();
+      e.preventDefault();
+      setSavedOpps((prevSaved) => {
+        if (prevSaved.includes(id)) {
+          return prevSaved.filter((savedId) => savedId !== id);
+        } else {
+          return [...prevSaved, id];
+        }
+      });
+      console.log("Saved✅", id);
+      console.log(savedOpps);
+    };
+
 
     useEffect(() => {
     const fetchOpps = async () => {
@@ -36,81 +52,112 @@ function SavedPage() {
     const suggestedCards = opps.slice(0, 3);
     const remainingCards = opps.slice(3);
 
-    return (
-        <div className="saved-section">
-            {/* Suggested Cards Section */}
-            <div className="suggested-section">
-                <h2>Suggested for You</h2>
-                <div className="suggested-grid">
-                    {suggestedCards.map(opportunity => (
-                        <Link to={`/opportunity/${opportunity.id}`} key={opportunity.id}>
-                            <div className="suggested-card">
-                                <div className="saved-card-header">
-                                    <div className="saved-card-header-left">
-                                        <h3 className="saved-card-title">{opportunity.name}</h3>
-                                        <p className="saved-card-org">{opportunity.organization.name}</p>
-                                    </div>
-                                </div>
-                                <div className="saved-card-details">
-                                    <span> {opportunity.location} | </span>
-                                    <span> {formatDate(opportunity.date)}</span>
-                                </div>
+     return (
+      <div className="saved-section">
+        {/* Suggested Cards Section */}
+        <div className="suggested-section">
+          <h2>Suggested for You</h2>
+          <div className="suggested-grid">
+            {suggestedCards.map((opportunity) => (
+              <div className="suggested-card">
+                <Link
+                  to={`/opportunity/${opportunity.id}`}
+                  key={opportunity.id}
+                >
+                  <div className="saved-card-header">
+                    <div className="saved-card-header-left">
+                      <h3 className="saved-card-title">{opportunity.name}</h3>
+                      <p className="saved-card-org">
+                        {opportunity.organization.name}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="saved-card-details">
+                    <span> {opportunity.location} | </span>
+                    <span> {formatDate(opportunity.date)}</span>
+                  </div>
+                </Link>
+                <p className="saved-card-description">
+                  {opportunity.description}
+                </p>
 
-                                <p className="saved-card-description">{opportunity.description}</p>
-                                
-                                <div className="tags">
-                                    {opportunity.tags.map(tag => (
-                                        <span key={tag} className="saved-card-tag">{tag}</span>
-                                    ))}
-                                </div>
-                                
-                                <div className="saved-card-actions">
-                                    <button className="btn-primary">I Want to Help</button>
-                                    <button className="btn-secondary">Save</button>
-                                </div>
-                            </div>
-                        </Link>
-                    ))}
+                <div className="tags">
+                  {opportunity.tags.map((tag) => (
+                    <span key={tag} className="saved-card-tag">
+                      {tag}
+                    </span>
+                  ))}
                 </div>
-            </div>
 
-            {/* Saved Cards Section */}
-            <div className="saved-cards-section">
-                <h2>Your Saved Cards</h2>
-                <div className="saved-grid">
-                    {remainingCards.map(opportunity => (
-                        <Link to={`/opportunity/${opportunity.id}`} key={opportunity.id}>
-                            <div className="saved-card">
-                                <div className="saved-card-header">
-                                    <div className="saved-card-header-left">
-                                        <h3 className="saved-card-title">{opportunity.name}</h3>
-                                        <p className="saved-card-org">{opportunity.organization.name}</p>
-                                    </div>
-                                </div>
-                                <div className="saved-card-details">
-                                    <span> {opportunity.location} | </span>
-                                    <span> {formatDate(opportunity.date)}</span>
-                                </div>
-
-                                <p className="saved-card-description">{opportunity.description}</p>
-                                
-                                <div className="tags">
-                                    {opportunity.tags.map(tag => (
-                                        <span key={tag} className="saved-card-tag">{tag}</span>
-                                    ))}
-                                </div>
-                                
-                                <div className="saved-card-actions">
-                                    <button className="btn-primary">I Want to Help</button>
-                                    <button className="btn-secondary">Remove</button>
-                                </div>
-                            </div>
-                        </Link>
-                    ))}
+                <div className="saved-card-actions">
+                  <Link to={`/opportunity/${opportunity.id}`}>
+                    <button className="btn-primary">I Want to Help</button>
+                  </Link>{" "}
+                  <div>
+                    <button className="btn-secondary">Save</button>
+                  </div>{" "}
                 </div>
-            </div>
+              </div>
+            ))}
+          </div>
         </div>
+
+        {/* Saved Cards Section */}
+        <div className="saved-cards-section">
+          <h2>Your Saved Cards</h2>
+          <div className="saved-grid">
+            {remainingCards.map((opportunity) => (
+              <div className="saved-card">
+                <Link
+                  to={`/opportunity/${opportunity.id}`}
+                  key={opportunity.id}
+                >
+                  <div className="saved-card-header">
+                    <div className="saved-card-header-left">
+                      <h3 className="saved-card-title">{opportunity.name}</h3>
+                      <p className="saved-card-org">
+                        {opportunity.organization.name}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="saved-card-details">
+                    <span> {opportunity.location} | </span>
+                    <span> {formatDate(opportunity.date)}</span>
+                  </div>
+                </Link>
+
+                <p className="saved-card-description">
+                  {opportunity.description}
+                </p>
+
+                <div className="tags">
+                  {opportunity.tags.map((tag) => (
+                    <span key={tag} className="saved-card-tag">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="saved-card-actions">
+                  <Link to={`/opportunity/${opportunity.id}`}>
+                    <button className="btn-primary">I Want to Help</button>
+                  </Link>{" "}
+                  <div>
+                    <button
+                      className="btn-secondary"
+                      onClick={(e) => handleSavedClick(e, opportunity.id)}
+                    >
+                      {savedOpps.includes(opportunity.id) ? "Saved" : "Save"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     );
 }
+
 
 export default SavedPage

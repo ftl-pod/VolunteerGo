@@ -142,6 +142,26 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
+exports.getUserByClerkId = async (req, res) => {
+    try {
+        const clerkId = req.params.clerkId;
+        const user = await prisma.user.findUnique({
+            where: { clerkId },
+            include: {
+                opportunities: true,
+                savedOpportunities: true,
+            },
+        });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        return res.json(user);
+    } catch (error) {
+        console.error("Error fetching user by clerkId:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
 // Send information to database and clerk 
 exports.onboarding = async (req, res) => {
     const newRank = await prisma.user.count() + 1;
@@ -208,4 +228,91 @@ exports.onboarding = async (req, res) => {
     console.error("Error saving user onboarding data:", e);
     res.status(500).json({ error: "Failed to save onboarding data" });
   }
+};
+
+exports.getSavedOpportunitiesByUserId = async (req, res) => {
+    try {
+        const userId = Number(req.params.id);
+        const userWithSavedOpps = await prisma.user.findUnique({
+            where: { id: userId },
+            include: {
+                savedOpportunities: true,
+            },
+        });
+        if (!userWithSavedOpps) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        return res.json(userWithSavedOpps.savedOpportunities);
+    } catch (error) {
+        console.error("Error fetching saved opportunities:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+exports.addSavedOpportunity = async (req, res) => {
+    try {
+        const userId = Number(req.params.id);
+        const { opportunityId } = req.body;
+
+        if (!opportunityId) {
+            return res.status(400).json({ error: "Missing opportunityId in request body" });
+        }
+
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            include: { savedOpportunities: true },
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: {
+                savedOpportunities: {
+                    connect: { id: opportunityId },
+                },
+            },
+        });
+
+        return res.json({ success: true, savedOpportunities: updatedUser.savedOpportunities });
+    } catch (error) {
+        console.error("Error adding saved opportunity:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+exports.removeSavedOpportunity = async (req, res) => {
+    try {
+        const userId = Number(req.params.id);
+        const { opportunityId } = req.body;
+
+        if (!opportunityId) {
+            return res.status(400).json({ error: "Missing opportunityId in request body" });
+        }
+
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            include: { savedOpportunities: true },
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: {
+                savedOpportunities: {
+                    disconnect: { id: opportunityId },
+                },
+            },
+        });
+
+        return res.json({ success: true, savedOpportunities: updatedUser.savedOpportunities });
+    } catch (error) {
+        console.error("Error removing saved opportunity:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
 };

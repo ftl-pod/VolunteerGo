@@ -2,133 +2,140 @@ import './SavedPage.css'
 import RemoveModal from '../RemoveModal/RemoveModal';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react'
+import { useUser } from "@clerk/clerk-react";
 
 function SavedPage() {
-    const [showModal, setShowModal] = useState(false); // animation thing
-    const [opps, setOpps] = useState([]);
-    // stuff for modal animation
-    const notInterestedClick = () => {
-        setShowModal(true)
-    };
+    const { user } = useUser();
+    const [showModal, setShowModal] = useState(false);
+    const [savedOpps, setSavedOpps] = useState([]);
+    const [oppToRemove, setOppToRemove] = useState(null);
+    const [prismaUserId, setPrismaUserId] = useState(null);
+
     const closeModal = () => {
         setShowModal(false);
+        setOppToRemove(null);
     };
 
     const formatDate = (dateStr) => {
         const date = new Date(dateStr);
-        return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+        return date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
         });
     };
 
     useEffect(() => {
-    const fetchOpps = async () => {
+        const fetchPrismaUserId = async () => {
+            if (!user) return;
+            try {
+                const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-clerk/${user.id}`;
+                const res = await fetch(url);
+
+                if (!res.ok) {
+                    throw new Error(`HTTP error! Status: ${res.status}`);
+                }
+
+                const data = await res.json();
+                setPrismaUserId(data.id);
+                setSavedOpps(data.savedOpportunities);
+            } catch (err) {
+                console.error("Failed to fetch Prisma user ID:", err);
+            }
+        };
+
+        fetchPrismaUserId();
+    }, [user]);
+
+    const handleRemoveClick = (opportunity) => {
+        setOppToRemove(opportunity);
+        setShowModal(true);
+    };
+
+    const confirmRemove = async () => {
+        if (!oppToRemove || !prismaUserId) return;
+
         try {
-        const url = `${import.meta.env.VITE_API_BASE_URL}/opportunities`;
-        const res = await fetch(url);
+            const url = `${import.meta.env.VITE_API_BASE_URL}/users/${prismaUserId}/saved-opportunities/remove`;
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ opportunityId: oppToRemove.id }),
+            });
 
-        if (!res.ok) {
-            throw new Error(`HTTP error! Status: ${res.status}`);
-        }
+            if (!res.ok) {
+                throw new Error(`HTTP error! Status: ${res.status}`);
+            }
 
-        const data = await res.json();
-        setOpps(data);
-        } catch (err) {
-        console.error("Failed to fetch opportunities:", err);
+            const data = await res.json();
+
+            if (data.success) {
+                setSavedOpps((prev) => prev.filter((opp) => opp.id !== oppToRemove.id));
+                closeModal();
+            } else {
+                console.error("Failed to remove saved opportunity:", data);
+            }
+        } catch (error) {
+            console.error("Error removing saved opportunity:", error);
         }
     };
 
-    fetchOpps();
-    }, []);
-
-    const suggestedCards = opps.slice(0, 3);
-    const remainingCards = opps.slice(3);
-
     return (
         <div className="saved-section">
-            {/* Suggested Cards Section */}
-            <div className="suggested-section">
-                <h2>Suggested for You</h2>
-                <div className="suggested-grid">
-                    {suggestedCards.map(opportunity => (
-                            <div className="suggested-card">
-                                <div className="saved-card-header">
-                                    <div className="saved-card-header-left">
-                                        <h3 className="saved-card-title">{opportunity.name}</h3>
-                                        <p className="saved-card-org">{opportunity.organization.name}</p>
-                                    </div>
-                                </div>
-                                <div className="saved-card-details">
-                                    <span> {opportunity.location} | </span>
-                                    <span> {formatDate(opportunity.date)}</span>
-                                </div>
-
-                                <p className="saved-card-description">{opportunity.description}</p>
-                                
-                                <div className="tags">
-                                    {opportunity.tags.map(tag => (
-                                        <span key={tag} className="saved-card-tag">{tag}</span>
-                                    ))}
-                                </div>
-                                
-                                <div className="saved-card-actions">
-                                    <button className="btn-primary">I Want to Help</button>
-                                    <button className="btn-secondary"
-                                    onClick={notInterestedClick}
-                                    >Not Interested</button>
-                                </div>
-                            </div>
-                    ))}
-                </div>
-            </div>
             <div>
-                <RemoveModal 
-                show={showModal}
-                closeModal={closeModal}
-                >
-                </RemoveModal>
-
+                <RemoveModal show={showModal} closeModal={closeModal} onConfirm={confirmRemove} />
             </div>
 
-            {/* Saved Cards Section */}
             <div className="saved-cards-section">
                 <h2>Your Saved Cards</h2>
                 <div className="saved-grid">
-                    {remainingCards.map(opportunity => (
-                        <Link to={`/opportunity/${opportunity.id}`} key={opportunity.id}>
-                            <div className="saved-card">
-                                <div className="saved-card-header">
-                                    <div className="saved-card-header-left">
-                                        <h3 className="saved-card-title">{opportunity.name}</h3>
-                                        <p className="saved-card-org">{opportunity.organization.name}</p>
+                    {savedOpps.length === 0 ? (
+                        <p>You have no saved opportunities.</p>
+                    ) : (
+                        savedOpps.map((opportunity) => (
+                            <div className="saved-card" key={opportunity.id}>
+                                <Link to={`/opportunity/${opportunity.id}`}>
+                                    <div className="saved-card-header">
+                                        <div className="saved-card-header-left">
+                                            <h3 className="saved-card-title">{opportunity.name}</h3>
+                                            <p className="saved-card-org">
+                                                {opportunity.organization?.name}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="saved-card-details">
-                                    <span> {opportunity.location} | </span>
-                                    <span> {formatDate(opportunity.date)}</span>
-                                </div>
+                                    <div className="saved-card-details">
+                                        <span> {opportunity.location} | </span>
+                                        <span> {formatDate(opportunity.date)}</span>
+                                    </div>
+                                </Link>
 
-                                <p className="saved-card-description">{opportunity.description}</p>
-                                
+                                <p className="saved-card-description">
+                                    {opportunity.description}
+                                </p>
+
                                 <div className="tags">
-                                    {opportunity.tags.map(tag => (
-                                        <span key={tag} className="saved-card-tag">{tag}</span>
+                                    {opportunity.tags.map((tag) => (
+                                        <span key={tag} className="saved-card-tag">
+                                            {tag}
+                                        </span>
                                     ))}
                                 </div>
-                                
+
                                 <div className="saved-card-actions">
-                                    <button className="btn-primary">I Want to Help</button>
-                                    <button className="btn-secondary">Remove</button>
+                                    <Link to={`/opportunity/${opportunity.id}`}>
+                                        <button className="btn-primary">I Want to Help</button>
+                                    </Link>
+                                    <button className="btn-secondary" onClick={() => handleRemoveClick(opportunity)}>
+                                        Remove
+                                    </button>
                                 </div>
                             </div>
-                        </Link>
-                    ))}
+                        ))
+                    )}
                 </div>
             </div>
         </div>
     );
 }
 
-export default SavedPage
+export default SavedPage;

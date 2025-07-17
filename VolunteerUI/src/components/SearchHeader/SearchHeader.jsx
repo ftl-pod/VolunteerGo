@@ -1,9 +1,12 @@
 import "./SearchHeader.css";
 import { useState } from 'react';
 
-function SearchHeader() {
-    const [searchTerm, setSearchTerm] = useState('');
+function SearchHeader({onSearch}) {
     const [city, setCity] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const handleClick = () => {
+        onSearch(searchTerm);
+    };
 
     return (
         <div className="search-header">
@@ -28,7 +31,9 @@ function SearchHeader() {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
 
-                    <button className="search-button">Search</button>
+                    <button className="search-button" onClick={handleClick}>
+                        Search
+                    </button>
                     <button className="smart-search-button">Smart Search</button>
                 </div>
             </div>

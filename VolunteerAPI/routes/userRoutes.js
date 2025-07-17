@@ -6,10 +6,18 @@ const controller = require('../controllers/userController');
 router.get("/", controller.getAllUsers);
 // get user by id 
 router.get("/:id", controller.getUserById);
+// get user by clerkId
+router.get("/by-clerk/:clerkId", controller.getUserByClerkId);
 // create user 
 router.post("/", controller.createUser);
 // add opp to user history 
 // router.post("/id/opps", controller.addOppToUser); // do last 
+//get saved opps by userid
+router.get("/:id/saved-opportunities", controller.getSavedOpportunitiesByUserId);
+// add saved opportunity for user
+router.post("/:id/saved-opportunities/add", controller.addSavedOpportunity);
+// remove saved opportunity for user
+router.post("/:id/saved-opportunities/remove", controller.removeSavedOpportunity);
 // update user 
 router.put("/:id", controller.updateUser);
 // delete user 

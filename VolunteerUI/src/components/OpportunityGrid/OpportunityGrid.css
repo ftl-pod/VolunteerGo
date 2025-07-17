@@ -111,8 +111,7 @@ h1{
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    flex-grow: 1;
-      font-family: 'Poppins';
+    font-family: 'Poppins';
 
 }
 
@@ -129,8 +128,7 @@ h1{
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    flex-grow: 1;
-      font-family: 'Poppins';
+    font-family: 'Poppins';
 
 }
 

@@ -1,7 +1,7 @@
 import './OpportunityGrid.css'
 import { Link } from 'react-router-dom';
 import {useEffect, useState} from 'react';
-function OpportunityGrid() {
+function OpportunityGrid({searchResults}) {
     const [opps, setOpps] = useState([]);
     const formatDate = (dateStr) => {
         const date = new Date(dateStr);
@@ -13,24 +13,27 @@ function OpportunityGrid() {
     };
 
     useEffect(() => {
-    const fetchOpps = async () => {
+        const fetchOpps = async () => {
         try {
-        const url = `${import.meta.env.VITE_API_BASE_URL}/opportunities`;
-        const res = await fetch(url);
+            const query = new URLSearchParams();
+            if (searchResults) query.append("keyword", searchResults);
 
-        if (!res.ok) {
+            const url = `${import.meta.env.VITE_API_BASE_URL}/opportunities?${query.toString()}`;
+            const res = await fetch(url);
+
+            if (!res.ok) {
             throw new Error(`HTTP error! Status: ${res.status}`);
-        }
+            }
 
-        const data = await res.json();
-        setOpps(data);
+            const data = await res.json();
+            setOpps(data);
         } catch (err) {
-        console.error("Failed to fetch opportunities:", err);
+            console.error("Failed to fetch opportunities:", err);
         }
-    };
+        };
 
-    fetchOpps();
-    }, []);
+        fetchOpps();
+    }, [searchResults]);
 
     return (
         <div className="opportunities-section">

@@ -1,7 +1,10 @@
 import './OpportunityGrid.css'
 import { Link } from 'react-router-dom';
 import {useEffect, useState} from 'react';
+import { useUser } from "@clerk/clerk-react";
 function OpportunityGrid() {
+    const {user, isLoaded, isSignedIn} = useUser();
+    const [direct, setDirect] = useState("search") // will update when we figure out application functionality
     const [opps, setOpps] = useState([]);
     const formatDate = (dateStr) => {
         const date = new Date(dateStr);
@@ -11,27 +14,27 @@ function OpportunityGrid() {
         day: 'numeric'
         });
     };
-
+    
     useEffect(() => {
+    // cant sign up for opp if not logged in
+    if (!isSignedIn) {
+        setDirect("login")
+    }
     const fetchOpps = async () => {
         try {
         const url = `${import.meta.env.VITE_API_BASE_URL}/opportunities`;
         const res = await fetch(url);
-
         if (!res.ok) {
             throw new Error(`HTTP error! Status: ${res.status}`);
         }
-
         const data = await res.json();
         setOpps(data);
         } catch (err) {
         console.error("Failed to fetch opportunities:", err);
         }
     };
-
     fetchOpps();
     }, []);
-
     return (
         <div className="opportunities-section">
             <div className="opportunity-grid">
@@ -59,7 +62,9 @@ function OpportunityGrid() {
                             </div>
                             
                             <div className="card-actions">
-                                <button className="btn-primary">I Want to Help</button>
+                                <Link to={`/${direct}`}>
+                                    <button className="btn-primary">I Want to Help</button>
+                                </Link>
                                 <button className="btn-secondary">Save</button>
                             </div>
                         </div>

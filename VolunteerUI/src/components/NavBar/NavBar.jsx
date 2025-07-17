@@ -2,6 +2,7 @@ import './NavBar.css';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { FaUserCircle } from "react-icons/fa";
 import { useUser, useClerk } from '@clerk/clerk-react';
+import { useEffect, useState } from 'react';
 
 function Navbar() {
     const navigate = useNavigate();
@@ -9,7 +10,8 @@ function Navbar() {
     const isHomePage = location.pathname === "/";
 
     const { signOut } = useClerk();
-    const { user } = useUser();
+    const { user, isSignedIn, isLoaded } = useUser();
+    const [show, setShow] = useState(null);
 
     const handleLogout = async () => {
         await signOut();
@@ -23,7 +25,9 @@ function Navbar() {
             <div className="navbar-links">
                 <NavLink to="/" className="nav-link">Home</NavLink>
                 <NavLink to="/search" className="nav-link">Search</NavLink>
-                <NavLink to="/saved" className="nav-link">Saved</NavLink>
+                {!isLoaded ? null : isSignedIn ? (
+                    <NavLink to="/saved" className="nav-link">Saved</NavLink>
+                ) : null}
                 <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
                 <NavLink to="/map" className="nav-link">Map</NavLink>
 

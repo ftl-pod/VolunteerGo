@@ -23,9 +23,10 @@ function HomePage() {
                 enim ad minim veniam.
               </p>
             </div>
-            <div>
+            {/* we werent using this button */}
+            {/* <div>
               <button>Learn more</button>
-            </div>
+            </div> */}
           </div>
           <div className="volunteering-media">
             <img

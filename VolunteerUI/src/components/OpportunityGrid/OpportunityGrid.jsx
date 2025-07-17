@@ -1,21 +1,13 @@
 import "./OpportunityGrid.css";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useUser } from "@clerk/clerk-react";
 
 function OpportunityGrid() {
+  const { user } = useUser();
   const [opps, setOpps] = useState([]);
-  const [savedOpps, setSavedOpps] = useState(() => {
-    try {
-      const saved = localStorage.getItem("savedOpportunities");
-      return saved ? JSON.parse(saved) : [];
-    } catch (error) {
-      console.error(
-        "Failed to load saved opportunities from localStorage:",
-        error
-      );
-      return [];
-    }
-  });
+  const [savedOpps, setSavedOpps] = useState([]);
+  const [prismaUserId, setPrismaUserId] = useState(null);
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -26,25 +18,60 @@ function OpportunityGrid() {
     });
   };
 
-  const handleSavedClick = (e, oppId) => {
-    e.stopPropagation();
-    setSavedOpps((prev) => {
-      const newSavedOpps = prev.includes(oppId)
-        ? prev.filter((id) => id !== oppId)
-        : [...prev, oppId];
-
-      // Save to localStorage
+  useEffect(() => {
+    const fetchPrismaUserId = async () => {
+      if (!user) return;
       try {
-        localStorage.setItem(
-          "savedOpportunities",
-          JSON.stringify(newSavedOpps)
-        );
+        const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-clerk/${user.id}`;
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        const data = await res.json();
+        setPrismaUserId(data.id);
+        setSavedOpps(data.savedOpportunities.map((opp) => opp.id));
       } catch (error) {
-        console.error("Failed to save opportunities to localStorage:", error);
+        console.error("Failed to fetch Prisma user ID:", error);
+      }
+    };
+    fetchPrismaUserId();
+  }, [user]);
+
+  const handleSavedClick = async (e, oppId) => {
+    e.stopPropagation();
+    if (!prismaUserId) {
+      console.error("Prisma user ID not available");
+      return;
+    }
+    try {
+      const isSaved = savedOpps.includes(oppId);
+      const url = `${import.meta.env.VITE_API_BASE_URL}/users/${prismaUserId}/saved-opportunities/${isSaved ? 'remove' : 'add'}`;
+      const method = 'POST';
+      const body = JSON.stringify({ opportunityId: oppId });
+      const headers = { 'Content-Type': 'application/json' };
+
+      const res = await fetch(url, { method, headers, body });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
       }
 
-      return newSavedOpps;
-    });
+      const data = await res.json();
+
+      if (data.success) {
+        setSavedOpps((prev) => {
+          if (isSaved) {
+            return prev.filter((id) => id !== oppId);
+          } else {
+            return [...prev, oppId];
+          }
+        });
+      } else {
+        console.error("Failed to update saved opportunities:", data);
+      }
+    } catch (error) {
+      console.error("Error updating saved opportunities:", error);
+    }
   };
 
   useEffect(() => {
@@ -65,26 +92,6 @@ function OpportunityGrid() {
     };
 
     fetchOpps();
-  }, []);
-
-  // Cleanup function to handle localStorage quota exceeded scenarios
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === "savedOpportunities" && e.newValue) {
-        try {
-          const newSavedOpps = JSON.parse(e.newValue);
-          setSavedOpps(newSavedOpps);
-        } catch (error) {
-          console.error(
-            "Failed to parse saved opportunities from storage event:",
-            error
-          );
-        }
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   return (

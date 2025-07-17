@@ -1,8 +1,11 @@
 {
   "dependencies": {
+    "@clerk/clerk-react": "^5.35.2",
+    "@clerk/express": "^1.7.9",
     "@googlemaps/markerclusterer": "^2.6.2",
     "@vis.gl/react-google-maps": "^1.5.4",
     "axios": "^1.10.0",
+    "clerk": "^0.8.3",
     "express": "^5.1.0",
     "geocode": "^0.0.3",
     "nodemon": "^3.1.10",

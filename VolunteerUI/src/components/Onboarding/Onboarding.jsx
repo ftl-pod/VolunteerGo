@@ -31,8 +31,8 @@ export default function Onboarding() {
         username: user.username || "",
         location: md.location || "",
         age: md.age ? String(md.age) : "",
-        skills: Array.isArray(md.skills) ? md.skills : [],
-        training: Array.isArray(md.training) ? md.training : [],
+        skills: Array.isArray(md.skills) ? md.skills.join(", ") : "",
+        training: Array.isArray(md.training) ? md.training.join(", ") : "",
         interests: Array.isArray(md.interests) ? md.interests : [],
       });
     }
@@ -190,7 +190,7 @@ export default function Onboarding() {
                   value={formData.location}
                   onChange={handleChange}
                   required
-                  placeholder="City"
+                  placeholder="City, State"
                 />
               </div>
 

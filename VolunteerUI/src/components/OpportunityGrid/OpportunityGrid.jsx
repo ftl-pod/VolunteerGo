@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 
 function OpportunityGrid({ searchResults }) {
-  const { user, isSignedIn, openSignIn } = useUser();
+  const { user, isSignedIn, openSignIn, isLoaded } = useUser();
+    const [direct, setDirect] = useState("search") // will update when we figure out application functionality
   const [opps, setOpps] = useState([]);
   const [savedOpps, setSavedOpps] = useState([]);
   const [prismaUserId, setPrismaUserId] = useState(null);
@@ -83,8 +84,12 @@ function OpportunityGrid({ searchResults }) {
       console.error("Error updating saved opportunities:", error);
     }
   };
-
+    
   useEffect(() => {
+    // cant sign up for opp if not logged in
+    if (!isSignedIn) {
+        setDirect("login")
+    }
     const fetchOpps = async () => {
       try {
         const query = new URLSearchParams();
@@ -94,21 +99,17 @@ function OpportunityGrid({ searchResults }) {
           import.meta.env.VITE_API_BASE_URL
         }/opportunities?${query.toString()}`;
         const res = await fetch(url);
-
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
-
         const data = await res.json();
         setOpps(data);
       } catch (err) {
         console.error("Failed to fetch opportunities:", err);
       }
     };
-
     fetchOpps();
   }, [searchResults]);
-
   return (
     <div className="opportunities-section">
       <div className="opportunity-grid">
@@ -137,7 +138,9 @@ function OpportunityGrid({ searchResults }) {
             </div>
 
             <div className="card-actions">
-              <button className="btn-primary">I Want to Help</button>
+                                <Link to={`/${direct}`}>
+                  <button className="btn-primary">I Want to Help</button>
+                                </Link>
               <button
                 className="btn-secondary"
                 onClick={(e) => handleSavedClick(e, opportunity.id)}

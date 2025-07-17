@@ -41,7 +41,9 @@ function LocationPage () {
         console.error("Failed to fetch opportunities:", err);
         }
     };
-        if (user?.publicMetadata?.location) {
+        fetchOppsAndCoords();
+        if (isLoaded && user?.publicMetadata?.location) {
+            console.log("hi")
             const getUserCoords = async () => {
             try {
                 const userResp = await Geocode.fromAddress(user.publicMetadata.location);
@@ -52,10 +54,9 @@ function LocationPage () {
             }
       };
         getUserCoords();
-        fetchOppsAndCoords();
     }
     }, [isLoaded, user]);
-        if (!isLoaded || !user?.publicMetadata) {
+        if (!isLoaded && user?.publicMetadata) {
         return <div>Loading user data...</div>;
     }
     return (
@@ -63,8 +64,9 @@ function LocationPage () {
         <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} onLoad={ () => console.log("Google Maps API loaded :)")}>
             <div className="map-container">
                 <Map
+                key={`${userLatLng.lat}-${userLatLng.lng}`} //lets you move around map
                 mapId={import.meta.env.VITE_GOOGLE_MAP_ID}
-                center={userLatLng} // sf for now but will be user's location
+                defaultCenter={userLatLng} // sf when not logged in
                 defaultZoom={10}
                 onCameraChanged={(ev) =>
                 console.log('camera changed:', ev.detail.center, 'zoom:', ev.detail.zoom)}

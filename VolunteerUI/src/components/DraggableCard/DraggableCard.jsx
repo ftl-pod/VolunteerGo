@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import '../OpportunityPage/OpportunityPage.css'
-import { useUser } from "@clerk/clerk-react";
-
+import { SignedIn, useUser } from '@clerk/clerk-react';
+import { Link } from 'react-router-dom';
 
 const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -12,10 +12,13 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   const [dragDistanceX, setDragDistanceX] = useState(0);
   const [dragDistanceY, setDragDistanceY] = useState(0);
   const cardRef = useRef(null);
-  const { user, isSignedIn, openSignIn } = useUser();
+  const { user, isSignedIn, openSignIn, isLoaded } = useUser();
   const [opps, setOpps] = useState([]);
   const [savedOpps, setSavedOpps] = useState([]);
   const [prismaUserId, setPrismaUserId] = useState(null);
+  const [direct, setDirect] = useState("search") // update for application functionality
+
+
 
   const handleStart = (clientX, clientY) => {
     setIsDragging(true);
@@ -105,6 +108,14 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   const handleTouchEnd = () => {
     handleEnd();
   };
+
+  useEffect(() => {
+    if (!isSignedIn) {
+      setDirect("login");
+    } else {
+      setDirect("search");
+    }
+  }, [isSignedIn]);
 
   useEffect(() => {
     const fetchPrismaUserId = async () => {
@@ -223,7 +234,9 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
         <p className="description">{opportunity?.description || 'This is a sample opportunity description. Help make a difference in your community by participating in this meaningful project.'}</p>
 
        <div className="actions">
-              <button className="btn-primary">I Want to Help</button>
+          <Link to={`/${direct}`}>
+                <button className="btn-primary">I Want to Help</button>
+          </Link>
               <button
                 className="btn-secondary"
                 onClick={(e) => handleSavedClick(e, opportunity.id)}

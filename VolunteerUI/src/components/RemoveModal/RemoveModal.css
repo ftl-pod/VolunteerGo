@@ -1,5 +1,6 @@
 .modal {
     display: flex;
+    margin-top: 50em;
     margin-bottom: 250px;
     justify-self: center;
     align-self: center;

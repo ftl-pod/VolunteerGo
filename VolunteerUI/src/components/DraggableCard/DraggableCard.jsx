@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import '../OpportunityPage/OpportunityPage.css'
+import { useUser } from "@clerk/clerk-react";
+
 
 const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -10,6 +12,10 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   const [dragDistanceX, setDragDistanceX] = useState(0);
   const [dragDistanceY, setDragDistanceY] = useState(0);
   const cardRef = useRef(null);
+  const { user, isSignedIn, openSignIn } = useUser();
+  const [opps, setOpps] = useState([]);
+  const [savedOpps, setSavedOpps] = useState([]);
+  const [prismaUserId, setPrismaUserId] = useState(null);
 
   const handleStart = (clientX, clientY) => {
     setIsDragging(true);
@@ -101,6 +107,71 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   };
 
   useEffect(() => {
+    const fetchPrismaUserId = async () => {
+      if (!user) return;
+      try {
+        const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-clerk/${
+          user.id
+        }`;
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        const data = await res.json();
+        setPrismaUserId(data.id);
+        setSavedOpps(data.savedOpportunities.map((opp) => opp.id));
+      } catch (error) {
+        console.error("Failed to fetch Prisma user ID:", error);
+      }
+    };
+    fetchPrismaUserId();
+  }, [user]);
+  const handleSavedClick = async (e, oppId) => {
+    e.stopPropagation();
+    if (!isSignedIn) {
+      openSignIn();
+      return;
+    }
+    if (!prismaUserId) {
+      console.error("Prisma user ID not available");
+      return;
+    }
+    try {
+      const isSaved = savedOpps.includes(oppId);
+      const url = `${
+        import.meta.env.VITE_API_BASE_URL
+      }/users/${prismaUserId}/saved-opportunities/${
+        isSaved ? "remove" : "add"
+      }`;
+      const method = "POST";
+      const body = JSON.stringify({ opportunityId: oppId });
+      const headers = { "Content-Type": "application/json" };
+
+      const res = await fetch(url, { method, headers, body });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      if (data.success) {
+        setSavedOpps((prev) => {
+          if (isSaved) {
+            return prev.filter((id) => id !== oppId);
+          } else {
+            return [...prev, oppId];
+          }
+        });
+      } else {
+        console.error("Failed to update saved opportunities:", data);
+      }
+    } catch (error) {
+      console.error("Error updating saved opportunities:", error);
+    }
+  };
+
+  useEffect(() => {
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
@@ -151,10 +222,15 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
 
         <p className="description">{opportunity?.description || 'This is a sample opportunity description. Help make a difference in your community by participating in this meaningful project.'}</p>
 
-        <div className="actions">
-          <button className="btn-primary">I Want to Help</button>
-          <button className="btn-secondary">Save</button>
-        </div>
+       <div className="actions">
+              <button className="btn-primary">I Want to Help</button>
+              <button
+                className="btn-secondary"
+                onClick={(e) => handleSavedClick(e, opportunity.id)}
+              >
+                {savedOpps.includes(opportunity.id) ? "Saved" : "Save"}
+              </button>
+            </div>
       </div>
       
     </div>

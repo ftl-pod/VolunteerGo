@@ -13,7 +13,7 @@ function RemoveModal({ show, closeModal, onConfirm }) {
             <div className="modal">
                 <SpinningIcon
                     animate={{ rotate: 360 }}
-                    transition={{ repeat: Infinity, duration: 3, ease: 'linear' }}
+                    transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
                     size={90}
                     color="#647c6e"
                 />

@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 
-function OpportunityGrid() {
-  const { user } = useUser();
+function OpportunityGrid({ searchResults }) {
+  const { user, isSignedIn, openSignIn } = useUser();
   const [opps, setOpps] = useState([]);
   const [savedOpps, setSavedOpps] = useState([]);
   const [prismaUserId, setPrismaUserId] = useState(null);
@@ -22,7 +22,9 @@ function OpportunityGrid() {
     const fetchPrismaUserId = async () => {
       if (!user) return;
       try {
-        const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-clerk/${user.id}`;
+        const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-clerk/${
+          user.id
+        }`;
         const res = await fetch(url);
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
@@ -39,16 +41,24 @@ function OpportunityGrid() {
 
   const handleSavedClick = async (e, oppId) => {
     e.stopPropagation();
+    if (!isSignedIn) {
+      openSignIn();
+      return;
+    }
     if (!prismaUserId) {
       console.error("Prisma user ID not available");
       return;
     }
     try {
       const isSaved = savedOpps.includes(oppId);
-      const url = `${import.meta.env.VITE_API_BASE_URL}/users/${prismaUserId}/saved-opportunities/${isSaved ? 'remove' : 'add'}`;
-      const method = 'POST';
+      const url = `${
+        import.meta.env.VITE_API_BASE_URL
+      }/users/${prismaUserId}/saved-opportunities/${
+        isSaved ? "remove" : "add"
+      }`;
+      const method = "POST";
       const body = JSON.stringify({ opportunityId: oppId });
-      const headers = { 'Content-Type': 'application/json' };
+      const headers = { "Content-Type": "application/json" };
 
       const res = await fetch(url, { method, headers, body });
 
@@ -77,7 +87,12 @@ function OpportunityGrid() {
   useEffect(() => {
     const fetchOpps = async () => {
       try {
-        const url = `${import.meta.env.VITE_API_BASE_URL}/opportunities`;
+        const query = new URLSearchParams();
+        if (searchResults) query.append("keyword", searchResults);
+
+        const url = `${
+          import.meta.env.VITE_API_BASE_URL
+        }/opportunities?${query.toString()}`;
         const res = await fetch(url);
 
         if (!res.ok) {
@@ -92,7 +107,7 @@ function OpportunityGrid() {
     };
 
     fetchOpps();
-  }, []);
+  }, [searchResults]);
 
   return (
     <div className="opportunities-section">

@@ -2,11 +2,11 @@ const prisma  = require("../db/db");
 
 exports.getAll = async (req, res) => {
     console.log("Query params received:", req.query);
-    const { name, sort_by } = req.query;
+    const { keyword, sort_by } = req.query;
     const filters = {};
-    if (name) {
+    if (keyword) {
         filters.name = {
-            contains: name,
+            contains: keyword,
             mode: 'insensitive' 
         }
     }

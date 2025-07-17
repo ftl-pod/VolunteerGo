@@ -2,6 +2,7 @@ import "./LocationPage.css";
 import React, {use, useEffect, useState} from 'react';
 import {APIProvider, Map, AdvancedMarker} from '@vis.gl/react-google-maps';
 import * as Geocode from 'react-geocode';
+import { useUser } from "@clerk/clerk-react";
 // need to import cluster stuff if i wanna do that
 
 
@@ -10,6 +11,9 @@ function LocationPage () {
     Geocode.setKey(import.meta.env.VITE_GOOGLE_GEOCODE_API_KEY);
     const [opps, setOpps] = useState([]);
     const [coords, setCoords] = useState([]); 
+    const [userLatLng, setUserLatLng] = useState({ lat: 37.7749, lng: -122.4194 })
+    // pulling from publicMetadata -> get user info
+    const { user, isLoaded } = useUser();
     useEffect(() => {
     const fetchOppsAndCoords = async () => {
         try {
@@ -18,7 +22,6 @@ function LocationPage () {
         if (!res.ok) {
             throw new Error(`HTTP error! Status: ${res.status}`);
         }
-
         const data = await res.json();
         setOpps(data);
         const coordsArr = await Promise.all(
@@ -38,15 +41,30 @@ function LocationPage () {
         console.error("Failed to fetch opportunities:", err);
         }
     };
+        if (user?.publicMetadata?.location) {
+            const getUserCoords = async () => {
+            try {
+                const userResp = await Geocode.fromAddress(user.publicMetadata.location);
+                const userLoc = userResp.results[0].geometry.location;
+                setUserLatLng(userLoc);
+            } catch (error) {
+                console.error("Error fetching user's location:", error);
+            }
+      };
+        getUserCoords();
         fetchOppsAndCoords();
-    }, []);
+    }
+    }, [isLoaded, user]);
+        if (!isLoaded || !user?.publicMetadata) {
+        return <div>Loading user data...</div>;
+    }
     return (
         <>
         <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} onLoad={ () => console.log("Google Maps API loaded :)")}>
             <div className="map-container">
                 <Map
                 mapId={import.meta.env.VITE_GOOGLE_MAP_ID}
-                defaultCenter={{ lat: 37.7749, lng: -122.4194 }} // sf for now but will be user's location
+                center={userLatLng} // sf for now but will be user's location
                 defaultZoom={10}
                 onCameraChanged={(ev) =>
                 console.log('camera changed:', ev.detail.center, 'zoom:', ev.detail.zoom)}

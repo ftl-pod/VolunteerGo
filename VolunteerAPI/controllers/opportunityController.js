@@ -2,39 +2,54 @@ const prisma  = require("../db/db");
 
 exports.getAll = async (req, res) => {
     console.log("Query params received:", req.query);
-    const { keyword, sort_by } = req.query;
+    const { keyword, sort_by, city } = req.query;
+
     const filters = {};
+
     if (keyword) {
         filters.name = {
-            contains: keyword,
-            mode: 'insensitive' 
-        }
-    }
-
-    // sorting for recent 
-    let orderBy = {}
-    if (sort_by) {
-        orderBy = {
-            [sort_by]: order === 'desc' ? 'desc' : 'asc',
+        contains: keyword,
+        mode: 'insensitive',
         };
     }
+
+    if (city) {
+        filters.organization = {
+        location: {
+            contains: city,
+            mode: 'insensitive'
+        }
+        };
+    }
+
+    // Sorting logic
+    let orderBy = {};
+        if (sort_by) {
+        orderBy = {
+            [sort_by]: req.query.order === 'desc' ? 'desc' : 'asc',
+        };
+        } else {
+        orderBy = {
+            createdAt: 'asc', // or 'desc' depending on your preference
+        };
+        }
+
     try {
         const opportunities = await prisma.opportunity.findMany({
-            where: filters,
-            orderBy: Object.keys(orderBy).length ? orderBy : undefined,
-            include: {
-                organization: {
-                    select: {
-                        id: true,
-                        name: true,
-                        tags: true,
-                        location: true
-                    }
-                }
-            }
+        where: filters,
+        orderBy: Object.keys(orderBy).length ? orderBy : undefined,
+        include: {
+            organization: {
+            select: {
+                id: true,
+                name: true,
+                tags: true,
+                location: true,
+            },
+            },
+        },
         });
         res.json(opportunities);
-
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Failed to fetch opportunities" });

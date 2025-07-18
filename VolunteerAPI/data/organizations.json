@@ -243,5 +243,210 @@
     "name": "Community Emergency Response Team",
     "tags": ["disaster response", "emergency", "training", "preparedness"],
     "location": "San Jose, CA"
+  },
+  {
+    "name": "Providence Care",
+    "tags": ["Faith-Based", "Health & Medicine", "Seniors", "Music", "Hospice", "Inspirational"],
+    "location": "Multiple locations Simpsonville, SC 29680"
+  },
+  {
+    "name": "Christian HELP Foundation",
+    "tags": ["Employment", "Faith-Based", "Hunger", "Data Entry", "Customer Service"],
+    "location": "450 Seminola Blvd Casselberry, FL 32707"
+  },
+  {
+    "name": "EMBE",
+    "tags": ["Children & Youth", "Community", "Women", "Event Management", "Fundraising"],
+    "location": "300 W. 11th Street Sioux Falls, SD 57104"
+  },
+  {
+    "name": "The Salvation Army of Summit County",
+    "tags": ["Community", "Hunger", "Food Distribution", "Customer Service"],
+    "location": "1033 Bellows Street Akron, OH 44311"
+  },
+  {
+    "name": "Wings of Hope",
+    "tags": ["Children & Youth", "Health & Medicine", "International", "IT Support", "Maintenance"],
+    "location": "18370 Wings of Hope Blvd Spirit of St Louis Airport Chesterfield, MO 63005"
+  },
+  {
+    "name": "Central California Food Bank",
+    "tags": ["Community", "Disaster Relief", "Hunger", "Food Distribution"],
+    "location": "4010 E Amendola Dr Fresno, CA 93725"
+  },
+  {
+    "name": "Christian HELP Foundation",
+    "tags": ["Community", "Faith-Based", "Hunger", "Customer Service", "Data Entry"],
+    "location": "450 Seminola Blvd. Casselberry, FL 32707"
+  },
+  {
+    "name": "EMBE",
+    "tags": ["Children & Youth", "Community", "Women", "Event Management", "Fundraising"],
+    "location": "300 W. 11th Street Sioux Falls, SD 57104"
+  },
+  {
+    "name": "The Salvation Army of Summit County",
+    "tags": ["Community", "Hunger", "Food Distribution", "Customer Service"],
+    "location": "1033 Bellows Street Akron, OH 44311"
+  },
+  {
+    "name": "BRIGHT MIND ENRICHMENT AND SCHOOLING",
+    "tags": ["Community", "Education & Literacy", "Homeless & Housing"],
+    "location": "Multiple locations"
+  },
+  {
+    "name": "OneInMath",
+    "tags": ["Children & Youth", "Education & Literacy", "Tutoring", "Math"],
+    "location": "Multiple locations"
+  },
+  {
+    "name": "I Want To Mow Your Lawn ®",
+    "tags": ["People with Disabilities", "Landscaping", "Home Repair"],
+    "location": "Multiple locations"
+  },
+  {
+    "name": "American Red Cross - National Capital & Greater Chesapeake Region",
+    "tags": ["Disaster Relief", "Emergency & Safety", "Health & Medicine", "Blood Donation"],
+    "location": "Multiple locations"
+  },
+  {
+    "name": "Empowherto Inc",
+    "tags": ["Children & Youth", "Community", "Computers & Technology", "Program Intake"],
+    "location": "101 N.E 3rd Ave. Suite 1500 fort lauderdale, FL 33301"
+  },
+  {
+    "name": "Sprouts Chef Training",
+    "tags": ["Children & Youth", "Community", "Employment", "Event Planning"],
+    "location": "1 Sansome Street San Francisco, CA 94104"
+  },
+  {
+    "name": "Wings of Hope",
+    "tags": ["Children & Youth", "Health & Medicine", "International", "Maintenance", "IT Support"],
+    "location": "18370 Wings of Hope Blvd Spirit of St Louis Airport Chesterfield, MO 63005"
+  },
+  {
+    "name": "BRIGHT MIND ENRICHMENT AND SCHOOLING",
+    "tags": ["Community", "Education & Literacy", "Homeless & Housing"],
+    "location": "Multiple locations"
+  },
+  {
+    "name": "Learning Is The Way",
+    "tags": ["Children & Youth", "Community", "Education & Literacy", "Arts & Culture"],
+    "location": "Multiple locations"
+  },
+  {
+    "name": "Black Men's Health Clinic",
+    "tags": ["Community", "Computers & Technology", "Marketing", "Communications"],
+    "location": "This is a Virtual Opportunity with no fixed address."
+  },
+  {
+    "name": "POSITIVE REFLECTION MINISTRIES",
+    "tags": ["Community", "Homeless & Housing", "Hunger", "Food Service"],
+    "location": "6716 Lake June Rd Dallas, TX 75217"
+  },
+  {
+    "name": "Citymeals-on-Wheels",
+    "tags": ["Community", "Hunger", "Seniors", "Healthcare"],
+    "location": "355 Lexington Ave. New York, NY 10017"
+  },
+  {
+    "name": "Learning Is The Way",
+    "tags": ["Children & Youth", "Community", "Education & Literacy", "Arts & Culture"],
+    "location": "Escondido, CA 92027"
+  },
+  {
+    "name": "The Borgen Project",
+    "tags": ["Crisis Support", "Disaster Relief", "International", "Advocacy"],
+    "location": "This is a Virtual Opportunity with no fixed address."
+  },
+  {
+    "name": "Sprouts Chef Training",
+    "tags": ["Children & Youth", "Community", "Employment", "Event Planning"],
+    "location": "San Francisco, CA"
+  },
+  {
+    "name": "Wings of Hope",
+    "tags": ["Children & Youth", "Health & Medicine", "International", "Maintenance", "IT Support"],
+    "location": "Chesterfield, MO 63005"
+  },
+  {
+  "name": "United Way of Tarrant County",
+  "tags": ["Advocacy", "Community", "Seniors", "Support Services"],
+  "location": "Tarrant County, TX"
+  },
+  {
+    "name": "Easter Seals Serving DC MD VA",
+    "tags": ["Children & Youth", "Disabilities", "Veterans", "Family Support"],
+    "location": "1420 Spring Street Silver Spring, MD 20910"
+  },
+  {
+    "name": "St. Vincent and Sarah Fisher Center",
+    "tags": ["Education", "Literacy", "Adult Education", "Tutoring"],
+    "location": "Detroit, MI"
+  },
+  {
+    "name": "Cherrie Give Resultz",
+    "tags": ["Employment", "Community", "Human Resources", "Advocacy"],
+    "location": "This is a Virtual Opportunity with no fixed address."
+  }, 
+  {
+    "name": "ACE MAKERSPACE",
+    "tags": ["Arts & Culture", "Education", "Makerspace", "Community"],
+    "location": "Oakland, CA"
+  },
+  {
+    "name": "Hostelling International New York",
+    "tags": ["Community", "Arts & Culture", "Travel", "Hospitality"],
+    "location": "891 Amsterdam Avenue New York, NY 10025"
+  },
+  {
+    "name": "Carboncopies Foundation for Substrate Independent Minds INC",
+    "tags": [
+      "Neuroscience",
+      "Technology",
+      "Artificial Intelligence",
+      "Transhumanism"
+    ],
+    "location": "This is a Virtual Opportunity with no fixed address."
+  },
+  {
+    "name": "Empowered Futures",
+    "tags": ["Youth", "Mentorship", "Education", "Self-Development"],
+    "location": "This is a Virtual Opportunity with no fixed address."
+  }, 
+  {
+    "name": "Forest Park Hospice/NBA American Northwest Hospice",
+    "tags": ["Hospice", "Health & Medicine", "Palliative Care", "Community"],
+    "location": "Multiple locations in WA and OR"
+  }, 
+  {
+    "name": "GRIP Training Institute",
+    "tags": [
+      "Education",
+      "Rehabilitation",
+      "Social Justice",
+      "Prison Outreach"
+    ],
+    "location": "California State Prisons (Virtual and In-Person)"
+  }, 
+  {
+    "name": "Hostelling International New York",
+    "tags": ["Community", "Arts & Culture", "Travel", "Hospitality"],
+    "location": "891 Amsterdam Avenue New York, NY 10025"
+  }, 
+  {
+    "name": "Las Vegas Science & Natural History Museum",
+    "tags": ["Science", "Education", "Museums", "STEM"],
+    "location": "900 Las Vegas Blvd N, Las Vegas, NV 89101"
+  }, 
+  {
+    "name": "MultiCare Yakima Home Health and Hospice",
+    "tags": ["Health & Medicine", "Hospice", "Nursing", "Seniors"],
+    "location": "Yakima, WA"
+  }, 
+  {
+    "name": "Volunteer Services",
+    "tags": ["Community", "Elderly", "Health Support", "Transportation"],
+    "location": "Multiple locations in WA State"
   }
 ]

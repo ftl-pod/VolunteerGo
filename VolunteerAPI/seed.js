@@ -69,7 +69,7 @@ async function seed() {
           location: opportunity.location,
           skills: opportunity.skills,
           imageUrl: opportunity.imageUrl,
-          volunteersNeeded: opportunity.volunteersNeeded,
+          //volunteersNeeded: opportunity.volunteersNeeded,
           status: opportunity.status,
           points: opportunity.points,
           organizationId: opportunity.organizationId,

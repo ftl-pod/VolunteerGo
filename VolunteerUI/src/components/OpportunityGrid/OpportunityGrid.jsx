@@ -126,7 +126,11 @@ function OpportunityGrid({ searchResults }) {
                 <span>{opportunity.location} | </span>
                 <span>{formatDate(opportunity.date)}</span>
               </div>
-              <p className="card-description">{opportunity.description}</p>
+              <p className="card-description" title={opportunity.description}>
+                {opportunity.description && opportunity.description.length > 150
+                  ? opportunity.description.slice(0, 150) + "..."
+                  : opportunity.description}
+              </p>
             </Link>
 
             <div className="card-tags">

@@ -81,60 +81,73 @@ function SavedPage() {
     };
 
     return (
-        <div className="saved-section">
-            <div>
-                <RemoveModal show={showModal} closeModal={closeModal} onConfirm={confirmRemove} />
-            </div>
-
-            <div className="saved-cards-section">
-                <h2>Your Saved Cards</h2>
-                <div className="saved-grid">
-                    {savedOpps.length === 0 ? (
-                        <p>You have no saved opportunities.</p>
-                    ) : (
-                        savedOpps.map((opportunity) => (
-                            <div className="saved-card" key={opportunity.id}>
-                                <Link to={`/opportunity/${opportunity.id}`}>
-                                    <div className="saved-card-header">
-                                        <div className="saved-card-header-left">
-                                            <h3 className="saved-card-title">{opportunity.name}</h3>
-                                            <p className="saved-card-org">
-                                                {opportunity.organization?.name}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="saved-card-details">
-                                        <span> {opportunity.location} | </span>
-                                        <span> {formatDate(opportunity.date)}</span>
-                                    </div>
-                                </Link>
-
-                                <p className="saved-card-description">
-                                    {opportunity.description}
-                                </p>
-
-                                <div className="tags">
-                                    {opportunity.tags.map((tag) => (
-                                        <span key={tag} className="saved-card-tag">
-                                            {tag}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                <div className="saved-card-actions">
-                                    <Link to={`/opportunity/${opportunity.id}`}>
-                                        <button className="btn-primary">I Want to Help</button>
-                                    </Link>
-                                    <button className="btn-secondary" onClick={() => handleRemoveClick(opportunity)}>
-                                        Remove
-                                    </button>
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-            </div>
+      <div className="saved-section">
+        <div>
+          <RemoveModal
+            show={showModal}
+            closeModal={closeModal}
+            onConfirm={confirmRemove}
+          />
         </div>
+
+        <div className="saved-cards-section">
+          <h2>Your Saved Cards</h2>
+          <div className="saved-grid">
+            {savedOpps.length === 0 ? (
+              <p>You have no saved opportunities.</p>
+            ) : (
+              savedOpps.map((opportunity) => (
+                <div className="saved-card" key={opportunity.id}>
+                  <Link to={`/opportunity/${opportunity.id}`}>
+                    <div className="saved-card-header">
+                      <div className="saved-card-header-left">
+                        <h3 className="saved-card-title">{opportunity.name}</h3>
+                        <p className="saved-card-org">
+                          {opportunity.organization?.name}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="saved-card-details">
+                      <span> {opportunity.location} | </span>
+                      <span> {formatDate(opportunity.date)}</span>
+                    </div>
+                  </Link>
+
+                  <p
+                    className="saved-card-description"
+                    title={opportunity.description}
+                  >
+                    {opportunity.description &&
+                    opportunity.description.length > 150
+                      ? opportunity.description.slice(0, 150) + "..."
+                      : opportunity.description}
+                  </p>
+
+                  <div className="tags">
+                    {opportunity.tags.map((tag) => (
+                      <span key={tag} className="saved-card-tag">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="saved-card-actions">
+                    <Link to={`/opportunity/${opportunity.id}`}>
+                      <button className="btn-primary">I Want to Help</button>
+                    </Link>
+                    <button
+                      className="btn-secondary"
+                      onClick={() => handleRemoveClick(opportunity)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
     );
 }
 

@@ -154,3 +154,17 @@ ul{
     padding-left: 0rem;
 }
 
+.full-description {
+    overflow-y: scroll;
+    max-height: 250px;
+}
+.opportunity-info {
+    padding:1.5rem;
+    height: 90%;
+}
+
+.opportunity-info p {
+        overflow-y: auto;
+
+}
+

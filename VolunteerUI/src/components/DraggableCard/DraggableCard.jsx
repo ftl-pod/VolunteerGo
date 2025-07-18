@@ -215,7 +215,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
       <div className ="left-side">
         <div className="opportunity-image">
           <img
-            src="https://picsum.photos/1000/500"
+            src={opportunity.imageUrl || "https://picsum.photos/1000/500"}
             alt="Random image"
             draggable={false}
           />
@@ -276,7 +276,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
           )}
         </div>
 
-        <p className="description">
+        <p className="full-description">
           {opportunity?.description ||
             "This is a sample opportunity description. Help make a difference in your community by participating in this meaningful project."}
         </p>

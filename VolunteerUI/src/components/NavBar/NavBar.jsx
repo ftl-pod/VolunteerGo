@@ -41,7 +41,7 @@ function Navbar() {
                         <img 
                             src={user.publicMetadata.avatarUrl} 
                             alt={`${user.username || 'User'}'s avatar`} 
-                            style={{ width: 60, height: 60, borderRadius: '50%' }} 
+                            style={{ width: 60, height: 60, borderRadius: '50%', border: '3px solid #63806f' }} 
                         />
                         ) : (
                         <FaUserCircle size={60} />

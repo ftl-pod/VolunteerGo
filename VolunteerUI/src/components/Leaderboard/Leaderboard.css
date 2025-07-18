@@ -1,84 +1,309 @@
+/* Leaderboard Page Styles */
+.page {
+    min-height: 100vh;
+    padding: 1.5rem 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
 .title {
     display: flex;
     width: 100%;
-    height: 5vh;
-    font-size: larger;
+    height: auto;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a2901;
     align-items: center;
     justify-content: center;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    flex-shrink: 0;
 }
+
 .list {
-    margin-top: 10px;
-    display:flex;
+    margin: 0 auto;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    justify-self: center;
-    width: 80%;
-    height: 80vh;
-    gap:10px;
+    width: 90%;
+    flex: 1;
+    min-height: 0;
+    gap: 16px;
     overflow-y: auto;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .list-item {
-    width: 95%;
+    width: 90%;
     display: flex;
-    min-height: 10%;
-    border: 1px solid #1a2901;
+    min-height: 90px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid transparent;
     justify-content: space-between;
     align-items: center;
-    border-radius:10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding: 1.2rem 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.list-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    border-color: #63806f;
 }
 
 .rank {
-    width: 10%;
+    width: 70px;
+    min-width: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
 }
 
-.circle {
-    width: 50%;
+.rank .circle {
+    width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    height: 80%;
-    background-color: #63806f;
-    color:white;
+    background: var(--primary-color);
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 3px solid rgba(255, 255, 255, 0.3);
 }
 
 .user-name {
-    width: 40%;
+    flex: 1;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     height: 100%;
-    flex-direction: row;
-    text-align: center;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #2d3436;
+    margin-left: 1.5rem;
+    min-width: 0;
 }
 
 .pfp {
-    width: 25%;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    margin-left:-50px;
+    margin-right: 1.5rem;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.pfp .circle {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #63806f;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .pfp-img {
-    object-fit: cover;
     width: 100%;
     height: 100%;
+    object-fit: cover;
     border-radius: 50%;
 }
 
 .points {
-    width: 10%;
+    width: 110px;
+    min-width: 110px;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #1a2901;
+    text-align: center;
+    background: rgba(99, 128, 111, 0.1);
+    border-radius: 12px;
+    padding: 0.6rem;
+}
+
+/* Custom scrollbar */
+.list::-webkit-scrollbar {
+    width: 10px;
+}
+
+.list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.list::-webkit-scrollbar-thumb {
+    background: rgba(99, 128, 111, 0.5);
+    border-radius: 10px;
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+    background: rgba(99, 128, 111, 0.7);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .page {
+        padding: 1rem 0.5rem;
+    }
+    
+    .title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .list {
+        width: 98%;
+        gap: 12px;
+        padding: 1rem;
+    }
+    
+    .list-item {
+        min-height: 75px;
+        padding: 1rem;
+        border-radius: 12px;
+    }
+    
+    .rank {
+        width: 55px;
+        min-width: 55px;
+    }
+    
+    .rank .circle {
+        width: 42px;
+        height: 42px;
+        font-size: 1rem;
+    }
+    
+    .user-name {
+        margin-left: 1rem;
+        font-size: 1rem;
+    }
+    
+    .pfp {
+        width: 55px;
+        height: 55px;
+        margin-right: 1rem;
+    }
+    
+    .pfp .circle {
+        width: 100%;
+        height: 100%;
+    }
+    
+    .points {
+        width: 85px;
+        min-width: 85px;
+        font-size: 1.1rem;
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page {
+        padding: 0.5rem 0.25rem;
+    }
+    
+    .title {
+        font-size: 1.6rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .list {
+        padding: 0.75rem;
+        gap: 10px;
+    }
+    
+    .list-item {
+        min-height: 65px;
+        padding: 0.8rem;
+    }
+    
+    .rank {
+        width: 50px;
+        min-width: 50px;
+    }
+    
+    .rank .circle {
+        width: 38px;
+        height: 38px;
+        font-size: 0.9rem;
+    }
+    
+    .user-name {
+        margin-left: 0.75rem;
+        font-size: 0.9rem;
+    }
+    
+    .pfp {
+        width: 50px;
+        height: 50px;
+        margin-right: 0.75rem;
+    }
+    
+    .pfp .circle {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .points {
+        width: 75px;
+        min-width: 75px;
+        font-size: 1rem;
+        padding: 0.4rem;
+    }
+}
+
+/* Loading state */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    font-size: 1.2rem;
+    color: #636e72;
+}
+
+/* Empty state */
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    color: #636e72;
+    text-align: center;
+}
+
+.empty h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.empty p {
+    font-size: 1rem;
+    opacity: 0.8;
 }

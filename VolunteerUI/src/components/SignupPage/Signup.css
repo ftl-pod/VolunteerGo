@@ -144,3 +144,9 @@ a {
     padding: 32px 12px;
   }
 }
+
+.left-pic {
+  width: 100%;
+  height: 100vh;
+  object-fit: block
+}

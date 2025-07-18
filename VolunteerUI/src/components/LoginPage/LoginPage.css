@@ -197,3 +197,9 @@
 .cl-internal-1jar8p7{
     padding: 0.3rem 1rem;
 }
+
+.left-pic {
+  width: 100%;
+  height: 100vh;
+  object-fit: block
+}

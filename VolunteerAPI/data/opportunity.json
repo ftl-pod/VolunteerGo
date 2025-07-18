@@ -2,6 +2,11 @@
   {
     "name": "Food Sorting and Packaging",
     "tags": ["food", "sorting", "warehouse", "teamwork"],
+    "requirements": [
+      "Must be able to lift 25 lbs",
+      "Comfortable standing for 3+ hours",
+      "Food safety certification preferred"
+    ],
     "description": "Help sort and package food donations for distribution to families in need. No experience required, just enthusiasm to help!",
     "location": "San Jose, CA",
     "skills": ["organization", "teamwork", "attention to detail"],
@@ -14,6 +19,11 @@
   {
     "name": "Dog Walking and Socialization",
     "tags": ["dogs", "exercise", "animal care", "outdoor"],
+    "requirements": [
+      "Comfortable with dogs of all sizes",
+      "Able to walk 2+ miles",
+      "Must attend orientation session"
+    ],
     "description": "Take rescued dogs for walks and help with socialization. Perfect for animal lovers who want to make a difference in a pet's life.",
     "location": "Palo Alto, CA",
     "skills": ["animal handling", "patience", "physical fitness"],
@@ -26,6 +36,11 @@
   {
     "name": "Computer Skills Workshop Assistant",
     "tags": ["teaching", "technology", "seniors", "computer skills"],
+    "requirements": [
+      "Proficient in Windows and Mac",
+      "Patient teaching style",
+      "Background check required"
+    ],
     "description": "Assist seniors in learning basic computer skills and internet navigation. Help bridge the digital divide in our community.",
     "location": "Mountain View, CA",
     "skills": ["computer literacy", "patience", "teaching", "communication"],
@@ -38,6 +53,11 @@
   {
     "name": "Community Garden Cleanup",
     "tags": ["gardening", "environment", "outdoor", "cleanup"],
+    "requirements": [
+      "Bring own gardening gloves",
+      "Comfortable with outdoor work",
+      "Must be able to kneel and bend"
+    ],
     "description": "Join us for a community garden cleanup day. We'll be weeding, planting, and preparing beds for the upcoming season.",
     "location": "Berkeley, CA",
     "skills": ["gardening", "physical work", "teamwork"],
@@ -50,6 +70,12 @@
   {
     "name": "House Building - Roofing Team",
     "tags": ["construction", "building", "housing", "skilled labor"],
+    "requirements": [
+      "Construction experience preferred",
+      "Must pass safety training",
+      "Hard hat and safety boots required",
+      "Not afraid of heights"
+    ],
     "description": "Help install roofing on a new home for a family in need. Construction experience preferred but not required - we'll provide training!",
     "location": "San Francisco, CA",
     "skills": [
@@ -67,6 +93,11 @@
   {
     "name": "After School Tutoring",
     "tags": ["tutoring", "education", "youth", "mentorship"],
+    "requirements": [
+      "High school diploma minimum",
+      "Background check required",
+      "Commit to 2+ hours per week"
+    ],
     "description": "Provide homework help and academic support to elementary school students. Make a lasting impact on a child's education.",
     "location": "Oakland, CA",
     "skills": ["tutoring", "patience", "communication", "subject knowledge"],
@@ -79,6 +110,11 @@
   {
     "name": "Senior Companion Visits",
     "tags": ["seniors", "companionship", "social", "conversation"],
+    "requirements": [
+      "Background check required",
+      "Reliable transportation",
+      "Commit to weekly visits"
+    ],
     "description": "Spend quality time with elderly residents at local care facilities. Share stories, play games, or simply provide friendly conversation.",
     "location": "Santa Clara, CA",
     "skills": ["empathy", "communication", "patience", "social skills"],
@@ -91,6 +127,11 @@
   {
     "name": "Reading Program for Kids",
     "tags": ["reading", "children", "literacy", "education"],
+    "requirements": [
+      "Love of reading",
+      "Comfortable with children",
+      "Clear speaking voice"
+    ],
     "description": "Read to groups of children at the local library and help foster a love of reading. Perfect for book lovers and aspiring teachers.",
     "location": "San Jose, CA",
     "skills": ["reading", "public speaking", "child interaction", "enthusiasm"],
@@ -103,6 +144,11 @@
   {
     "name": "Animal Shelter Cleaning",
     "tags": ["animals", "cleaning", "shelter", "maintenance"],
+    "requirements": [
+      "Comfortable around animals",
+      "Able to lift 30 lbs",
+      "Bring old clothes"
+    ],
     "description": "Help maintain a clean and healthy environment for rescued animals. Tasks include cleaning kennels, washing bedding, and general upkeep.",
     "location": "Palo Alto, CA",
     "skills": [
@@ -120,6 +166,11 @@
   {
     "name": "Beach Cleanup Day",
     "tags": ["environment", "cleanup", "ocean", "conservation"],
+    "requirements": [
+      "Bring water and sunscreen",
+      "Comfortable walking on sand",
+      "Wear closed-toe shoes"
+    ],
     "description": "Join our monthly beach cleanup to remove trash and debris from our beautiful coastline. Help protect marine life and keep beaches clean.",
     "location": "Half Moon Bay, CA",
     "skills": ["environmental awareness", "physical activity", "teamwork"],
@@ -132,6 +183,11 @@
   {
     "name": "Mobile Food Distribution",
     "tags": ["food", "distribution", "community", "outreach"],
+    "requirements": [
+      "Able to lift 40 lbs",
+      "Bilingual (Spanish/English) preferred",
+      "Reliable transportation"
+    ],
     "description": "Help distribute food to underserved communities through our mobile food pantry program. Great way to directly impact families in need.",
     "location": "East San Jose, CA",
     "skills": [
@@ -149,6 +205,11 @@
   {
     "name": "Youth Basketball Coaching",
     "tags": ["youth", "sports", "coaching", "mentorship"],
+    "requirements": [
+      "Basketball knowledge",
+      "Youth coaching certification preferred",
+      "Background check required"
+    ],
     "description": "Coach youth basketball teams and help develop both athletic skills and character. Previous coaching experience preferred but not required.",
     "location": "Oakland, CA",
     "skills": ["coaching", "sports knowledge", "leadership", "mentorship"],
@@ -161,6 +222,11 @@
   {
     "name": "Hospital Patient Support",
     "tags": ["healthcare", "companionship", "hospital", "support"],
+    "requirements": [
+      "Health screening required",
+      "Comfortable in hospital environment",
+      "Commit to 4+ hours per week"
+    ],
     "description": "Provide comfort and companionship to patients in local hospitals. Help with reading, conversation, and light activities.",
     "location": "San Francisco, CA",
     "skills": ["empathy", "communication", "patience", "emotional support"],
@@ -173,6 +239,11 @@
   {
     "name": "Community Mural Painting",
     "tags": ["art", "community", "creativity", "beautification"],
+    "requirements": [
+      "Basic art skills",
+      "Comfortable with ladders",
+      "Bring own brushes"
+    ],
     "description": "Help paint a vibrant community mural that celebrates local culture and brings neighborhoods together through art.",
     "location": "San Francisco, CA",
     "skills": [
@@ -190,6 +261,11 @@
   {
     "name": "Homeless Shelter Meal Service",
     "tags": ["food service", "homeless", "compassion", "community"],
+    "requirements": [
+      "Food handler's permit",
+      "Comfortable serving diverse populations",
+      "Reliable attendance"
+    ],
     "description": "Serve meals to individuals experiencing homelessness. Help provide not just food, but dignity and human connection.",
     "location": "San Jose, CA",
     "skills": ["food service", "compassion", "teamwork", "reliability"],
@@ -202,6 +278,11 @@
   {
     "name": "Tax Preparation Assistance",
     "tags": ["taxes", "financial literacy", "community service", "accounting"],
+    "requirements": [
+      "IRS VITA certification",
+      "Basic math skills",
+      "Attention to detail"
+    ],
     "description": "Help low-income families prepare their tax returns for free. Training provided for basic tax situations.",
     "location": "Fremont, CA",
     "skills": [
@@ -219,6 +300,11 @@
   {
     "name": "Children's Hospital Entertainment",
     "tags": ["children", "hospital", "entertainment", "joy"],
+    "requirements": [
+      "Background check required",
+      "Health screening",
+      "Comfortable with sick children"
+    ],
     "description": "Bring smiles to young patients through games, crafts, and entertainment activities. Help make hospital stays a little brighter.",
     "location": "Oakland, CA",
     "skills": ["child interaction", "creativity", "enthusiasm", "patience"],
@@ -231,6 +317,11 @@
   {
     "name": "Urban Farm Volunteer",
     "tags": ["agriculture", "farming", "sustainability", "education"],
+    "requirements": [
+      "Comfortable with outdoor work",
+      "Basic gardening knowledge",
+      "Able to work in all weather"
+    ],
     "description": "Help tend to crops at an urban farm that provides fresh produce to local food banks and teaches sustainable farming.",
     "location": "Berkeley, CA",
     "skills": [
@@ -248,6 +339,11 @@
   {
     "name": "Senior Technology Support",
     "tags": ["seniors", "technology", "teaching", "digital literacy"],
+    "requirements": [
+      "Patient teaching style",
+      "Tech-savvy",
+      "Background check required"
+    ],
     "description": "Help seniors learn to use smartphones, tablets, and video calling to stay connected with family and friends.",
     "location": "Palo Alto, CA",
     "skills": ["technology skills", "patience", "teaching", "communication"],
@@ -264,6 +360,11 @@
       "blood donation",
       "coordination",
       "community health"
+    ],
+    "requirements": [
+      "Event planning experience",
+      "First aid certification preferred",
+      "Strong organizational skills"
     ],
     "description": "Help organize and run community blood drives. Assist with registration, donor support, and event coordination.",
     "location": "San Mateo, CA",
@@ -282,6 +383,11 @@
   {
     "name": "Refugee Family Support",
     "tags": ["refugees", "cultural exchange", "family support", "integration"],
+    "requirements": [
+      "Cultural sensitivity training",
+      "Multilingual preferred",
+      "Reliable transportation"
+    ],
     "description": "Help newly arrived refugee families navigate their new community. Assist with shopping, appointments, and cultural orientation.",
     "location": "Fremont, CA",
     "skills": [
@@ -299,6 +405,11 @@
   {
     "name": "Wildlife Rehabilitation Assistant",
     "tags": ["wildlife", "rehabilitation", "animal care", "conservation"],
+    "requirements": [
+      "Animal handling experience",
+      "Comfortable with wild animals",
+      "Rabies vaccination required"
+    ],
     "description": "Assist with care of injured and orphaned wildlife. Help with feeding, cleaning, and preparing animals for release.",
     "location": "San Rafael, CA",
     "skills": [
@@ -316,6 +427,11 @@
   {
     "name": "Community Festival Volunteer",
     "tags": ["events", "community", "festival", "coordination"],
+    "requirements": [
+      "Friendly demeanor",
+      "Able to stand for long periods",
+      "Flexible schedule"
+    ],
     "description": "Help organize and run annual community festivals. Assist with setup, vendor coordination, and visitor services.",
     "location": "Santa Clara, CA",
     "skills": ["event planning", "customer service", "teamwork", "flexibility"],
@@ -328,6 +444,11 @@
   {
     "name": "Disaster Relief Preparation",
     "tags": ["disaster relief", "emergency", "preparation", "community safety"],
+    "requirements": [
+      "Emergency response training",
+      "Physical fitness",
+      "Flexible availability"
+    ],
     "description": "Help prepare emergency supply kits and disaster relief materials for community emergency response.",
     "location": "San Jose, CA",
     "skills": [
@@ -345,6 +466,11 @@
   {
     "name": "Adult Literacy Tutoring",
     "tags": ["literacy", "education", "adults", "tutoring"],
+    "requirements": [
+      "Teaching experience preferred",
+      "Patient approach",
+      "Commit to 6+ months"
+    ],
     "description": "Help adults improve their reading and writing skills. Make a profound impact on someone's ability to navigate daily life.",
     "location": "Oakland, CA",
     "skills": ["teaching", "patience", "communication", "literacy"],
@@ -357,6 +483,11 @@
   {
     "name": "Therapeutic Horse Care",
     "tags": ["horses", "therapy", "animal care", "special needs"],
+    "requirements": [
+      "Horse experience required",
+      "Comfortable with special needs individuals",
+      "Physical fitness"
+    ],
     "description": "Help care for therapy horses used in programs for individuals with disabilities. Assist with grooming, feeding, and facility maintenance.",
     "location": "Woodside, CA",
     "skills": ["animal handling", "physical work", "patience", "reliability"],
@@ -369,6 +500,11 @@
   {
     "name": "Environmental Education Guide",
     "tags": ["environment", "education", "nature", "guiding"],
+    "requirements": [
+      "Environmental science knowledge",
+      "Public speaking skills",
+      "Hiking ability"
+    ],
     "description": "Lead nature walks and environmental education programs for school groups and families at local parks.",
     "location": "Redwood City, CA",
     "skills": [
@@ -386,6 +522,11 @@
   {
     "name": "Veteran Support Services",
     "tags": ["veterans", "support", "counseling", "community service"],
+    "requirements": [
+      "Respect for military service",
+      "Reliable transportation",
+      "Emotional maturity"
+    ],
     "description": "Provide companionship and support to veterans. Help with transportation, errands, and social activities.",
     "location": "San Francisco, CA",
     "skills": ["empathy", "reliability", "communication", "respect"],
@@ -398,6 +539,11 @@
   {
     "name": "Youth Art Workshop Leader",
     "tags": ["youth", "art", "creativity", "mentorship"],
+    "requirements": [
+      "Art background",
+      "Experience with at-risk youth",
+      "Background check required"
+    ],
     "description": "Lead art workshops for at-risk youth. Help young people express themselves through various artistic mediums.",
     "location": "Richmond, CA",
     "skills": [
@@ -415,6 +561,11 @@
   {
     "name": "Habitat Restoration",
     "tags": ["environment", "restoration", "conservation", "outdoor"],
+    "requirements": [
+      "Outdoor work comfort",
+      "Basic plant knowledge",
+      "Bring work gloves"
+    ],
     "description": "Help restore natural habitats by removing invasive species and planting native vegetation in local parks and preserves.",
     "location": "Pacifica, CA",
     "skills": [
@@ -432,6 +583,11 @@
   {
     "name": "Senior Meal Delivery",
     "tags": ["seniors", "food delivery", "community service", "nutrition"],
+    "requirements": [
+      "Valid driver's license",
+      "Insured vehicle",
+      "Flexible daytime schedule"
+    ],
     "description": "Deliver nutritious meals to homebound seniors. Provide not just food, but a friendly face and welfare check.",
     "location": "Sunnyvale, CA",
     "skills": ["driving", "reliability", "compassion", "time management"],
@@ -444,6 +600,11 @@
   {
     "name": "Community Theater Production",
     "tags": ["theater", "arts", "community", "performance"],
+    "requirements": [
+      "Theater experience preferred",
+      "Evening availability",
+      "Reliable commitment"
+    ],
     "description": "Help with community theater productions. Assist with costumes, set building, lighting, or backstage support.",
     "location": "San Mateo, CA",
     "skills": ["theater arts", "creativity", "teamwork", "reliability"],
@@ -456,6 +617,11 @@
   {
     "name": "Bicycle Repair Workshop",
     "tags": ["bicycles", "repair", "transportation", "sustainability"],
+    "requirements": [
+      "Basic mechanical skills",
+      "Own bike tools helpful",
+      "Teaching patience"
+    ],
     "description": "Help repair donated bicycles for low-income families and individuals. Teach basic bike maintenance skills.",
     "location": "San Francisco, CA",
     "skills": [
@@ -473,6 +639,11 @@
   {
     "name": "Crisis Hotline Support",
     "tags": ["crisis support", "mental health", "counseling", "phone support"],
+    "requirements": [
+      "Crisis intervention training",
+      "Emotional stability",
+      "Commit to 6+ months"
+    ],
     "description": "Provide emotional support and crisis intervention through phone and chat services. Extensive training provided.",
     "location": "Palo Alto, CA",
     "skills": [
@@ -490,6 +661,11 @@
   {
     "name": "Community Orchard Care",
     "tags": ["gardening", "fruit trees", "community", "sustainability"],
+    "requirements": [
+      "Gardening experience",
+      "Physical fitness",
+      "Seasonal availability"
+    ],
     "description": "Help maintain community fruit orchards through pruning, harvesting, and general care. Share the bounty with local food banks.",
     "location": "San Jose, CA",
     "skills": ["gardening", "tree care", "physical work", "sustainability"],
@@ -502,6 +678,11 @@
   {
     "name": "Homeless Outreach Team",
     "tags": ["homeless", "outreach", "social services", "compassion"],
+    "requirements": [
+      "Social work background preferred",
+      "Emotional resilience",
+      "Street outreach training"
+    ],
     "description": "Join outreach teams that connect with individuals experiencing homelessness to provide resources and support services.",
     "location": "Berkeley, CA",
     "skills": ["social work", "compassion", "communication", "resilience"],
@@ -514,6 +695,11 @@
   {
     "name": "Pollinator Garden Creation",
     "tags": ["gardening", "pollinators", "environment", "conservation"],
+    "requirements": [
+      "Basic gardening knowledge",
+      "Bee-friendly (no allergies)",
+      "Seasonal commitment"
+    ],
     "description": "Help create and maintain pollinator gardens that support bees, butterflies, and other essential pollinators.",
     "location": "Mountain View, CA",
     "skills": [
@@ -531,6 +717,11 @@
   {
     "name": "Digital Storytelling Workshop",
     "tags": ["technology", "storytelling", "seniors", "digital skills"],
+    "requirements": [
+      "Video editing skills",
+      "Patient teaching style",
+      "Tech equipment helpful"
+    ],
     "description": "Help seniors create digital stories about their lives using simple video and audio editing tools.",
     "location": "Cupertino, CA",
     "skills": ["technology", "storytelling", "patience", "creativity"],
@@ -543,6 +734,11 @@
   {
     "name": "Food Recovery Program",
     "tags": ["food waste", "sustainability", "food rescue", "environment"],
+    "requirements": [
+      "Valid driver's license",
+      "Food safety knowledge",
+      "Flexible schedule"
+    ],
     "description": "Collect surplus food from restaurants and grocery stores to redistribute to food banks and pantries.",
     "location": "Milpitas, CA",
     "skills": ["organization", "driving", "food safety", "efficiency"],
@@ -555,6 +751,11 @@
   {
     "name": "Adaptive Sports Coach",
     "tags": ["sports", "disabilities", "adaptive", "coaching"],
+    "requirements": [
+      "Sports coaching experience",
+      "Disability awareness training",
+      "Physical fitness"
+    ],
     "description": "Coach adaptive sports programs for individuals with disabilities. Help athletes develop skills and confidence.",
     "location": "San Francisco, CA",
     "skills": ["coaching", "sports knowledge", "patience", "adaptability"],
@@ -567,6 +768,11 @@
   {
     "name": "Community Tool Library",
     "tags": ["tools", "community", "sharing", "sustainability"],
+    "requirements": [
+      "Tool knowledge",
+      "Customer service skills",
+      "Inventory management"
+    ],
     "description": "Help run a community tool library where residents can borrow tools and equipment for home projects.",
     "location": "Oakland, CA",
     "skills": [
@@ -584,6 +790,11 @@
   {
     "name": "Prison Education Program",
     "tags": ["education", "rehabilitation", "teaching", "social justice"],
+    "requirements": [
+      "Teaching credentials",
+      "Security clearance",
+      "Non-judgmental attitude"
+    ],
     "description": "Teach basic education or life skills classes to incarcerated individuals preparing for reentry into society.",
     "location": "San Rafael, CA",
     "skills": ["teaching", "patience", "communication", "empathy"],
@@ -596,6 +807,11 @@
   {
     "name": "Marine Conservation Volunteer",
     "tags": ["marine", "conservation", "ocean", "research"],
+    "requirements": [
+      "Swimming ability",
+      "Marine biology interest",
+      "Data recording skills"
+    ],
     "description": "Assist with marine conservation research and education programs. Help protect ocean ecosystems and marine life.",
     "location": "Half Moon Bay, CA",
     "skills": [
@@ -613,6 +829,11 @@
   {
     "name": "Community Solar Project",
     "tags": ["solar", "renewable energy", "sustainability", "community"],
+    "requirements": [
+      "Electrical safety training",
+      "Physical fitness",
+      "Tool handling skills"
+    ],
     "description": "Help install and maintain community solar projects that provide clean energy to low-income households.",
     "location": "Richmond, CA",
     "skills": [
@@ -627,10 +848,12 @@
     "points": 10,
     "organizationName": "Community Solar Initiative"
   },
+  
   {
     "name": "Grief Support Group Facilitator",
     "tags": ["grief", "support", "counseling", "mental health"],
-    "description": "Facilitate support groups for individuals coping with loss and grief. Provide a safe space for healing and sharing.",
+    "requirements": ["Psychology or counseling background preferred", "Completed grief counseling training", "Background check required", "Minimum 6-month commitment"],
+    "description": "Join our compassionate team as a grief support group facilitator, where you'll create a nurturing environment for individuals navigating the challenging journey of loss. You'll guide weekly support sessions, helping participants process their emotions, share their experiences, and find comfort in community connection. This role involves facilitating discussions, providing emotional support resources, and creating structured activities that promote healing. You'll work alongside licensed counselors and receive ongoing training to ensure you're equipped to handle sensitive situations with care and professionalism.",
     "location": "San Mateo, CA",
     "skills": [
       "counseling",
@@ -647,7 +870,8 @@
   {
     "name": "Urban Beekeeping Assistant",
     "tags": ["beekeeping", "urban agriculture", "sustainability", "education"],
-    "description": "Assist with urban beekeeping projects that support pollinator health and produce local honey for the community.",
+    "requirements": ["Basic beekeeping knowledge or willingness to learn", "Not allergic to bee stings", "Able to lift 50 lbs", "Weekend availability required"],
+    "description": "Become part of an innovative urban beekeeping initiative that's transforming city landscapes and supporting crucial pollinator populations. As an urban beekeeping assistant, you'll help maintain rooftop and community garden hives, assist with honey harvesting, and participate in educational workshops for local residents. This hands-on role includes learning about bee behavior, hive maintenance, seasonal beekeeping practices, and sustainable agriculture. You'll also help package and distribute locally-produced honey to community members while educating the public about the vital role bees play in our food system.",
     "location": "Berkeley, CA",
     "skills": [
       "beekeeping",
@@ -664,7 +888,8 @@
   {
     "name": "Elderly Tech Training",
     "tags": ["seniors", "technology", "training", "digital literacy"],
-    "description": "Provide one-on-one technology training to help elderly individuals use modern devices and stay connected.",
+    "requirements": ["Proficient with smartphones and computers", "Excellent communication skills", "Patient and understanding demeanor", "Flexible scheduling"],
+    "description": "Bridge the digital divide by providing personalized technology training to elderly community members who want to stay connected with family and friends. You'll conduct one-on-one sessions teaching smartphone basics, video calling, email, social media, and online safety. This rewarding role involves adapting your teaching style to different learning paces, troubleshooting technical issues, and building confidence in technology use. You'll help seniors navigate everything from setting up accounts to using apps, ensuring they feel comfortable and empowered in the digital world.",
     "location": "Fremont, CA",
     "skills": ["technology", "patience", "teaching", "empathy"],
     "imageUrl": "https://example.com/elderly-tech.jpg",
@@ -676,7 +901,8 @@
   {
     "name": "Community Composting Program",
     "tags": ["composting", "sustainability", "waste reduction", "environment"],
-    "description": "Help manage community composting sites and teach residents about waste reduction and sustainable practices.",
+    "requirements": ["Interest in environmental sustainability", "Comfortable working outdoors", "Basic knowledge of composting principles", "Reliable transportation"],
+    "description": "Lead the charge in creating a more sustainable community through hands-on composting education and site management. You'll help operate community composting facilities, teach residents about proper composting techniques, and promote waste reduction strategies. This role involves managing compost bins, monitoring decomposition processes, troubleshooting common composting issues, and organizing educational workshops. You'll work with families to implement home composting systems, track waste diversion metrics, and help create nutrient-rich soil for community gardens while fostering environmental awareness.",
     "location": "Palo Alto, CA",
     "skills": [
       "sustainability",
@@ -693,7 +919,8 @@
   {
     "name": "Therapeutic Art Sessions",
     "tags": ["art therapy", "mental health", "creativity", "healing"],
-    "description": "Facilitate therapeutic art sessions for individuals dealing with trauma, addiction, or mental health challenges.",
+    "requirements": ["Art therapy certification or relevant experience", "Mental health training preferred", "Background check and references", "Trauma-informed care knowledge"],
+    "description": "Facilitate healing through the power of creative expression by leading therapeutic art sessions for individuals facing mental health challenges, trauma, or addiction recovery. You'll guide participants through various art mediums including painting, drawing, sculpture, and mixed media, creating a safe space for emotional expression and processing. This role involves designing age-appropriate activities, providing gentle guidance without judgment, and helping participants explore their feelings through artistic creation. You'll collaborate with mental health professionals to ensure sessions support overall treatment goals while fostering creativity and self-discovery.",
     "location": "San Francisco, CA",
     "skills": [
       "art therapy",
@@ -710,7 +937,8 @@
   {
     "name": "Community Seed Library",
     "tags": ["gardening", "seeds", "sustainability", "community"],
-    "description": "Help maintain a community seed library where residents can share and exchange seeds for home gardens.",
+    "requirements": ["Basic gardening knowledge", "Organizational skills", "Able to work independently", "Interest in sustainable agriculture"],
+    "description": "Help cultivate community resilience and food security by managing a unique seed library that connects neighbors through shared gardening resources. You'll organize and catalog seed donations, provide gardening advice to community members, and maintain seed storage systems to ensure viability. This role involves educating visitors about seed saving techniques, seasonal planting schedules, and sustainable gardening practices. You'll help coordinate seed swaps, maintain inventory records, and create educational materials about heirloom varieties and local growing conditions while fostering connections between gardening enthusiasts.",
     "location": "Santa Clara, CA",
     "skills": [
       "gardening",
@@ -732,7 +960,8 @@
       "training",
       "community preparedness"
     ],
-    "description": "Learn and help teach community disaster response skills including first aid, emergency communication, and evacuation procedures.",
+    "requirements": ["CPR and First Aid certification", "Physical fitness for emergency response", "Available for weekend training sessions", "Commitment to ongoing education"],
+    "description": "Empower your community by becoming a certified disaster response volunteer who helps neighbors prepare for and respond to emergencies. You'll participate in comprehensive training covering first aid, CPR, emergency communication protocols, search and rescue basics, and evacuation procedures. This vital role involves learning to assess disaster situations, coordinate with emergency services, provide immediate assistance to those in need, and help establish emergency shelters. You'll also help teach community preparedness workshops, conduct safety drills, and maintain emergency supply caches while building neighborhood resilience.",
     "location": "San Jose, CA",
     "skills": ["emergency response", "first aid", "teaching", "leadership"],
     "imageUrl": "https://example.com/disaster-training.jpg",

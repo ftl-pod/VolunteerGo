@@ -11,7 +11,7 @@ async function seed() {
     // Clear existing data (in order due to relations)
     await prisma.opportunity.deleteMany();
     await prisma.organization.deleteMany();
-    await prisma.user.deleteMany();
+    //await prisma.user.deleteMany();
 
     // Load JSON data
     const opportunityData = JSON.parse(
@@ -22,9 +22,9 @@ async function seed() {
       fs.readFileSync(path.join(__dirname, "./data/organizations.json"), "utf8")
     );
 
-    const userData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, "./data/user.json"), "utf8")
-    );
+    // const userData = JSON.parse(
+    //   fs.readFileSync(path.join(__dirname, "./data/user.json"), "utf8")
+    // );
 
     console.log("📋 Seeding organizations...");
     for (const org of organizationData) {
@@ -64,6 +64,7 @@ async function seed() {
         data: {
           name: opportunity.name,
           tags: opportunity.tags,
+          requirements: opportunity.requirements,
           description: opportunity.description,
           location: opportunity.location,
           skills: opportunity.skills,
@@ -77,27 +78,27 @@ async function seed() {
     }
     console.log(`✅ Created ${opportunityData.length} opportunities`);
 
-    console.log("\n👤 Seeding users...");
-    for (let i = 0; i < userData.length; i++) {
-      const user = userData[i];
-      const hashedPassword = await bcrypt.hash(user.password, 10); // hash pass
-      await prisma.user.create({
-        data: {
-          username: user.username,
-          password: hashedPassword,
-          skills: user.skills,
-          training: user.training,
-          location: user.location,
-          age: user.age,
-          level: user.level ?? 1,
-          points: user.points ?? 0,
-          leaderboardRank: i + 1, // ensure this is unique and not null
-          avatarUrl: user.avatarUrl ??
-          "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
-        },
-      });
-    }
-    console.log(`✅ Created ${userData.length} users`);
+    // console.log("\n👤 Seeding users...");
+    // for (let i = 0; i < userData.length; i++) {
+    //   const user = userData[i];
+    //   const hashedPassword = await bcrypt.hash(user.password, 10); // hash pass
+    //   await prisma.user.create({
+    //     data: {
+    //       username: user.username,
+    //       password: hashedPassword,
+    //       skills: user.skills,
+    //       training: user.training,
+    //       location: user.location,
+    //       age: user.age,
+    //       level: user.level ?? 1,
+    //       points: user.points ?? 0,
+    //       leaderboardRank: i + 1, // ensure this is unique and not null
+    //       avatarUrl: user.avatarUrl ??
+    //       "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
+    //     },
+    //   });
+    // }
+    // console.log(`✅ Created ${userData.length} users`);
 
     console.log("\n🎉 Seeding complete!");
   } catch (err) {

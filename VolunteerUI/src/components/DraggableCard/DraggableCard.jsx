@@ -199,53 +199,100 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   }, [isDragging, startX, startY]);
 
   return (
-    <div 
+    <div
       ref={cardRef}
-      className={`opportunity-page ${isDragging ? 'dragging' : ''}`}
+      className={`opportunity-page ${isDragging ? "dragging" : ""}`}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
       style={{
-        cursor: isDragging ? 'grabbing' : 'grab',
-        transition: isDragging ? 'none' : 'transform 0.3s ease, opacity 0.3s ease',
-        touchAction: 'none'
-      }}
+        cursor: isDragging ? "grabbing" : "grab",
+        transition: isDragging
+          ? "none"
+          : "transform 0.3s ease, opacity 0.3s ease",
+          touchAction: "none",
+        }}
     >
-      <div className="opportunity-image">
-        <img
-          src="https://picsum.photos/1000/500"
-          alt="Random image"
-          draggable={false}
-        />
+      <div className ="left-side">
+        <div className="opportunity-image">
+          <img
+            src="https://picsum.photos/1000/500"
+            alt="Random image"
+            draggable={false}
+          />
+        </div>
+          <div className="needed">
+            <div className="requirements">
+              <h2>Requirements</h2>
+              <ul className="requirements-list">
+                {(
+                  opportunity?.requirements || ["Environment", "Community", "Education"]
+                ).map((requirement) => (
+                  <li key={requirement}>
+                    {requirement
+                      .split(" ")
+                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                      .join(" ")}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="skills">
+              <h2>Skills</h2>
+              <ul className="skills-list">
+                {(
+                  opportunity?.skills || ["Environment", "Community", "Education"]
+                ).map((skill) => (
+                  <li key={skill}>
+                    {skill
+                      .split(" ")
+                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                      .join(" ")}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
       </div>
       <div className="opportunity-info">
-        <button className="back-button" onClick={() => window.history.back()}>← Back</button>
-        <h1>{opportunity?.name || 'Sample Opportunity'}</h1>
-        <p className="organization">By: {opportunity?.organization.name || 'Sample Organization'}</p>
+        <button className="back-button" onClick={() => window.history.back()}>
+          ← Back
+        </button>
+        <h1>{opportunity?.name || "Sample Opportunity"}</h1>
+        <p className="organization">
+          By: {opportunity?.organization.name || "Sample Organization"}
+        </p>
         <p className="location-date">
-          {opportunity?.location || 'Sample Location'} | {formatDate ? formatDate(opportunity?.date) : 'Jan 1, 2024'}
+          {opportunity?.location || "Sample Location"} |{" "}
+          {formatDate ? formatDate(opportunity?.date) : "Jan 1, 2024"}
         </p>
 
         <div className="tags">
-          {(opportunity?.tags || ['Environment', 'Community', 'Education']).map(tag => (
-            <span key={tag} className="tag">{tag}</span>
-          ))}
+          {(opportunity?.tags || ["Environment", "Community", "Education"]).map(
+            (tag) => (
+              <span key={tag} className="tag">
+                {tag}
+              </span>
+            )
+          )}
         </div>
 
-        <p className="description">{opportunity?.description || 'This is a sample opportunity description. Help make a difference in your community by participating in this meaningful project.'}</p>
+        <p className="description">
+          {opportunity?.description ||
+            "This is a sample opportunity description. Help make a difference in your community by participating in this meaningful project."}
+        </p>
 
-       <div className="actions">
+        <div className="actions">
           <Link to={`/${direct}`}>
-                <button className="btn-primary">I Want to Help</button>
+            <button className="btn-primary">I Want to Help</button>
           </Link>
-              <button
-                className="btn-secondary"
-                onClick={(e) => handleSavedClick(e, opportunity.id)}
-              >
-                {savedOpps.includes(opportunity.id) ? "Saved" : "Save"}
-              </button>
-            </div>
+          <button
+            className="btn-secondary"
+            onClick={(e) => handleSavedClick(e, opportunity.id)}
+          >
+            {savedOpps.includes(opportunity.id) ? "Saved" : "Save"}
+          </button>
+        </div>
       </div>
-      
     </div>
   );
 };

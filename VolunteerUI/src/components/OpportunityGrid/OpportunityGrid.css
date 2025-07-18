@@ -139,3 +139,18 @@ h1{
 a{
     text-decoration: none;
 }
+
+.needed{
+    display: flex;
+    gap: 3rem;
+}
+.needed h2 {
+    text-align: left;
+}
+
+ul{
+    list-style-type: none !important;
+    text-align: left;
+    padding-left: 0rem;
+}
+

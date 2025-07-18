@@ -224,12 +224,12 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
     >
       <div className ="left-side">
         <div className="opportunity-image">
-          <img
-            src="https://picsum.photos/1000/500"
-            alt="Random image"
-            draggable={false}
-            loading="lazy"
-          />
+        <img
+          src={opportunity?.imageUrl || "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0"}
+          alt="Opportunity"
+          draggable={false}
+          loading="lazy"
+        />
         </div>
           <div className="needed">
             <div className="requirements">

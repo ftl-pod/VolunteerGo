@@ -18,10 +18,11 @@ function HomePage() {
             </div>
             <div className="impact-paragraph">
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam.
-              </p>
+                VolunteerGo is a platform that connects volunteers with
+                organizations in need of help. Whether you want to volunteer
+                your time, skills, or resources, we have opportunities for you.
+                Join us in making a difference in our communities and the world.
+               </p>
             </div>
             <div>
               <button>Learn more</button>
@@ -29,7 +30,7 @@ function HomePage() {
           </div>
           <div className="volunteering-media">
             <img
-              src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQZfkSQKyEEk-bhuIk6wQs8Opzky-FKPISLt6e6wFyuzU6YzFQ9"
+              src="https://www.parents.com/thmb/TKfsiYM0mOsnTtYnrOoug95R1fA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-626891352-99af025cafaf4e69a76cb8af44140201.jpg"
               alt="group of people volunteering"
               className="volunteering-media-1"
             />
@@ -39,7 +40,7 @@ function HomePage() {
               className="volunteering-media-1"
             />
             <img
-              src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTkh8vPxT7tRX20AOzB34Zeqf0-2nJDpcLwdwz2M3VP9hkyWVn5"
+              src="https://www.skh.com/wp-content/uploads/2025/01/SKHTreePlantingGuide1-min.jpg"
               alt="group of people volunteering"
               className="volunteering-media-1"
             />

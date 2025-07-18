@@ -7,6 +7,12 @@ function SearchHeader({onSearch}) {
     const handleClick = () => {
         onSearch(searchTerm);
     };
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleClick();
+        }
+    };
+
 
     return (
         <div className="search-header">
@@ -17,7 +23,7 @@ function SearchHeader({onSearch}) {
                 <div className="search-form">
                     <input
                         type="text"
-                        placeholder="City"
+                        placeholder="San Francisco, CA"
                         className="search-input city-input"
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
@@ -29,6 +35,7 @@ function SearchHeader({onSearch}) {
                         className="search-input main-input"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={handleKeyDown}
                     />
 
                     <button className="search-button" onClick={handleClick}>

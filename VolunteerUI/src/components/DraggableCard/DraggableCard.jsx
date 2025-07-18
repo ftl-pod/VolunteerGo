@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import '../OpportunityPage/OpportunityPage.css'
 import { SignedIn, useUser } from '@clerk/clerk-react';
 import { Link } from 'react-router-dom';
+  import ApplyModal from '../ApplyModal/ApplyModal';
 
 const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -17,7 +18,15 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   const [savedOpps, setSavedOpps] = useState([]);
   const [prismaUserId, setPrismaUserId] = useState(null);
   const [direct, setDirect] = useState("search") // update for application functionality
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  
+  const handleApplyClick = () => {
+    setIsApplyModalOpen(true);
+  };
 
+  const handleCloseModal = () => {
+    setIsApplyModalOpen(false);
+  };
 
 
   const handleStart = (clientX, clientY) => {
@@ -199,6 +208,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   }, [isDragging, startX, startY]);
 
   return (
+    <>
     <div
       ref={cardRef}
       className={`opportunity-page ${isDragging ? "dragging" : ""}`}
@@ -218,6 +228,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
             src="https://picsum.photos/1000/500"
             alt="Random image"
             draggable={false}
+            loading="lazy"
           />
         </div>
           <div className="needed">
@@ -282,9 +293,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
         </p>
 
         <div className="actions">
-          <Link to={`/${direct}`}>
-            <button className="btn-primary">I Want to Help</button>
-          </Link>
+            <button className="btn-primary" onClick={() => handleApplyClick(opportunity)}>I Want to Help</button>
           <button
             className="btn-secondary"
             onClick={(e) => handleSavedClick(e, opportunity.id)}
@@ -294,6 +303,12 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
         </div>
       </div>
     </div>
+    <ApplyModal
+        isOpen={isApplyModalOpen}
+        onClose={handleCloseModal}
+        opportunity={opportunity}
+    />
+    </>
   );
 };
 

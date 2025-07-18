@@ -33,6 +33,7 @@ const OpportunityPage = () => {
   }
 
   return (
+    <>
     <DraggableCard
       opportunity={opportunity}
       formatDate={(date) => new Date(date).toLocaleDateString('en-US', {
@@ -41,6 +42,8 @@ const OpportunityPage = () => {
         day: 'numeric'
       })}
     />
+
+    </>
   );
 };
 export default OpportunityPage;

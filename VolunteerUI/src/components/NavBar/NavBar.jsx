@@ -1,6 +1,6 @@
 import './NavBar.css';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { FaUserCircle } from "react-icons/fa";
+import { useEffect, useState } from 'react';
 import { useAuth } from "../../hooks/useAuth";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
@@ -9,17 +9,38 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
-
   const { user, isSignedIn, isLoaded } = useAuth();
 
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!user?.uid) return;
+
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${user.uid}`);
+        if (!res.ok) throw new Error('Failed to fetch profile');
+        const data = await res.json();
+        setProfile(data);
+      } catch (error) {
+        console.error("Error fetching profile in navbar:", error);
+      }
+    };
+
+    if (isSignedIn && isLoaded) {
+      fetchProfile();
+    }
+  }, [user, isSignedIn, isLoaded]);
+
   const handleLogout = async () => {
-    await signOut(auth); // Firebase sign out
+    await signOut(auth);
     navigate('/login');
   };
 
   const avatarUrl =
-    user?.photoURL ||
-    "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png"; // fallback
+    profile?.avatarUrl || // From backend DB
+    user?.photoURL ||     // Fallback to Firebase photoURL
+    "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png"; // Final fallback
 
   return (
     <nav className="navbar">
@@ -45,6 +66,7 @@ function Navbar() {
                   height: 60,
                   borderRadius: '50%',
                   border: '3px solid #63806f',
+                  objectFit: 'cover', 
                 }}
               />
             </NavLink>

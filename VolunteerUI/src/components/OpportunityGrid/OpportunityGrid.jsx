@@ -11,7 +11,8 @@ function OpportunityGrid({ searchResults }) {
   const [prismaUserId, setPrismaUserId] = useState(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
-  
+  const [loading, setLoading] = useState(true);
+
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString("en-US", {
@@ -94,12 +95,15 @@ function OpportunityGrid({ searchResults }) {
         if (searchResults.city) query.append("city", searchResults.city);
 
         const url = `${import.meta.env.VITE_API_BASE_URL}/opportunities?${query.toString()}`;
+        setLoading(true);
         const res = await fetch(url);
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
         const data = await res.json();
         setOpps(data);
+        setLoading(false);
+
       } catch (err) {
         console.error("Failed to fetch opportunities:", err);
       }
@@ -110,52 +114,56 @@ function OpportunityGrid({ searchResults }) {
   return (
     <>
       <div className="opportunities-section">
-        <div className="opportunity-grid">
-          {opps.map((opportunity) => (
-            <div key={opportunity.id} className="opportunity-card">
-              <Link to={`/opportunity/${opportunity.id}`}>
-                <div className="card-header">
-                  <div className="card-header-left">
-                    <h3 className="card-title">{opportunity.name}</h3>
-                    <p className="card-org">{opportunity.organization.name}</p>
+        {loading ? (
+          <div className="loading-spinner">Loading opportunities...</div>
+        ) : (
+          <div className="opportunity-grid">
+            {opps.map((opportunity) => (
+              <div key={opportunity.id} className="opportunity-card">
+                <Link to={`/opportunity/${opportunity.id}`}>
+                  <div className="card-header">
+                    <div className="card-header-left">
+                      <h3 className="card-title">{opportunity.name}</h3>
+                      <p className="card-org">{opportunity.organization.name}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="card-details">
-                  <span>{opportunity.location} | </span>
-                  <span>{formatDate(opportunity.date)}</span>
-                </div>
-                <p className="card-description" title={opportunity.description}>
-                  {opportunity.description && opportunity.description.length > 150
-                    ? opportunity.description.slice(0, 150) + "..."
-                    : opportunity.description}
-                </p>
-              </Link>
+                  <div className="card-details">
+                    <span>{opportunity.location} | </span>
+                    <span>{formatDate(opportunity.date)}</span>
+                  </div>
+                  <p className="card-description" title={opportunity.description}>
+                    {opportunity.description && opportunity.description.length > 150
+                      ? opportunity.description.slice(0, 150) + "..."
+                      : opportunity.description}
+                  </p>
+                </Link>
 
-              <div className="card-tags">
-                {opportunity.tags.map((tag) => (
-                  <span key={tag} className="card-tag">
-                    {tag}
-                  </span>
-                ))}
-              </div>
+                <div className="card-tags">
+                  {opportunity.tags.map((tag) => (
+                    <span key={tag} className="card-tag">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
 
-              <div className="card-actions">
-                <button
-                  className="btn-primary"
-                  onClick={() => handleApplyClick(opportunity)}
-                >
-                  I Want to Help
-                </button>
-                <button
-                  className="btn-secondary"
-                  onClick={(e) => handleSavedClick(e, opportunity.id)}
-                >
-                  {savedOpps.includes(opportunity.id) ? "Saved" : "Save"}
-                </button>
+                <div className="card-actions">
+                  <button
+                    className="btn-primary"
+                    onClick={() => handleApplyClick(opportunity)}
+                  >
+                    I Want to Help
+                  </button>
+                  <button
+                    className="btn-secondary"
+                    onClick={(e) => handleSavedClick(e, opportunity.id)}
+                  >
+                    {savedOpps.includes(opportunity.id) ? "Saved" : "Save"}
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <ApplyModal

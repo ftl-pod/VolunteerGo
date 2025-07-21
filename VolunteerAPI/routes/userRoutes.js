@@ -23,6 +23,6 @@ router.put("/:id", controller.updateUser);
 // delete user 
 router.delete("/:id", controller.deleteUser);
 // login user
-router.post("/onboarding", controller.onboarding);
+router.post("/onboarding", verifyFirebaseToken, controller.onboarding);
 
 module.exports = router;

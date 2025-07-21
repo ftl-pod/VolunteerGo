@@ -133,7 +133,12 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.getUserByFirebaseUid = async (req, res) => {
-  const firebaseUid = req.params.firebaseUid;
+  const firebaseUid = req.params.uid;
+
+  if (!firebaseUid) {
+    return res.status(400).json({ error: "Missing firebaseUid param" });
+  }
+
   try {
     const user = await prisma.user.findUnique({
       where: { firebaseUid },
@@ -142,7 +147,11 @@ exports.getUserByFirebaseUid = async (req, res) => {
         savedOpportunities: true,
       },
     });
-    if (!user) return res.status(404).json({ error: "User not found" });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     res.json(user);
   } catch (error) {
     console.error("Error fetching user by firebaseUid:", error);

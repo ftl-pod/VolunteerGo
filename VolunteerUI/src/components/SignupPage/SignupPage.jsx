@@ -1,29 +1,89 @@
 import "./Signup.css";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { SignUp, useSignUp } from '@clerk/clerk-react';
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../../firebase";
 
 function SignupPage() {
   const navigate = useNavigate();
-  const { isLoaded, signUp } = useSignUp();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [error, setError] = useState(null);
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setError(null);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      // Optional: set displayName in Firebase user profile
+      await updateProfile(userCredential.user, { displayName: username });
+
+      navigate("/onboarding"); // redirect after signup
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   return (
-    <>
-      <div className="auth-page-container">
-        <div className="auth-left">
-            <div className="left-pic">
-            <img src="https://i.postimg.cc/fWvtkTqv/image.jpg" alt="logo-placeholder" className="logo-placeholder"/>
-          </div> 
-        </div>
-        <div className="auth-right">
-          <div className="w-full h-full flex items-center justify-center">
-          <SignUp
-            signInUrl="/login"
-            fallbackRedirectUrl="/onboarding" 
+    <div className="auth-page-container">
+      <div className="auth-left">
+        <div className="left-pic">
+          <img
+            src="https://i.postimg.cc/fWvtkTqv/image.jpg"
+            alt="logo-placeholder"
+            className="logo-placeholder"
           />
-          </div>
         </div>
       </div>
-    </>
+      <div className="auth-right">
+        <form
+          className="w-full h-full flex flex-col items-center justify-center"
+          onSubmit={handleSignup}
+        >
+          <h2>Sign Up</h2>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            autoComplete="username"
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoComplete="new-password"
+          />
+          <button type="submit">Sign Up</button>
+          <p>
+            Already have an account?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              style={{ color: "blue", cursor: "pointer" }}
+            >
+              Log In
+            </span>
+          </p>
+        </form>
+      </div>
+    </div>
   );
 }
 

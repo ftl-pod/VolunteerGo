@@ -8,7 +8,7 @@ export default function Onboarding() {
   const navigate = useNavigate();  
   const [currentStep, setCurrentStep] = useState(1);
   
-  // Initialize formData from Clerk user publicMetadata if available
+  // Initialize formData from firebase if available
   const [formData, setFormData] = useState({
     avatarUrl: user?.photoURL || "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
     name: user?.displayName || "",
@@ -21,17 +21,43 @@ export default function Onboarding() {
     interests: []
   });
 
-useEffect(() => {
-  if (user && isLoaded) {
-    setFormData((prev) => ({
-      ...prev,
-      avatarUrl: user.photoURL || prev.avatarUrl,
-      name: user.displayName || prev.name,
-      email: user.email || prev.email,
-      username: user.email?.split("@")[0] || prev.username
-    }));
-  }
-}, [user, isLoaded]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch user data from API if user is logged in and data is loaded
+  useEffect(() => {
+    if (user && isLoaded) {
+      const fetchUserData = async () => {
+        try {
+          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${user.uid}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (!res.ok) throw new Error("Failed to fetch user profile");
+          const data = await res.json();
+          
+          // Update formData with fetched user data
+          setFormData({
+            name: data.name || "",
+            email: data.email || user.email || "",
+            username: data.username || "",
+            skills: Array.isArray(data.skills) ? data.skills.join(", ") : (data.skills || ""),
+            training: Array.isArray(data.training) ? data.training.join(", ") : (data.training || ""),
+            location: data.location || "",
+            age: data.age || "",
+            interests: data.interests || [],
+            avatarUrl: data.avatarUrl || ""
+          });
+          setLoading(false);
+        } catch (err) {
+          console.error(err);
+          setLoading(false);
+        }
+      };
+
+      fetchUserData();
+    }
+  }, [user, isLoaded, token]);
 
   const causes = [
     { id: 'environment', label: 'Environmental Protection', icon: '🌍' },
@@ -84,41 +110,41 @@ useEffect(() => {
     if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const skillsArray = formData.skills.split(",").map(s => s.trim()).filter(Boolean);
-    const trainingArray = formData.training.split(",").map(t => t.trim()).filter(Boolean);
+  const skillsArray = formData.skills.split(",").map(s => s.trim()).filter(Boolean);
+  const trainingArray = formData.training.split(",").map(t => t.trim()).filter(Boolean);
 
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/onboarding`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, 
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          username: formData.username,
-          skills: skillsArray,
-          training: trainingArray,
-          location: formData.location,
-          age: Number(formData.age),
-          interests: formData.interests,
-          avatarUrl: formData.avatarUrl,
-        }),
-      });
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/onboarding`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // 🔥 include Firebase token
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        username: formData.username,
+        skills: skillsArray,
+        training: trainingArray,
+        location: formData.location,
+        age: Number(formData.age),
+        interests: formData.interests,
+        avatarUrl: formData.avatarUrl,
+      }),
+    });
 
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Failed to save user");
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "Failed to save user");
 
-      alert("Profile updated and saved!");
-      navigate("/profile");
-    } catch (err) {
-      console.error("Failed onboarding process", err);
-      alert("Error during onboarding");
-    }
-  };
+    alert("Profile updated and saved!");
+    navigate("/profile");
+  } catch (err) {
+    console.error("Failed onboarding process", err);
+    alert("Error during onboarding");
+  }
+};
 
   const isStep1Valid = formData.name && formData.email && formData.location;
   const isStep2Valid = formData.interests.length > 0;

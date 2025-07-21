@@ -8,26 +8,39 @@ async function seed() {
   try {
     console.log("🌱 Seeding database...\n");
 
-    // Clear existing data (in order due to relations)
     await prisma.opportunity.deleteMany();
     await prisma.organization.deleteMany();
-    //await prisma.user.deleteMany();
 
-    // Load JSON data
     const opportunityData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, "./data/opportunity.json"), "utf8")
+      fs.readFileSync(
+        path.join(
+          __dirname,
+          "./opp_scraper/opp_scraper/opportunity.json"
+        ),
+        "utf8"
+      )
     );
 
-    const organizationData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, "./data/organizations.json"), "utf8")
-    );
+    
+    const uniqueOrgsMap = new Map();
 
-    // const userData = JSON.parse(
-    //   fs.readFileSync(path.join(__dirname, "./data/user.json"), "utf8")
-    // );
+    for (const opp of opportunityData) {
+      const orgName = opp.organizationName?.trim();
+      if (!orgName) continue;
+
+      if (!uniqueOrgsMap.has(orgName)) {
+        uniqueOrgsMap.set(orgName, {
+          name: orgName,
+          tags: opp.orgTags?.[0] ?? [],
+          location: opp.orgLocation?.[0] ?? "Unknown Location",
+        });
+      }
+    }
+
+    const uniqueOrgs = Array.from(uniqueOrgsMap.values());
 
     console.log("📋 Seeding organizations...");
-    for (const org of organizationData) {
+    for (const org of uniqueOrgs) {
       await prisma.organization.create({
         data: {
           name: org.name,
@@ -36,69 +49,41 @@ async function seed() {
         },
       });
     }
-    console.log(`✅ Created ${organizationData.length} organizations`);
+    console.log(`✅ Created ${uniqueOrgs.length} organizations`);
 
-    // Fetch all organizations to get their IDs
+
     const organizations = await prisma.organization.findMany();
 
     console.log("\n🎯 Seeding opportunities...");
-    for (let i = 0; i < opportunityData.length; i++) {
-      const opportunity = opportunityData[i];
+    for (const opportunity of opportunityData) {
+      const org = organizations.find(
+        (o) => o.name === opportunity.organizationName
+      );
 
-      if (!opportunity.organizationId && opportunity.organizationName) {
-        const org = organizations.find(
-          (o) => o.name === opportunity.organizationName
+      if (!org) {
+        console.warn(
+          `⚠️ Organization not found for opportunity "${opportunity.name}"`
         );
-        if (org) {
-          opportunity.organizationId = org.id;
-        } else {
-          throw new Error(
-            `Organization "${opportunity.organizationName}" not found for opportunity "${opportunity.name}"`
-          );
-        }
-      } else if (!opportunity.organizationId) {
-        opportunity.organizationId = organizations[i % organizations.length].id;
+        continue;
       }
-
+      
       await prisma.opportunity.create({
         data: {
           name: opportunity.name,
           tags: opportunity.tags,
           requirements: opportunity.requirements,
           description: opportunity.description,
-          location: opportunity.location,
+          location: opportunity.volunteerLocation,
           skills: opportunity.skills,
           imageUrl: opportunity.imageUrl,
           //volunteersNeeded: opportunity.volunteersNeeded,
           status: opportunity.status,
-          points: opportunity.points,
-          organizationId: opportunity.organizationId,
+          points: opportunity.points ?? 10,
+          organizationId: org.id,
         },
       });
     }
     console.log(`✅ Created ${opportunityData.length} opportunities`);
-
-    // console.log("\n👤 Seeding users...");
-    // for (let i = 0; i < userData.length; i++) {
-    //   const user = userData[i];
-    //   const hashedPassword = await bcrypt.hash(user.password, 10); // hash pass
-    //   await prisma.user.create({
-    //     data: {
-    //       username: user.username,
-    //       password: hashedPassword,
-    //       skills: user.skills,
-    //       training: user.training,
-    //       location: user.location,
-    //       age: user.age,
-    //       level: user.level ?? 1,
-    //       points: user.points ?? 0,
-    //       leaderboardRank: i + 1, // ensure this is unique and not null
-    //       avatarUrl: user.avatarUrl ??
-    //       "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
-    //     },
-    //   });
-    // }
-    // console.log(`✅ Created ${userData.length} users`);
 
     console.log("\n🎉 Seeding complete!");
   } catch (err) {
@@ -109,3 +94,11 @@ async function seed() {
 }
 
 seed();
+
+
+// you need to download python first, at least version 3.11
+// then you need to install scrapy with pip3 install scrapy
+// then you need to navigate to this directory where the spider is located /opp_scraper
+// then you can run the spider with scrapy crawl opportunity 
+// then go back to volunteerapi directory in terminal and run node seed. js
+// then go to http://localhost:5173/map in the browser to see the map populated with the opporunities or th eopportunity grid even, idk

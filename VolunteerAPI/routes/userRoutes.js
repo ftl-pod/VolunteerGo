@@ -3,11 +3,11 @@ const router = express.Router();
 const controller = require('../controllers/userController');
 const { verifyFirebaseToken } = require('../middleware/auth');
 // get all users 
-router.get("/", verifyFirebaseToken, controller.getAllUsers);
+router.get("/", controller.getAllUsers);
 // get user by id 
-router.get("/:id", verifyFirebaseToken, controller.getUserById);
+router.get("/:id", controller.getUserById);
 // get user by clerkId
-router.get("/by-firebase/:firebaseUid", verifyFirebaseToken, controller.getUserByFirebaseUid);
+router.get("/by-uid/:uid", controller.getUserByFirebaseUid);
 // create user 
 router.post("/", controller.createUser);
 // add opp to user history 

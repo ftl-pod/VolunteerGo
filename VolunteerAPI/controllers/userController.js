@@ -6,20 +6,18 @@ const admin = require('../firebase/firebaseAdmin');
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await prisma.user.findMany({
-        include: {
-            opportunities: true, // include related opps
-            savedOpportunities: true,
-        },
-    });
-    if (users.length === 0) {
-        return res.status(404).json({ error : "No users found" });
-    }
-    return res.json(users);
+            include: {
+                opportunities: true,
+                savedOpportunities: true,
+            },
+        });
+        return res.json(users);
     } catch (error) {
         console.error("Error fetching users:", error);
         return res.status(500).json({ error : "Internal server error" });
     }
 };
+
 
 exports.getUserById = async (req, res) => {
     try {

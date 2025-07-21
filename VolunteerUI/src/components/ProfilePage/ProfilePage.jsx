@@ -7,12 +7,47 @@ import { BsBookmarkHeartFill } from "react-icons/bs";
 import { TbTargetArrow } from "react-icons/tb";
 import { PiCertificateFill } from "react-icons/pi";
 import { BiSolidDonateHeart } from "react-icons/bi";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "../../hooks/useAuth";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function ProfilePage() {
-  const { user } = useUser();
+  const { user } = useAuth();
   const navigate = useNavigate();
+
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch user profile from backend by firebase UID
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const res = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${user.uid}`
+        );
+
+        if (!res.ok) {
+          throw new Error(`Failed to fetch profile: ${res.status}`);
+        }
+
+        const data = await res.json();
+        setProfile(data);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [user]);
 
   if (!user) {
     return (
@@ -24,7 +59,37 @@ function ProfilePage() {
     );
   }
 
-  // Pulling from publicMetadata
+  if (loading) {
+    return (
+      <div className="page-container">
+        <div className="section">
+          <p>Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="page-container">
+        <div className="section">
+          <p>Error loading profile: {error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <div className="page-container">
+        <div className="section">
+          <p>No profile data found.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Destructure profile fields from DB user object
   const {
     location,
     name,
@@ -36,7 +101,8 @@ function ProfilePage() {
     leaderboardRank,
     interests = [],
     avatarUrl,
-  } = user.publicMetadata;
+    createdAt,
+  } = profile;
 
   return (
     <div className="page-container">
@@ -44,30 +110,53 @@ function ProfilePage() {
         <div className="profile">
           <div className="name">{name}</div>
           <div className="img-container">
-            <img src={avatarUrl} alt="Profile" className="profile-img" />
+            <img
+              src={avatarUrl || "/default-avatar.png"}
+              alt="Profile"
+              className="profile-img"
+            />
           </div>
           <div className="bio">
             <div className="info">
-              <div><IoLocationSharp className="icon" /><b>Location</b></div>
-              <div><MdCake className="icon" /><b>Age</b></div>
-              <div><GiThreeLeaves className="icon" /><b>Points</b></div>
-              <div><FaBarsProgress className="icon" /><b>Level</b></div>
-              <div><IoCalendarSharp className="icon" /><b>Joined</b></div>
+              <div>
+                <IoLocationSharp className="icon" />
+                <b>Location</b>
+              </div>
+              <div>
+                <MdCake className="icon" />
+                <b>Age</b>
+              </div>
+              <div>
+                <GiThreeLeaves className="icon" />
+                <b>Points</b>
+              </div>
+              <div>
+                <FaBarsProgress className="icon" />
+                <b>Level</b>
+              </div>
+              <div>
+                <IoCalendarSharp className="icon" />
+                <b>Joined</b>
+              </div>
             </div>
             <div className="info">
               <div>{location || "Not set"}</div>
               <div>{age || "Unknown"}</div>
               <div>{points || 0}</div>
               <div>{level || "1"}</div>
-              <div>{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}</div>
+              <div>
+                {createdAt
+                  ? new Date(createdAt).toLocaleDateString()
+                  : "N/A"}
+              </div>
             </div>
           </div>
-            <button
+          <button
             className="btn-primary profile-button"
             onClick={() => navigate("/onboarding")}
-            >
+          >
             Edit Profile
-            </button>
+          </button>
         </div>
       </div>
 
@@ -78,7 +167,11 @@ function ProfilePage() {
             <b>Interests</b>
           </div>
           <div className="box-content">
-            {interests.length ? interests.map((i, index) => <div key={index}>{i}</div>) : <div>No interests listed.</div>}
+            {interests.length ? (
+              interests.map((i, index) => <div key={index}>{i}</div>)
+            ) : (
+              <div>No interests listed.</div>
+            )}
           </div>
         </div>
 
@@ -88,7 +181,11 @@ function ProfilePage() {
             <b>Skills</b>
           </div>
           <div className="box-content">
-            {skills.length ? skills.map((skill, index) => <div key={index}>{skill}</div>) : <div>No skills listed.</div>}
+            {skills.length ? (
+              skills.map((skill, index) => <div key={index}>{skill}</div>)
+            ) : (
+              <div>No skills listed.</div>
+            )}
           </div>
         </div>
 
@@ -98,7 +195,11 @@ function ProfilePage() {
             <b>Certifications</b>
           </div>
           <div className="box-content">
-            {training.length ? training.map((t, index) => <div key={index}>{t}</div>) : <div>No certifications listed.</div>}
+            {training.length ? (
+              training.map((t, index) => <div key={index}>{t}</div>)
+            ) : (
+              <div>No certifications listed.</div>
+            )}
           </div>
         </div>
       </div>
@@ -121,8 +222,7 @@ function ProfilePage() {
             <BiSolidDonateHeart className="icon" />
             <b>You Have Made A Difference With</b>
           </div>
-          <div className="s2-content">
-          </div>
+          <div className="s2-content"></div>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import '../OpportunityPage/OpportunityPage.css'
-import { SignedIn, useUser } from '@clerk/clerk-react';
+import { useAuth } from "../../hooks/useAuth";
 import { Link } from 'react-router-dom';
   import ApplyModal from '../ApplyModal/ApplyModal';
 
@@ -13,7 +13,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   const [dragDistanceX, setDragDistanceX] = useState(0);
   const [dragDistanceY, setDragDistanceY] = useState(0);
   const cardRef = useRef(null);
-  const { user, isSignedIn, openSignIn, isLoaded } = useUser();
+  const { user } = useAuth();
   const [opps, setOpps] = useState([]);
   const [savedOpps, setSavedOpps] = useState([]);
   const [prismaUserId, setPrismaUserId] = useState(null);
@@ -119,14 +119,6 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   };
 
   useEffect(() => {
-    if (!isSignedIn) {
-      setDirect("login");
-    } else {
-      setDirect("search");
-    }
-  }, [isSignedIn]);
-
-  useEffect(() => {
     const fetchPrismaUserId = async () => {
       if (!user) return;
       try {
@@ -148,10 +140,6 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   }, [user]);
   const handleSavedClick = async (e, oppId) => {
     e.stopPropagation();
-    if (!isSignedIn) {
-      openSignIn();
-      return;
-    }
     if (!prismaUserId) {
       console.error("Prisma user ID not available");
       return;

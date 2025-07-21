@@ -2,11 +2,9 @@ import "./LocationPage.css";
 import React, {use, useEffect, useState} from 'react';
 import {APIProvider, Map, AdvancedMarker} from '@vis.gl/react-google-maps';
 import * as Geocode from 'react-geocode';
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router";
 import { MdLocationOn } from "react-icons/md";
-
-// need to import cluster stuff if i wanna do that
 
 
 function LocationPage () {
@@ -16,7 +14,7 @@ function LocationPage () {
     const [coords, setCoords] = useState([]); 
     const [userLatLng, setUserLatLng] = useState({ lat: 37.7749, lng: -122.4194 })
     // pulling from publicMetadata -> get user info
-    const { user, isLoaded } = useUser();
+    const { user, isLoaded } = useAuth();
     const navigate = useNavigate();
     useEffect(() => {
     const fetchOppsAndCoords = async () => {

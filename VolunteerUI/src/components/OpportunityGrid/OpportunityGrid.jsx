@@ -1,12 +1,11 @@
 import "./OpportunityGrid.css";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "../../hooks/useAuth";
 import ApplyModal from '../ApplyModal/ApplyModal';
 
 function OpportunityGrid({ searchResults }) {
-  const { user, isSignedIn, openSignIn } = useUser();
-
+  const { user, isSignedIn } = useAuth();
   const [opps, setOpps] = useState([]);
   const [savedOpps, setSavedOpps] = useState([]);
   const [prismaUserId, setPrismaUserId] = useState(null);
@@ -34,18 +33,17 @@ function OpportunityGrid({ searchResults }) {
   // Fetch Prisma user and saved opps
   useEffect(() => {
     const fetchPrismaUserId = async () => {
-      if (!user) return;
+      if (!user?.uid) return;
       try {
-        const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-clerk/${user.id}`;
+        const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${user.uid}`;
         const res = await fetch(url);
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+
         const data = await res.json();
-        setPrismaUserId(data.id);
-        setSavedOpps(data.savedOpportunities.map((opp) => opp.id));
+        setPrismaUserId(data.id); // ← this is your internal Prisma user.id
+        setSavedOpps(data.savedOpportunities.map((opp) => opp.id)); // if you're including savedOpps
       } catch (error) {
-        console.error("Failed to fetch Prisma user ID:", error);
+        console.error("Failed to fetch Prisma user:", error);
       }
     };
     fetchPrismaUserId();
@@ -54,10 +52,7 @@ function OpportunityGrid({ searchResults }) {
   // Handle Save/Unsave logic
   const handleSavedClick = async (e, oppId) => {
     e.stopPropagation();
-    if (!isSignedIn) {
-      openSignIn();
-      return;
-    }
+
     if (!prismaUserId) {
       console.error("Prisma user ID not available");
       return;

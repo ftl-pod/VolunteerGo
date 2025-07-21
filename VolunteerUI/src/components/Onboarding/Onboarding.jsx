@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "../../hooks/useAuth";
 import './Onboarding.css'
 import { useNavigate } from "react-router-dom";  
 
 export default function Onboarding() {
-  const { user } = useUser();
+  const { user, token, isLoaded } = useAuth();
   const navigate = useNavigate();  
   const [currentStep, setCurrentStep] = useState(1);
   
   // Initialize formData from Clerk user publicMetadata if available
   const [formData, setFormData] = useState({
-    avatarUrl: "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
-    name: "",
-    email: user?.emailAddresses?.[0]?.emailAddress || "",
-    username: user?.username || "",
+    avatarUrl: user?.photoURL || "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
+    name: user?.displayName || "",
+    email: user?.email || "",
+    username: user?.email?.split("@")[0] || "", // default fallback
     location: "",
     age: "",
     skills: "",
@@ -21,22 +21,17 @@ export default function Onboarding() {
     interests: []
   });
 
-  useEffect(() => {
-    if (user?.publicMetadata) {
-      const md = user.publicMetadata;
-      setFormData({
-        avatarUrl: md.avatarUrl || formData.avatarUrl,
-        name: md.name || "",
-        email: user.emailAddresses[0]?.emailAddress || "",
-        username: user.username || "",
-        location: md.location || "",
-        age: md.age ? String(md.age) : "",
-        skills: Array.isArray(md.skills) ? md.skills.join(", ") : "",
-        training: Array.isArray(md.training) ? md.training.join(", ") : "",
-        interests: Array.isArray(md.interests) ? md.interests : [],
-      });
-    }
-  }, [user]);
+useEffect(() => {
+  if (user && isLoaded) {
+    setFormData((prev) => ({
+      ...prev,
+      avatarUrl: user.photoURL || prev.avatarUrl,
+      name: user.displayName || prev.name,
+      email: user.email || prev.email,
+      username: user.email?.split("@")[0] || prev.username
+    }));
+  }
+}, [user, isLoaded]);
 
   const causes = [
     { id: 'environment', label: 'Environmental Protection', icon: '🌍' },
@@ -91,27 +86,18 @@ export default function Onboarding() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("POST to:", `${import.meta.env.VITE_API_BASE_URL}/users/onboarding`);
-    
-    const skillsArray = formData.skills
-        .split(",")
-        .map((s) => s.trim())
-        .filter((s) => s);
 
-    const trainingArray = formData.training
-        .split(",")
-        .map((t) => t.trim())
-        .filter((t) => t);
+    const skillsArray = formData.skills.split(",").map(s => s.trim()).filter(Boolean);
+    const trainingArray = formData.training.split(",").map(t => t.trim()).filter(Boolean);
 
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/onboarding`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, 
         },
         body: JSON.stringify({
-          clerkId: user.id,
-          email: formData.email,
           name: formData.name,
           username: formData.username,
           skills: skillsArray,
@@ -119,7 +105,7 @@ export default function Onboarding() {
           location: formData.location,
           age: Number(formData.age),
           interests: formData.interests,
-          avatarUrl: formData.avatarUrl
+          avatarUrl: formData.avatarUrl,
         }),
       });
 

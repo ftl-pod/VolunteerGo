@@ -12,11 +12,11 @@ import LocationPage from '../LocationPage/LocationPage'
 import SavedPage from '../SavedPage/SavedPage'
 import Onboarding from '../Onboarding/Onboarding'
 
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "../../hooks/useAuth";
 import './App.css'
 
 function App() {
-  const { user, isLoaded, isSignedIn } = useUser();
+  const { user, loading } = useAuth();
 
   return (
     <Router>  

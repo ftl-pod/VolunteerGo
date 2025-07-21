@@ -2,7 +2,7 @@ import './SavedPage.css'
 import RemoveModal from '../RemoveModal/RemoveModal';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react'
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "../../hooks/useAuth";
 
 function SavedPage() {
     const { user } = useUser();

@@ -8,46 +8,13 @@ import { TbTargetArrow } from "react-icons/tb";
 import { PiCertificateFill } from "react-icons/pi";
 import { BiSolidDonateHeart } from "react-icons/bi";
 import { useAuth } from "../../hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useProfile } from "../../contexts/ProfileContext"; // Import profile context
 import { useNavigate } from "react-router-dom";
 
 function ProfilePage() {
   const { user } = useAuth();
+  const { profile, loading, error } = useProfile(); // Use context for profile data, loading, and error
   const navigate = useNavigate();
-
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // Fetch user profile from backend by firebase UID
-  useEffect(() => {
-    if (!user?.uid) return;
-
-    const fetchProfile = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${user.uid}`
-        );
-
-        if (!res.ok) {
-          throw new Error(`Failed to fetch profile: ${res.status}`);
-        }
-
-        const data = await res.json();
-        setProfile(data);
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, [user]);
 
   if (!user) {
     return (
@@ -89,7 +56,7 @@ function ProfilePage() {
     );
   }
 
-  // Destructure profile fields from DB user object
+  // Destructure profile fields
   const {
     location,
     name,
@@ -145,9 +112,7 @@ function ProfilePage() {
               <div>{points || 0}</div>
               <div>{level || "1"}</div>
               <div>
-                {createdAt
-                  ? new Date(createdAt).toLocaleDateString()
-                  : "N/A"}
+                {createdAt ? new Date(createdAt).toLocaleDateString() : "N/A"}
               </div>
             </div>
           </div>

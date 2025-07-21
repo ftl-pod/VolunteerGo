@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from "../../hooks/useAuth";
 
 function SavedPage() {
-    const { user } = useUser();
+    const { user } = useAuth();
     const [showModal, setShowModal] = useState(false);
     const [savedOpps, setSavedOpps] = useState([]);
     const [oppToRemove, setOppToRemove] = useState(null);
@@ -29,7 +29,7 @@ function SavedPage() {
         const fetchPrismaUserId = async () => {
             if (!user) return;
             try {
-                const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-clerk/${user.id}`;
+                const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${user.uid}`;
                 const res = await fetch(url);
 
                 if (!res.ok) {

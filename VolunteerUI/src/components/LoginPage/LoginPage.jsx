@@ -15,7 +15,7 @@ function LoginPage() {
     setError(null);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/onboarding"); // redirect after login
+      navigate("/profile"); 
     } catch (err) {
       setError(err.message);
     }

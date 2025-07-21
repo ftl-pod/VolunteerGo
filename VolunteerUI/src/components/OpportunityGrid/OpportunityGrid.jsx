@@ -12,7 +12,7 @@ function OpportunityGrid({ searchResults }) {
   const [prismaUserId, setPrismaUserId] = useState(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
-
+  
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString("en-US", {
@@ -95,7 +95,8 @@ function OpportunityGrid({ searchResults }) {
     const fetchOpps = async () => {
       try {
         const query = new URLSearchParams();
-        if (searchResults) query.append("keyword", searchResults);
+        if (searchResults.keyword) query.append("keyword", searchResults.keyword);
+        if (searchResults.city) query.append("city", searchResults.city);
 
         const url = `${import.meta.env.VITE_API_BASE_URL}/opportunities?${query.toString()}`;
         const res = await fetch(url);

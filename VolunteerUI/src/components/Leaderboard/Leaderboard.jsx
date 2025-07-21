@@ -37,11 +37,11 @@ function Leaderboard() {
                     <div className="points">points</div>
                 </div> */}
                 {
-                    users.sort((a, b) => a.leaderboardRank - b.leaderboardRank).map((u)=>{
+                    users.sort((a, b) => b.points - a.points).map((u, index)=>{
                         return (
                             <div className="list-item" key={u.id}>
                                 <div className="rank">
-                                    <div className="circle">{u.leaderboardRank}</div>
+                                    <div className="circle">{index + 1}</div>
                                 </div>
                                 <div className="user-name">
                                     <div className="pfp">

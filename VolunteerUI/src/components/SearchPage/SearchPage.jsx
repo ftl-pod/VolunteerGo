@@ -5,7 +5,7 @@ import { useState } from 'react'
 import './SearchPage.css';
 
 function SearchPage() {
-    const [searchResults, setSearchResults] = useState('');
+    const [searchResults, setSearchResults] = useState({ keyword: '', city: '' });
     return (
         <div className="search-page">
             <div className="search-page-content">

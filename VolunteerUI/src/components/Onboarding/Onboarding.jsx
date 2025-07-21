@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
-import './onboarding.css'
+import './Onboarding.css'
 import { useNavigate } from "react-router-dom";  
 
 export default function Onboarding() {

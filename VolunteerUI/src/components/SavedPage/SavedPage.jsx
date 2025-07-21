@@ -1,85 +1,66 @@
 import './SavedPage.css'
+import { useProfile } from '../../contexts/ProfileContext';
 import RemoveModal from '../RemoveModal/RemoveModal';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react'
-import { useAuth } from "../../hooks/useAuth";
 
 function SavedPage() {
-    const { user } = useAuth();
-    const [showModal, setShowModal] = useState(false);
-    const [savedOpps, setSavedOpps] = useState([]);
-    const [oppToRemove, setOppToRemove] = useState(null);
-    const [prismaUserId, setPrismaUserId] = useState(null);
+  const { profile, setProfile } = useProfile(); // access profile & setter
+  const [showModal, setShowModal] = useState(false);
+  const [oppToRemove, setOppToRemove] = useState(null);
 
-    const closeModal = () => {
-        setShowModal(false);
-        setOppToRemove(null);
-    };
+  const savedOpps = profile?.savedOpportunities || [];
 
-    const formatDate = (dateStr) => {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        });
-    };
+  const closeModal = () => {
+    setShowModal(false);
+    setOppToRemove(null);
+  };
 
-    useEffect(() => {
-        const fetchPrismaUserId = async () => {
-            if (!user) return;
-            try {
-                const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${user.uid}`;
-                const res = await fetch(url);
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
 
-                if (!res.ok) {
-                    throw new Error(`HTTP error! Status: ${res.status}`);
-                }
+  const handleRemoveClick = (opportunity) => {
+    setOppToRemove(opportunity);
+    setShowModal(true);
+  };
 
-                const data = await res.json();
-                setPrismaUserId(data.id);
-                setSavedOpps(data.savedOpportunities);
-            } catch (err) {
-                console.error("Failed to fetch Prisma user ID:", err);
-            }
-        };
+  const confirmRemove = async () => {
+    if (!oppToRemove || !profile?.id) return;
 
-        fetchPrismaUserId();
-    }, [user]);
+    try {
+      const url = `${import.meta.env.VITE_API_BASE_URL}/users/${profile.id}/saved-opportunities/remove`;
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ opportunityId: oppToRemove.id }),
+      });
 
-    const handleRemoveClick = (opportunity) => {
-        setOppToRemove(opportunity);
-        setShowModal(true);
-    };
+      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
 
-    const confirmRemove = async () => {
-        if (!oppToRemove || !prismaUserId) return;
+      const data = await res.json();
 
-        try {
-            const url = `${import.meta.env.VITE_API_BASE_URL}/users/${prismaUserId}/saved-opportunities/remove`;
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ opportunityId: oppToRemove.id }),
-            });
-
-            if (!res.ok) {
-                throw new Error(`HTTP error! Status: ${res.status}`);
-            }
-
-            const data = await res.json();
-
-            if (data.success) {
-                setSavedOpps((prev) => prev.filter((opp) => opp.id !== oppToRemove.id));
-                closeModal();
-            } else {
-                console.error("Failed to remove saved opportunity:", data);
-            }
-        } catch (error) {
-            console.error("Error removing saved opportunity:", error);
-        }
-    };
-
+      if (data.success) {
+        // Update savedOpps locally in context
+        setProfile((prev) => ({
+          ...prev,
+          savedOpportunities: prev.savedOpportunities.filter(
+            (opp) => opp.id !== oppToRemove.id
+          ),
+        }));
+        closeModal();
+      } else {
+        console.error("Failed to remove saved opportunity:", data);
+      }
+    } catch (error) {
+      console.error("Error removing saved opportunity:", error);
+    }
+  };
     return (
       <div className="saved-section">
         <div>

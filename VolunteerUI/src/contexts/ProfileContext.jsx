@@ -32,7 +32,7 @@ export function ProfileProvider({ children }) {
   }, [user, isSignedIn, isLoaded]);
 
   return (
-    <ProfileContext.Provider value={{ profile, loading, refreshProfile: fetchProfile }}>
+    <ProfileContext.Provider value={{ profile, setProfile, loading, refreshProfile: fetchProfile }}>
       {children}
     </ProfileContext.Provider>
   );

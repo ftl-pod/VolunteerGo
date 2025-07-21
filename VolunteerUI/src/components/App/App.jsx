@@ -13,6 +13,7 @@ import OpportunityPage from '../OpportunityPage/OpportunityPage'
 import LocationPage from '../LocationPage/LocationPage'
 import SavedPage from '../SavedPage/SavedPage'
 import Onboarding from '../Onboarding/Onboarding'
+import { OpportunityProvider } from './contexts/OpportunityContext';
 
 import { useAuth } from "../../hooks/useAuth";
 import './App.css'

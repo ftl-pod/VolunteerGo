@@ -122,7 +122,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
     const fetchPrismaUserId = async () => {
       if (!user) return;
       try {
-        const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-clerk/${
+        const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${
           user.id
         }`;
         const res = await fetch(url);

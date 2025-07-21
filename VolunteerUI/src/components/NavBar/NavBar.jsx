@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from "../../hooks/useAuth";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
+import { useProfile } from "../../contexts/ProfileContext";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -11,34 +12,14 @@ function Navbar() {
   const isHomePage = location.pathname === "/";
   const { user, isSignedIn, isLoaded } = useAuth();
 
-  const [profile, setProfile] = useState(null);
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (!user?.uid) return;
-
-      try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${user.uid}`);
-        if (!res.ok) throw new Error('Failed to fetch profile');
-        const data = await res.json();
-        setProfile(data);
-      } catch (error) {
-        console.error("Error fetching profile in navbar:", error);
-      }
-    };
-
-    if (isSignedIn && isLoaded) {
-      fetchProfile();
-    }
-  }, [user, isSignedIn, isLoaded]);
+  const { profile } = useProfile();
 
   const handleLogout = async () => {
     await signOut(auth);
     navigate('/login');
   };
-
   const avatarUrl =
-    profile?.avatarUrl || // From backend DB
+    profile?.avatarUrl || // From backend DB (shared context)
     user?.photoURL ||     // Fallback to Firebase photoURL
     "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png"; // Final fallback
 

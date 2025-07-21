@@ -3,15 +3,20 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import ApplyModal from '../ApplyModal/ApplyModal';
+import { useProfile } from '../../contexts/ProfileContext';
 
 function OpportunityGrid({ searchResults }) {
   const { user, isSignedIn } = useAuth();
+  const { profile, setProfile } = useProfile();
+  const [savingOppId, setSavingOppId] = useState(null);
   const [opps, setOpps] = useState([]);
-  const [savedOpps, setSavedOpps] = useState([]);
-  const [prismaUserId, setPrismaUserId] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+  // Use profile ID and saved opportunities from context
+  const prismaUserId = profile?.id || null;
+  const savedOpps = profile?.savedOpportunities?.map((opp) => opp.id) || [];
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -31,33 +36,16 @@ function OpportunityGrid({ searchResults }) {
     setIsApplyModalOpen(false);
   };
 
-  // Fetch Prisma user and saved opps
-  useEffect(() => {
-    const fetchPrismaUserId = async () => {
-      if (!user?.uid) return;
-      try {
-        const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${user.uid}`;
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-
-        const data = await res.json();
-        setPrismaUserId(data.id); // ← this is your internal Prisma user.id
-        setSavedOpps(data.savedOpportunities.map((opp) => opp.id)); // if you're including savedOpps
-      } catch (error) {
-        console.error("Failed to fetch Prisma user:", error);
-      }
-    };
-    fetchPrismaUserId();
-  }, [user]);
-
-  // Handle Save/Unsave logic
+  // Handle Save/Unsave logic - update profile context
   const handleSavedClick = async (e, oppId) => {
     e.stopPropagation();
 
     if (!prismaUserId) {
-      console.error("Prisma user ID not available");
+      console.error("Profile ID not available");
       return;
     }
+
+    setSavingOppId(oppId); // start saving
 
     try {
       const isSaved = savedOpps.includes(oppId);
@@ -75,14 +63,31 @@ function OpportunityGrid({ searchResults }) {
       const data = await res.json();
 
       if (data.success) {
-        setSavedOpps((prev) =>
-          isSaved ? prev.filter((id) => id !== oppId) : [...prev, oppId]
-        );
+        setProfile((prev) => {
+          if (!prev) return prev;
+
+          if (isSaved) {
+            return {
+              ...prev,
+              savedOpportunities: prev.savedOpportunities.filter((opp) => opp.id !== oppId),
+            };
+          } else {
+            const oppToAdd = opps.find((opp) => opp.id === oppId);
+            if (!oppToAdd) return prev;
+
+            return {
+              ...prev,
+              savedOpportunities: [...prev.savedOpportunities, oppToAdd],
+            };
+          }
+        });
       } else {
         console.error("Failed to update saved opportunities:", data);
       }
     } catch (error) {
       console.error("Error updating saved opportunities:", error);
+    } finally {
+      setSavingOppId(null); // done saving
     }
   };
 
@@ -156,8 +161,13 @@ function OpportunityGrid({ searchResults }) {
                   <button
                     className="btn-secondary"
                     onClick={(e) => handleSavedClick(e, opportunity.id)}
+                    disabled={savingOppId === opportunity.id}
                   >
-                    {savedOpps.includes(opportunity.id) ? "Saved" : "Save"}
+                    {savingOppId === opportunity.id
+                      ? "Saving..."
+                      : savedOpps.includes(opportunity.id)
+                      ? "Saved"
+                      : "Save"}
                   </button>
                 </div>
               </div>

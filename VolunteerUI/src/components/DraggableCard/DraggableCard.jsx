@@ -3,6 +3,7 @@ import '../OpportunityPage/OpportunityPage.css'
 import { useAuth } from "../../hooks/useAuth";
 import { Link } from 'react-router-dom';
   import ApplyModal from '../ApplyModal/ApplyModal';
+  import { useProfile } from "../../contexts/ProfileContext";
 
 const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -14,12 +15,14 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   const [dragDistanceY, setDragDistanceY] = useState(0);
   const cardRef = useRef(null);
   const { user } = useAuth();
-  const [opps, setOpps] = useState([]);
-  const [savedOpps, setSavedOpps] = useState([]);
-  const [prismaUserId, setPrismaUserId] = useState(null);
   const [direct, setDirect] = useState("search") // update for application functionality
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
-  
+  const { profile, setProfile } = useProfile();
+  const prismaUserId = profile?.id;
+  const savedOpps = profile?.savedOpportunities?.map((opp) => opp.id) || [];
+  const [savingOppId, setSavingOppId] = useState(null);
+  const [loadingSave, setLoadingSave] = useState({});
+
   const handleApplyClick = () => {
     setIsApplyModalOpen(true);
   };
@@ -118,39 +121,20 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
     handleEnd();
   };
 
-  useEffect(() => {
-    const fetchPrismaUserId = async () => {
-      if (!user) return;
-      try {
-        const url = `${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${
-          user.id
-        }`;
-        const res = await fetch(url);
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        const data = await res.json();
-        setPrismaUserId(data.id);
-        setSavedOpps(data.savedOpportunities.map((opp) => opp.id));
-      } catch (error) {
-        console.error("Failed to fetch Prisma user ID:", error);
-      }
-    };
-    fetchPrismaUserId();
-  }, [user]);
+
   const handleSavedClick = async (e, oppId) => {
     e.stopPropagation();
+
     if (!prismaUserId) {
       console.error("Prisma user ID not available");
       return;
     }
+
+    setLoadingSave((prev) => ({ ...prev, [oppId]: true }));
+
     try {
       const isSaved = savedOpps.includes(oppId);
-      const url = `${
-        import.meta.env.VITE_API_BASE_URL
-      }/users/${prismaUserId}/saved-opportunities/${
-        isSaved ? "remove" : "add"
-      }`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/users/${prismaUserId}/saved-opportunities/${isSaved ? "remove" : "add"}`;
       const method = "POST";
       const body = JSON.stringify({ opportunityId: oppId });
       const headers = { "Content-Type": "application/json" };
@@ -163,19 +147,27 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
 
       const data = await res.json();
 
-      if (data.success) {
-        setSavedOpps((prev) => {
-          if (isSaved) {
-            return prev.filter((id) => id !== oppId);
-          } else {
-            return [...prev, oppId];
-          }
-        });
-      } else {
-        console.error("Failed to update saved opportunities:", data);
-      }
+    if (data.success) {
+      setProfile((prev) => {
+        if (!prev) return prev;
+
+        if (isSaved) {
+          return {
+            ...prev,
+            savedOpportunities: prev.savedOpportunities.filter((opp) => opp.id !== oppId),
+          };
+        } else {
+          return {
+            ...prev,
+            savedOpportunities: [...prev.savedOpportunities, opportunity],
+          };
+        }
+      });
+    }
     } catch (error) {
       console.error("Error updating saved opportunities:", error);
+    } finally {
+      setLoadingSave((prev) => ({ ...prev, [oppId]: false }));
     }
   };
 
@@ -282,12 +274,19 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
 
         <div className="actions">
             <button className="btn-primary" onClick={() => handleApplyClick(opportunity)}>I Want to Help</button>
-          <button
-            className="btn-secondary"
-            onClick={(e) => handleSavedClick(e, opportunity.id)}
-          >
-            {savedOpps.includes(opportunity.id) ? "Saved" : "Save"}
-          </button>
+            <button
+              className="btn-secondary"
+              onClick={(e) => handleSavedClick(e, opportunity.id)}
+              disabled={!!loadingSave[opportunity.id]}
+            >
+              {loadingSave[opportunity.id]
+                ? savedOpps.includes(opportunity.id)
+                  ? "Unsaving..."
+                  : "Saving..."
+                : savedOpps.includes(opportunity.id)
+                ? "Saved"
+                : "Save"}
+            </button>
         </div>
       </div>
     </div>

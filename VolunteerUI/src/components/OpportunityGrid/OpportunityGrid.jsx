@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import ApplyModal from '../ApplyModal/ApplyModal';
 import { useProfile } from '../../contexts/ProfileContext';
+import { useOpportunity } from '../../contexts/OpportunityContext'; // Import OpportunityContext
 
 function OpportunityGrid({ searchResults }) {
-  const { user, isSignedIn } = useAuth();
+  const { user } = useAuth();
   const { profile, setProfile } = useProfile();
+  const { opportunities, loading, fetchOpportunities } = useOpportunity(); // Use OpportunityContext
+
   const [savingOppId, setSavingOppId] = useState(null);
-  const [opps, setOpps] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
 
@@ -35,6 +36,11 @@ function OpportunityGrid({ searchResults }) {
   const handleCloseModal = () => {
     setIsApplyModalOpen(false);
   };
+
+  // Fetch opportunities when searchResults change
+useEffect(() => {
+  fetchOpportunities(searchResults);
+}, [searchResults.keyword, searchResults.city, fetchOpportunities]);
 
   // Handle Save/Unsave logic - update profile context
   const handleSavedClick = async (e, oppId) => {
@@ -72,7 +78,7 @@ function OpportunityGrid({ searchResults }) {
               savedOpportunities: prev.savedOpportunities.filter((opp) => opp.id !== oppId),
             };
           } else {
-            const oppToAdd = opps.find((opp) => opp.id === oppId);
+            const oppToAdd = opportunities.find((opp) => opp.id === oppId);
             if (!oppToAdd) return prev;
 
             return {
@@ -91,31 +97,6 @@ function OpportunityGrid({ searchResults }) {
     }
   };
 
-  // Fetch opportunities when search term changes
-  useEffect(() => {
-    const fetchOpps = async () => {
-      try {
-        const query = new URLSearchParams();
-        if (searchResults.keyword) query.append("keyword", searchResults.keyword);
-        if (searchResults.city) query.append("city", searchResults.city);
-
-        const url = `${import.meta.env.VITE_API_BASE_URL}/opportunities?${query.toString()}`;
-        setLoading(true);
-        const res = await fetch(url);
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        const data = await res.json();
-        setOpps(data);
-        setLoading(false);
-
-      } catch (err) {
-        console.error("Failed to fetch opportunities:", err);
-      }
-    };
-    fetchOpps();
-  }, [searchResults]);
-
   return (
     <>
       <div className="opportunities-section">
@@ -123,7 +104,7 @@ function OpportunityGrid({ searchResults }) {
           <div className="loading-spinner">Loading opportunities...</div>
         ) : (
           <div className="opportunity-grid">
-            {opps.map((opportunity) => (
+            {opportunities.map((opportunity) => (
               <div key={opportunity.id} className="opportunity-card">
                 <Link to={`/opportunity/${opportunity.id}`}>
                   <div className="card-header">
@@ -164,7 +145,9 @@ function OpportunityGrid({ searchResults }) {
                     disabled={savingOppId === opportunity.id}
                   >
                     {savingOppId === opportunity.id
-                      ? "Saving..."
+                      ? savedOpps.includes(opportunity.id)
+                        ? "Unsaving..."
+                        : "Saving..."
                       : savedOpps.includes(opportunity.id)
                       ? "Saved"
                       : "Save"}

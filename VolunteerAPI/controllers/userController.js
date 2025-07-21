@@ -1,7 +1,7 @@
 const prisma = require('../db/db'); 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { clerkClient } = require('@clerk/express');
+const admin = require('../firebase/firebaseAdmin');
 
 exports.getAllUsers = async (req, res) => {
     try {
@@ -92,15 +92,16 @@ exports.updateUser = async (req, res) => {
                 avatarUrl,
                 level,
                 // pass in opportunities by arrary of ids : [1,2] -> adding opps 1 & 2
-                opportunities: {
-                    connect: opportunities.map(oppId => ({ id: Number(oppId) }))
-                },
-                savedOpportunities: {
-                    connect: opportunities.map(oppId => ({ id: Number(oppId) }))
-                }
+                opportunities: opportunities?.length
+                ? { connect: opportunities.map(oppId => ({ id: Number(oppId) })) }
+                : undefined,
+
+                savedOpportunities: savedOpportunities?.length
+                ? { connect: savedOpportunities.map(oppId => ({ id: Number(oppId) })) }
+                : undefined,
             }
         })
-        // excluding pass from responsegi t
+        // excluding pass from response
         const { password: _, ...userWithoutPassword } = updatedUser;
         return res.json(userWithoutPassword);
     } catch (error) {
@@ -121,15 +122,6 @@ exports.deleteUser = async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        // Delete user from Clerk
-        if (user.clerkId) {
-            try {
-                await clerkClient.users.deleteUser(user.clerkId);
-            } catch (clerkError) {
-                console.warn("User deleted in DB but not found in Clerk:", clerkError.message);
-            }
-        }
-
         // Delete from user database
         await prisma.user.delete({
             where: { id: userId },
@@ -142,57 +134,54 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
-exports.getUserByClerkId = async (req, res) => {
-    try {
-        const clerkId = req.params.clerkId;
-        const user = await prisma.user.findUnique({
-            where: { clerkId },
-            include: {
-                opportunities: true,
-                savedOpportunities: true,
-            },
-        });
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
-        return res.json(user);
-    } catch (error) {
-        console.error("Error fetching user by clerkId:", error);
-        return res.status(500).json({ error: "Internal server error" });
-    }
+exports.getUserByFirebaseUid = async (req, res) => {
+  const firebaseUid = req.params.firebaseUid;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { firebaseUid },
+      include: {
+        opportunities: true,
+        savedOpportunities: true,
+      },
+    });
+    if (!user) return res.status(404).json({ error: "User not found" });
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching user by firebaseUid:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-// Send information to database and clerk 
+
+// Send information to database and firebase 
 exports.onboarding = async (req, res) => {
-    const newRank = await prisma.user.count() + 1;
-    const {
-        clerkId,
-        name,
-        username,
-        skills,
-        training,
-        location,
-        age,
-        points = 0,
-        level = 1,
-        interests,
-        avatarUrl
-    } = req.body;
+  const firebaseUid = req.user.uid; // comes from token middleware
+  const newRank = await prisma.user.count() + 1;
+  const {
+    name,
+    username,
+    skills,
+    training,
+    location,
+    age,
+    points = 0,
+    level = 1,
+    interests,
+    avatarUrl
+  } = req.body;
 
   try {
-    // Check if user already exists or update leaderboardrank
-    const existingUser = await prisma.user.findUnique({ where: { clerkId } });
+    const existingUser = await prisma.user.findUnique({ where: { firebaseUid } });
 
     const leaderboardRank = existingUser
       ? existingUser.leaderboardRank
       : (await prisma.user.count()) + 1;
 
-    // Upsert user in your database
     const user = await prisma.user.upsert({
-      where: { clerkId },
+      where: { firebaseUid },
       update: { name, username, skills, training, location, age, points, level, interests, avatarUrl },
       create: {
-        clerkId,
+        firebaseUid,
         name,
         username,
         skills,
@@ -202,22 +191,6 @@ exports.onboarding = async (req, res) => {
         points,
         level,
         leaderboardRank,
-        interests,
-        avatarUrl
-      },
-    });
-
-    // 2. Update Clerk user publicMetadata
-    await clerkClient.users.updateUserMetadata(clerkId, {
-      publicMetadata: {
-        name,
-        points,
-        level,
-        leaderboardRank,
-        skills,
-        training,
-        location,
-        age,
         interests,
         avatarUrl
       },

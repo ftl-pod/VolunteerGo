@@ -43,7 +43,7 @@ model Opportunity {
 
 model User {
   id           Int           @id @default(autoincrement())
-  clerkId      String?        @unique
+  firebaseUid      String?        @unique
   avatarUrl    String?        @default("https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png")
   name         String?
   username     String        @unique
@@ -57,7 +57,7 @@ model User {
   age          Int?
   opportunities Opportunity[] @relation("UserOpportunities")
   savedOpportunities   Opportunity[] @relation("SavedOpportunities")
-  leaderboardRank Int          
+  leaderboardRank Int       
 }
 model Chat {
   id             Int      @id @default(autoincrement())

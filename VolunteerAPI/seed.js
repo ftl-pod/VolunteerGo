@@ -2,7 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const fs = require("fs");
 const path = require("path");
-const bcrypt = require("bcrypt");
+const admin = require("../VolunteerAPI/firebase/firebaseAdmin.js");
 
 async function seed() {
   try {
@@ -23,6 +23,7 @@ async function seed() {
 
     
     const uniqueOrgsMap = new Map();
+
 
     for (const opp of opportunityData) {
       const orgName = opp.organizationName?.trim();
@@ -76,7 +77,6 @@ async function seed() {
           location: opportunity.volunteerLocation,
           skills: opportunity.skills,
           imageUrl: opportunity.imageUrl,
-          //volunteersNeeded: opportunity.volunteersNeeded,
           status: opportunity.status,
           points: opportunity.points ?? 10,
           organizationId: org.id,
@@ -84,6 +84,32 @@ async function seed() {
       });
     }
     console.log(`✅ Created ${opportunityData.length} opportunities`);
+
+
+    // ✅ Firebase user seeding
+    console.log("\n👤 Seeding users from Firebase Auth...");
+    const { users: firebaseUsers } = await admin.auth().listUsers(1000);
+
+    for (const fbUser of firebaseUsers) {
+      const { uid, email, displayName, photoURL } = fbUser;
+
+      await prisma.user.upsert({
+        where: { firebaseUid: uid },
+        update: {},
+        create: {
+          firebaseUid: uid,
+          username: displayName || email?.split("@")[0] || `user_${uid.slice(0, 6)}`,
+          name: displayName || null,
+          avatarUrl:
+            photoURL ||
+            "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
+          points: 0,
+          level: 1,
+        },
+      });
+    }
+
+    console.log(`✅ Seeded ${firebaseUsers.length} Firebase users`);
 
     console.log("\n🎉 Seeding complete!");
   } catch (err) {

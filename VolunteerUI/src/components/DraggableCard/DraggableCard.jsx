@@ -254,7 +254,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
         </p>
         <p className="location-date">
           {opportunity?.location || "Sample Location"} |{" "}
-          {formatDate ? formatDate(opportunity?.date) : "Jan 1, 2024"}
+          {opportunity?.date ? (formatDate ? formatDate(opportunity.date) : opportunity.date) : "Flexible schedule"}
         </p>
 
         <div className="tags">

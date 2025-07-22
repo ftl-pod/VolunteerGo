@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { useUser } from "@clerk/clerk-react";
-import './onboarding.css'
+import { useAuth } from "../../hooks/useAuth";
+import './Onboarding.css'
 import { useNavigate } from "react-router-dom";  
+import { useLeaderboard } from "../../contexts/LeaderboardContext"
+import { useProfile } from "../../contexts/ProfileContext";
 
 export default function Onboarding() {
-  const { user } = useUser();
+  const { user, token, isLoaded } = useAuth();
   const navigate = useNavigate();  
   const [currentStep, setCurrentStep] = useState(1);
-  
-  // Initialize formData from Clerk user publicMetadata if available
+  const { refreshLeaderboard } = useLeaderboard();
+  const { refreshProfile } = useProfile();
+
+  // Initialize formData from firebase if available
   const [formData, setFormData] = useState({
-    avatarUrl: "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
-    name: "",
-    email: user?.emailAddresses?.[0]?.emailAddress || "",
-    username: user?.username || "",
+    avatarUrl: user?.photoURL || "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
+    name: user?.displayName || "",
+    email: user?.email || "",
+    username: user?.email?.split("@")[0] || "", // default fallback
     location: "",
     age: "",
     skills: "",
@@ -21,22 +25,43 @@ export default function Onboarding() {
     interests: []
   });
 
+  const [loading, setLoading] = useState(true);
+
+  // Fetch user data from API if user is logged in and data is loaded
   useEffect(() => {
-    if (user?.publicMetadata) {
-      const md = user.publicMetadata;
-      setFormData({
-        avatarUrl: md.avatarUrl || formData.avatarUrl,
-        name: md.name || "",
-        email: user.emailAddresses[0]?.emailAddress || "",
-        username: user.username || "",
-        location: md.location || "",
-        age: md.age ? String(md.age) : "",
-        skills: Array.isArray(md.skills) ? md.skills.join(", ") : "",
-        training: Array.isArray(md.training) ? md.training.join(", ") : "",
-        interests: Array.isArray(md.interests) ? md.interests : [],
-      });
+    if (user && isLoaded) {
+      const fetchUserData = async () => {
+        try {
+          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${user.uid}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (!res.ok) throw new Error("Failed to fetch user profile");
+          const data = await res.json();
+          
+          // Update formData with fetched user data
+          setFormData({
+            name: data.name || "",
+            email: data.email || user.email || "",
+            username: data.username || "",
+            skills: Array.isArray(data.skills) ? data.skills.join(", ") : (data.skills || ""),
+            training: Array.isArray(data.training) ? data.training.join(", ") : (data.training || ""),
+            location: data.location || "",
+            age: data.age || "",
+            interests: data.interests || [],
+            avatarUrl: data.avatarUrl || ""
+          });
+          setLoading(false);
+        } catch (err) {
+          console.error(err);
+          setLoading(false);
+        }
+      };
+
+      fetchUserData();
     }
-  }, [user]);
+  }, [user, isLoaded, token]);
 
   const causes = [
     { id: 'environment', label: 'Environmental Protection', icon: '🌍' },
@@ -89,50 +114,43 @@ export default function Onboarding() {
     if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("POST to:", `${import.meta.env.VITE_API_BASE_URL}/users/onboarding`);
-    
-    const skillsArray = formData.skills
-        .split(",")
-        .map((s) => s.trim())
-        .filter((s) => s);
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const trainingArray = formData.training
-        .split(",")
-        .map((t) => t.trim())
-        .filter((t) => t);
+  const skillsArray = formData.skills.split(",").map(s => s.trim()).filter(Boolean);
+  const trainingArray = formData.training.split(",").map(t => t.trim()).filter(Boolean);
 
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/onboarding`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          clerkId: user.id,
-          email: formData.email,
-          name: formData.name,
-          username: formData.username,
-          skills: skillsArray,
-          training: trainingArray,
-          location: formData.location,
-          age: Number(formData.age),
-          interests: formData.interests,
-          avatarUrl: formData.avatarUrl
-        }),
-      });
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/onboarding`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // 🔥 include Firebase token
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        username: formData.username,
+        skills: skillsArray,
+        training: trainingArray,
+        location: formData.location,
+        age: Number(formData.age),
+        interests: formData.interests,
+        avatarUrl: formData.avatarUrl,
+      }),
+    });
 
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Failed to save user");
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "Failed to save user");
 
-      alert("Profile updated and saved!");
-      navigate("/profile");
-    } catch (err) {
-      console.error("Failed onboarding process", err);
-      alert("Error during onboarding");
-    }
-  };
+    alert("Profile updated and saved!");
+    navigate("/profile");
+    refreshLeaderboard();
+    refreshProfile();
+  } catch (err) {
+    console.error("Failed onboarding process", err);
+    alert("Error during onboarding");
+  }
+};
 
   const isStep1Valid = formData.name && formData.email && formData.location;
   const isStep2Valid = formData.interests.length > 0;

@@ -15,7 +15,7 @@ async function seed() {
       fs.readFileSync(
         path.join(
           __dirname,
-          "./opp_scraper/opp_scraper/opportunity.json"
+          "./opp_scraper/opp_scraper/opportunity_updated.json"
         ),
         "utf8"
       )
@@ -73,6 +73,7 @@ async function seed() {
           name: opportunity.name,
           tags: opportunity.tags,
           requirements: opportunity.requirements,
+          date: opportunity.date,
           description: opportunity.description,
           location: opportunity.volunteerLocation,
           skills: opportunity.skills,
@@ -126,5 +127,6 @@ seed();
 // then you need to install scrapy with pip3 install scrapy
 // then you need to navigate to this directory where the spider is located /opp_scraper
 // then you can run the spider with scrapy crawl opportunity 
+// then run python3 opp_scraper/add_date_to_opportunities.py in the same /opp_scraper directory
 // then go back to volunteerapi directory in terminal and run node seed. js
 // then go to http://localhost:5173/map in the browser to see the map populated with the opporunities or th eopportunity grid even, idk

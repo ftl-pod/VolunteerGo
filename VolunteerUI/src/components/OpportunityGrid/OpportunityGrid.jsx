@@ -112,15 +112,27 @@ useEffect(() => {
                   <div className="card-header">
                     <div className="card-header-left">
                       <h3 className="card-title">{opportunity.name}</h3>
-                      <p className="card-org">{opportunity.organization.name}</p>
+                      <p className="card-org">
+                        {opportunity.organization.name}
+                      </p>
                     </div>
                   </div>
                   <div className="card-details">
                     <span>{opportunity.location} | </span>
-                    <span>{formatDate(opportunity.date)}</span>
+                    <span>
+                      {opportunity?.date
+                        ? formatDate
+                          ? formatDate(opportunity.date)
+                          : opportunity.date
+                        : "Flexible schedule"}
+                    </span>
                   </div>
-                  <p className="card-description" title={opportunity.description}>
-                    {opportunity.description && opportunity.description.length > 150
+                  <p
+                    className="card-description"
+                    title={opportunity.description}
+                  >
+                    {opportunity.description &&
+                    opportunity.description.length > 150
                       ? opportunity.description.slice(0, 150) + "..."
                       : opportunity.description}
                   </p>
@@ -163,7 +175,7 @@ useEffect(() => {
       <ApplyModal
         isOpen={isApplyModalOpen}
         onClose={handleCloseModal}
-        applicant={user?.firstName || user?.fullName || 'Anonymous'}
+        applicant={user?.firstName || user?.fullName || "Anonymous"}
         opportunity={selectedOpportunity}
       />
     </>

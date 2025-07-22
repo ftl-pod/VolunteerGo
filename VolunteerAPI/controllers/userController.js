@@ -6,12 +6,18 @@ const admin = require('../firebase/firebaseAdmin');
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await prisma.user.findMany({
+            orderBy: { points: 'desc' },
             include: {
                 opportunities: true,
                 savedOpportunities: true,
             },
         });
-        return res.json(users);
+        const rankedUsers = users.map((user, index) => ({
+        ...user,
+        leaderboardRank: index + 1,
+        }));
+
+        res.json(rankedUsers);
     } catch (error) {
         console.error("Error fetching users:", error);
         return res.status(500).json({ error : "Internal server error" });
@@ -41,7 +47,6 @@ exports.getUserById = async (req, res) => {
 
 exports.createUser = async (req, res) => {
     try {
-        const newRank = await prisma.user.count() + 1; // new user will be at the end of the leaderboard
         const { username, password, training, skills, location, age,  avatarUrl} = req.body;
         if (!username || !password || !Array.isArray(training) || training.length === 0 || !Array.isArray(skills) || skills.length === 0 || !location || !age ) {
             return res.status(400).json({ error : "Missing required field!" });
@@ -55,7 +60,6 @@ exports.createUser = async (req, res) => {
                 skills,
                 location,
                 age,
-                leaderboardRank : newRank, // all new users start at 0
                 avatarUrl, 
                 // when creating a user, they will have no opportunities initially
             },
@@ -72,8 +76,8 @@ exports.createUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
     try {
         const userId = Number(req.params.id);
-        const {username, password, training, skills, location, age, leaderboardRank, opportunities, savedOpportunities, avatarUrl, level} = req.body;
-        if (!username || !password || !Array.isArray(training) || training.length === 0 || !Array.isArray(skills) || skills.length === 0 || !location || typeof age !== 'number' || typeof leaderboardRank !== 'number') {
+        const {username, password, training, skills, location, age, opportunities, savedOpportunities, avatarUrl, level} = req.body;
+        if (!username || !password || !Array.isArray(training) || training.length === 0 || !Array.isArray(skills) || skills.length === 0 || !location || typeof age !== 'number') {
             return res.status(400).json({ error : "Missing required field!" });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -86,7 +90,6 @@ exports.updateUser = async (req, res) => {
                 skills,
                 location,
                 age,
-                leaderboardRank,
                 avatarUrl,
                 level,
                 // pass in opportunities by arrary of ids : [1,2] -> adding opps 1 & 2
@@ -180,10 +183,6 @@ exports.onboarding = async (req, res) => {
   try {
     const existingUser = await prisma.user.findUnique({ where: { firebaseUid } });
 
-    const leaderboardRank = existingUser
-      ? existingUser.leaderboardRank
-      : (await prisma.user.count()) + 1;
-
     const user = await prisma.user.upsert({
       where: { firebaseUid },
       update: { name, username, skills, training, location, age, points, level, interests, avatarUrl },
@@ -197,7 +196,6 @@ exports.onboarding = async (req, res) => {
         age,
         points,
         level,
-        leaderboardRank,
         interests,
         avatarUrl
       },

@@ -10,12 +10,16 @@ import { BiSolidDonateHeart } from "react-icons/bi";
 import { useAuth } from "../../hooks/useAuth";
 import { useProfile } from "../../contexts/ProfileContext"; // Import profile context
 import { useNavigate } from "react-router-dom";
+import { useLeaderboard } from "../../contexts/LeaderboardContext"; // Import leaderboard context
 
 function ProfilePage() {
   const { user } = useAuth();
   const { profile, loading, error } = useProfile(); // Use context for profile data, loading, and error
   const navigate = useNavigate();
+  const { users = [] } = useLeaderboard();
+  const currentUser = users.find(u => u.firebaseUid === user?.uid);
 
+  const leaderboardRank = currentUser?.leaderboardRank;
   if (!user) {
     return (
       <div className="page-container">
@@ -46,30 +50,20 @@ function ProfilePage() {
     );
   }
 
-  if (!profile) {
-    return (
-      <div className="page-container">
-        <div className="section">
-          <p>No profile data found.</p>
-        </div>
-      </div>
-    );
-  }
 
   // Destructure profile fields
-  const {
-    location,
-    name,
-    age,
-    points,
-    level,
-    skills = [],
-    training = [],
-    leaderboardRank,
-    interests = [],
-    avatarUrl,
-    createdAt,
-  } = profile;
+const {
+  location,
+  name = user?.displayName || "Unnamed User",
+  age,
+  points = 0,
+  level = "1",
+  skills = [],
+  training = [],
+  interests = [],
+  avatarUrl ,
+  createdAt,
+} = profile || {}; 
 
   return (
     <div className="page-container">
@@ -78,7 +72,7 @@ function ProfilePage() {
           <div className="name">{name}</div>
           <div className="img-container">
             <img
-              src={avatarUrl || "/default-avatar.png"}
+              src={avatarUrl || "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png"}
               alt="Profile"
               className="profile-img"
             />

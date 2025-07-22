@@ -7,7 +7,8 @@ export default function Onboarding() {
   const { user, token, isLoaded } = useAuth();
   const navigate = useNavigate();  
   const [currentStep, setCurrentStep] = useState(1);
-  
+  const { refreshLeaderboard } = useLeaderboard();
+
   // Initialize formData from firebase if available
   const [formData, setFormData] = useState({
     avatarUrl: user?.photoURL || "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
@@ -140,6 +141,7 @@ const handleSubmit = async (e) => {
 
     alert("Profile updated and saved!");
     navigate("/profile");
+    refreshLeaderboard();
   } catch (err) {
     console.error("Failed onboarding process", err);
     alert("Error during onboarding");

@@ -153,6 +153,8 @@ ul{
     max-height: 90px;
     overflow-y: scroll;
     max-width: 200px;
+    scrollbar-color: var(--tertiary-color) var(--primary-color);
+  scrollbar-width: thin;
 }
 
 .full-description {
@@ -165,8 +167,9 @@ ul{
 }
 
 .opportunity-info p {
-        overflow-y: auto;
-
+    overflow-y: auto;
+    scrollbar-color: var(--primary-color) var(--tertiary-color);
+    scrollbar-width: thin;
 }
 
 .save-btn {
@@ -195,3 +198,10 @@ ul{
     color: var(--primary-color);
 }
 
+
+.loading-spinner {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+}

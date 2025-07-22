@@ -5,7 +5,7 @@ function SearchHeader({onSearch}) {
     const [city, setCity] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const handleClick = () => {
-        onSearch(searchTerm);
+        onSearch({ keyword: searchTerm, city });
     };
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {

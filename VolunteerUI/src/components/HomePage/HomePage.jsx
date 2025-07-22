@@ -136,23 +136,7 @@ function HomePage() {
                </div>
             </div>
             </div>
-          <div className="volunteering-media">
-            <img
-              src="https://www.parents.com/thmb/TKfsiYM0mOsnTtYnrOoug95R1fA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-626891352-99af025cafaf4e69a76cb8af44140201.jpg"
-              alt="group of people volunteering"
-              className="volunteering-media-1"
-            />
-            <img
-              src="pexels-shvetsa-5029919.jpghttps://images.pexels.com/photos/5029919/pexels-photo-5029919.jpeg?auto=compress&cs=tinysrgb&h=627&fit=crop&w=1200"
-              alt="group of people volunteering"
-              className="volunteering-media-1"
-            />
-            <img
-              src="https://www.skh.com/wp-content/uploads/2025/01/SKHTreePlantingGuide1-min.jpg"
-              alt="group of people volunteering"
-              className="volunteering-media-1"
-            />
-          </div>
+         
           </div>
         </div>
         </div>

@@ -7,6 +7,7 @@
     "axios": "^1.10.0",
     "clerk": "^0.8.3",
     "express": "^5.1.0",
+    "firebase": "^12.0.0",
     "geocode": "^0.0.3",
     "nodemon": "^3.1.10",
     "prisma": "^6.11.1",

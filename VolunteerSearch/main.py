@@ -9,6 +9,7 @@ import os
 from sentence_transformers import SentenceTransformer, util
 from typing import Optional, List
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
+import torch
 
 # Model loading is okay globally
 model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -23,8 +24,14 @@ async def lifespan(app: FastAPI):
         print(f"✅ Loaded {len(opps)} opportunities")
 
         for opp in opps:
-            opp["text"] = f"{opp.get('name', '')} {opp.get('description', '')} {' '.join(opp.get('tags', []))}"
-
+            opp["text"] = " ".join([
+                str(opp.get("name") or ""),
+                str(opp.get("description") or ""),
+                " ".join(opp.get("tags") or []),
+                str(opp.get("location") or ""),
+                str(opp.get("organization", {}).get("name") or "")
+            ]).strip()
+            
         if os.path.exists(embedding_path):
             with open(embedding_path, "rb") as f:
                 opportunity_vecs = pickle.load(f)
@@ -99,9 +106,11 @@ async def search(request: Request, body: SearchRequest):
     opps = request.app.state.opps
     opportunity_vecs = request.app.state.opportunity_vecs
 
-    user_profile = body.user_profile or UserProfile(**user)
+    user_profile = body.user_profile
     combined_vec = build_user_vector(body.search_prompt, user_profile, opps)
-    vector_scores = util.pytorch_cos_sim(combined_vec, opportunity_vecs).squeeze().tolist()
+    combined_vec_tensor = torch.tensor(combined_vec, dtype=torch.float32)
+    
+    vector_scores = util.pytorch_cos_sim(combined_vec_tensor, opportunity_vecs).squeeze().tolist()
 
     keywords = [word for word in body.search_prompt.lower().split() if word not in ENGLISH_STOP_WORDS]
     keyword_scores = [keyword_match_score(opp, keywords) for opp in opps]
@@ -112,12 +121,9 @@ async def search(request: Request, body: SearchRequest):
 
     recommendations = []
     for i in top_indices[:10]:
-        if opps[i]["id"] not in user_profile["saved_opportunities"]:
-            recommendations.append({
-                "id": opps[i]["id"],
-                "name": opps[i]["name"],
-                "description": opps[i]["description"],
-                "score": final_scores[i],
-            })
+        if opps[i]["id"] not in user_profile.saved_opportunities:
+            rec = dict(opps[i])  # copy all fields of the opportunity
+            rec["score"] = final_scores[i]
+            recommendations.append(rec)
 
     return {"recommendations": recommendations}

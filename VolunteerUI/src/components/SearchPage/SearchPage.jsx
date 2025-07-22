@@ -6,11 +6,16 @@ import './SearchPage.css';
 
 function SearchPage() {
     const [searchResults, setSearchResults] = useState({ keyword: '', city: '' });
+    const [smartResults, setSmartResults] = useState([]); // new
+
     return (
         <div className="search-page">
             <div className="search-page-content">
-                <SearchHeader onSearch={setSearchResults} />
-                <OpportunityGrid searchResults={searchResults} />
+                <SearchHeader onSearch={setSearchResults} onSmartSearch={setSmartResults} />
+                <OpportunityGrid
+                    searchResults={searchResults}
+                    overrideOpportunities={smartResults}
+                />
             </div>
         </div>
     );

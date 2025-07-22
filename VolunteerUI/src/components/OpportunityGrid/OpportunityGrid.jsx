@@ -8,7 +8,7 @@ import { BsBookmark } from "react-icons/bs";
 import { useProfile } from '../../contexts/ProfileContext';
 import { useOpportunity } from '../../contexts/OpportunityContext'; // Import OpportunityContext
 
-function OpportunityGrid({ searchResults }) {
+function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
   const { user } = useAuth();
   const { profile, setProfile } = useProfile();
   const { opportunities, loading, fetchOpportunities } = useOpportunity(); // Use OpportunityContext
@@ -20,6 +20,9 @@ function OpportunityGrid({ searchResults }) {
   // Use profile ID and saved opportunities from context
   const prismaUserId = profile?.id || null;
   const savedOpps = profile?.savedOpportunities?.map((opp) => opp.id) || [];
+  const resultsToShow = (overrideOpportunities && overrideOpportunities.length > 0) 
+    ? overrideOpportunities 
+    : opportunities;
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -98,6 +101,7 @@ useEffect(() => {
       setSavingOppId(null); // done saving
     }
   };
+  console.log("Results to show:", resultsToShow);
 
   return (
     <>
@@ -106,14 +110,14 @@ useEffect(() => {
           <div className="loading-spinner">Loading opportunities...</div>
         ) : (
           <div className="opportunity-grid">
-            {opportunities.map((opportunity) => (
+            {resultsToShow.map((opportunity) => (
               <div key={opportunity.id} className="opportunity-card">
                 <Link to={`/opportunity/${opportunity.id}`}>
                   <div className="card-header">
                     <div className="card-header-left">
                       <h3 className="card-title">{opportunity.name}</h3>
                       <p className="card-org">
-                        {opportunity.organization.name}
+                        {opportunity.organization?.name || "Unknown Organization"}
                       </p>
                     </div>
                   </div>
@@ -139,7 +143,7 @@ useEffect(() => {
                 </Link>
 
                 <div className="card-tags">
-                  {opportunity.tags.map((tag) => (
+                  {opportunity.tags?.map((tag) => (
                     <span key={tag} className="card-tag">
                       {tag}
                     </span>

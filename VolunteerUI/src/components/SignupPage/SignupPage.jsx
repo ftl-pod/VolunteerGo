@@ -38,13 +38,18 @@ function SignupPage() {
   };
 
   return (
-    <div className="auth-page-container">
-      <div className="auth-left">
-        <div className="left-pic">
-          <img
-            src="https://i.postimg.cc/fWvtkTqv/image.jpg"
-            alt="logo-placeholder"
-            className="logo-placeholder"
+    <>
+      <div className="auth-page-container">
+        <div className="auth-left">
+            <div className="left-pic">
+            <img src="https://i.postimg.cc/fWvtkTqv/image.jpg" alt="logo-placeholder" className="logo-placeholder"/>
+          </div> 
+        </div>
+        <div className="auth-right">
+          <div className="w-full h-full flex items-center justify-center">
+          <SignUp 
+            signInUrl="/login"
+            fallbackRedirectUrl="/onboarding" 
           />
         </div>
       </div>
@@ -108,6 +113,7 @@ function SignupPage() {
         </form>
       </div>
     </div>
+    </>
   );
 }
 

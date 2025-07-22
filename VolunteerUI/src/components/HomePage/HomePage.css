@@ -1,182 +1,186 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+html {
+  scroll-behavior: smooth;
+}
+
 .waterfall-media img {
     width: 100%;
-    max-width: 92%;
+    max-width: 95%;
     height: 50vh;
     object-fit: cover;
     border-radius: 16px;
     display: block;
     margin: 2rem auto 2.5rem auto;
   }
-
-  .headline h2 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 3rem;
-    font-weight: 800;
-    color: #3f4a1b;
-    margin-bottom: 1rem;
-    margin-top: 0;
-    line-height: 1.1;
-  }
   
-  .impact-paragraph p {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.25rem;
-    color: #555;
-    margin-bottom: 1.5rem;
-  }
-  
-  .impact-text button {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.7rem;
-    font-weight: 700;
-    background: #6b8576;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 0.6em 2em;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-top: 0.5rem;
-    margin-bottom: 2rem;
-  }
-  
-  .impact-text button:hover {
-    background: #4e665a;
-  }
-  
-  .volunteering-media-1 {
-    width: 100%;
-    max-width: 20rem;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 50%;
-    box-shadow: 0 4px 24px rgba(80, 100, 90, 0.10);
-    border: 4px solid #fafafa;
-    background: #eee;
-    flex: 1;
-  }
-  
-  .impact-section {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin: 0 auto;
+  .imprint {
     width: 95%;
-    max-width: 1200px;
-    gap: 2.5rem;
-    padding: 0 1rem;
-  }
-  
-  .impact-text {
-    max-width: 420px;
-    margin-left: 2rem;
-    margin-top: 1.5rem;
+    height: 7vh;
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    flex: 1;
-    min-width: 300px;
+    align-items: center;
+    justify-self: center;
   }
-  
-  .volunteering-media {
+
+  .imprint-pic {
+    display: flex;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .info-section {
     display: flex;
     flex-flow: row wrap;
-    gap: 1.5rem;
     justify-content: center;
-    align-items: flex-end;
-    margin: 0;
-    flex: 2;
-    min-width: 0; /* Allows the container to shrink */
+    align-items: center;
+    gap:30px;
+    margin-top: 50px;
+ }
+
+ .info-cat {
+  font-size: 22px;
+  transition: color 0.3s ease, font-size 0.3s ease;
+  color: var(--primary-color)
+ }
+
+ .info-cat:hover {
+  color: #4e665a;
+  font-size: 23px;
+ }
+
+ .mission {
+  display: flex;
+  align-items: flex-end;
+  margin-right: 5%;
+  margin-top:80px;
+  flex-direction: column;
+ }
+
+ .mission-text {
+  display: flex;
+  width:60%;
+  height: 35vh;
+  justify-content: center;
+  padding-top: 40px;
+  font-size: large;
+ }
+
+ .about {
+  display: flex;
+  align-items: flex-start;
+  margin-left: 5%;
+  margin-top:80px;
+  flex-direction: column;
+ }
+
+ .about-text {
+  display: flex;
+  width:50%;
+  height: 60vh;
+  flex-direction: column;
+  padding-top: 40px;
+  font-size: large;
+  justify-content: center;
+ }
+
+ .about-pic {
+  display: flex;
+  object-fit: cover;
+  border-radius: 50%;
+  width: 180px;
+  height: 203px;
+ }
+ 
+.pic-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  gap:40px;
+  justify-content: center;
+  align-items: center;
+  margin-top:10px;
+}
+
+.founder-info {
+  width: 100%;
+  height: 20vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-size: small;
+  margin-top:20px;
+}
+ 
+.section-wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+}
+
+.earth-media {
+  margin-top:100px
+}
+
+.org-name {
+  text-shadow: 2px 2px 4px rgba(28, 59, 31, 0.4);
+}
+
+/* animation stuff */
+.squiggly-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.squiggly-line {
+  position: absolute;
+  width: 300%;
+  height: auto;
+  opacity: 0.5;
+  animation: diagonalFloat 6s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 7px rgb(73, 109, 68));
+}
+
+.line-0 {
+  top: -10%;
+  left: -60%;
+  animation-delay: 0s;
+}
+.line-1 {
+  top: 10%;
+  left: -60%;
+  animation-delay: .5s;
+}
+.line-2 {
+  top: 30%;
+  left: -55%;
+  animation-delay: 1s;
+}
+.line-3 {
+  top: 50%;
+  left: -55%;
+  animation-delay: 1.5s;
+}
+.line-4 {
+  top: 70%;
+  left: -60%;
+  animation-delay: 2s;
+}
+
+@keyframes diagonalFloat {
+  0% {
+    transform: translate(0px, 0px) rotate(5deg);
   }
-  
-  /* Tablet breakpoint */
-  @media (max-width: 1024px) {
-    .impact-section {
-      gap: 2rem;
-    }
-    
-    .volunteering-media {
-      gap: 1rem;
-    }
-    
-    .volunteering-media-1 {
-      max-width: 16rem;
-    }
-    
-    .headline h2 {
-      font-size: 2.5rem;
-    }
-    
-    .impact-text {
-      margin-left: 1rem;
-    }
+  50% {
+    transform: translate(100px, 100px) rotate(2deg);
   }
-  
-  /* Mobile breakpoint */
-  @media (max-width: 768px) {
-    .impact-section {
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-      padding: 0 0.5rem;
-    }
-    
-    .impact-text {
-      margin-left: 0;
-      max-width: 100%;
-      align-items: center;
-      text-align: center;
-      min-width: auto;
-    }
-    
-    .volunteering-media {
-      flex-direction: column;
-      align-items: center;
-      margin: 0;
-      gap: 1.5rem;
-      width: 100%;
-    }
-    
-    .volunteering-media-1 {
-      max-width: 18rem;
-    }
-    
-    .headline h2 {
-      font-size: 2.2rem;
-    }
-    
-    .impact-paragraph p {
-      font-size: 1.1rem;
-    }
-    
-    .impact-text button {
-      font-size: 1.5rem;
-    }
+  100% {
+    transform: translate(200px, 200px) rotate(-1deg);
   }
-  
-  /* Small mobile breakpoint */
-  @media (max-width: 480px) {
-    .volunteering-media-1 {
-      max-width: 15rem;
-    }
-    
-    .headline h2 {
-      font-size: 1.8rem;
-    }
-    
-    .impact-paragraph p {
-      font-size: 1rem;
-    }
-    
-    .impact-text button {
-      font-size: 1.3rem;
-      padding: 0.5em 1.5em;
-    }
-    
-    .impact-section {
-      width: 98%;
-    }
-  }
+}

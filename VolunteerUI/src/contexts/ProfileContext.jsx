@@ -1,4 +1,3 @@
-// src/contexts/ProfileContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 
@@ -14,22 +13,30 @@ export function ProfileProvider({ children }) {
 
     try {
       setLoading(true);
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${user.uid}`);
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${user.uid}`, {
+        cache: "no-store",  // prevent caching issues
+      });
       if (!res.ok) throw new Error("Failed to fetch profile");
       const data = await res.json();
       setProfile(data);
     } catch (err) {
       console.error("Error loading profile:", err);
+      setProfile(null); // clear stale profile on error
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    // Reset profile immediately on user/signin change
+    setProfile(null);
+
     if (isSignedIn && isLoaded) {
       fetchProfile();
+    } else {
+      setLoading(false);
     }
-  }, [user, isSignedIn, isLoaded]);
+  }, [user?.uid, isSignedIn, isLoaded]);
 
   return (
     <ProfileContext.Provider value={{ profile, setProfile, loading, refreshProfile: fetchProfile }}>

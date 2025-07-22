@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../firebase";
+import { useProfile } from "../../contexts/ProfileContext";
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -11,23 +12,50 @@ function SignupPage() {
   const [username, setUsername] = useState("");
   const [error, setError] = useState(null);
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    setError(null);
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      // Optional: set displayName in Firebase user profile
-      await updateProfile(userCredential.user, { displayName: username });
+const handleSignup = async (e) => {
+  e.preventDefault();
+  setError(null);
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
 
-      navigate("/onboarding"); // redirect after signup
-    } catch (err) {
-      setError(err.message);
+    const user = userCredential.user;
+
+    await updateProfile(user, { displayName: username });
+
+    const token = await user.getIdToken();
+
+    // POST to backend to create user in DB
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        username: username,
+        firebaseUid: user.uid,
+      }),
+    });
+
+    if (!res.ok) {
+      // Read backend error message for better debugging
+      const errorText = await res.text();
+      throw new Error(`Backend user creation failed: ${errorText}`);
     }
-  };
+
+    // Only redirect after successful user creation
+    navigate("/onboarding");
+
+  } catch (err) {
+    console.error(err);
+    setError(err.message);
+  }
+};
+
 
   return (
     <div className="auth-page-container">

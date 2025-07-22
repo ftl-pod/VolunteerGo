@@ -3,11 +3,14 @@ import { useAuth } from "../../hooks/useAuth";
 import './Onboarding.css'
 import { useNavigate } from "react-router-dom";  
 import { useLeaderboard } from "../../contexts/LeaderboardContext"
+import { useProfile } from "../../contexts/ProfileContext";
+
 export default function Onboarding() {
   const { user, token, isLoaded } = useAuth();
   const navigate = useNavigate();  
   const [currentStep, setCurrentStep] = useState(1);
   const { refreshLeaderboard } = useLeaderboard();
+  const { refreshProfile } = useProfile();
 
   // Initialize formData from firebase if available
   const [formData, setFormData] = useState({
@@ -142,6 +145,7 @@ const handleSubmit = async (e) => {
     alert("Profile updated and saved!");
     navigate("/profile");
     refreshLeaderboard();
+    refreshProfile();
   } catch (err) {
     console.error("Failed onboarding process", err);
     alert("Error during onboarding");

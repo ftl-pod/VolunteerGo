@@ -46,69 +46,29 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
-    try {
-        const { username, password, training, skills, location, age,  avatarUrl} = req.body;
-        if (!username || !password || !Array.isArray(training) || training.length === 0 || !Array.isArray(skills) || skills.length === 0 || !location || !age ) {
-            return res.status(400).json({ error : "Missing required field!" });
-        }
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await prisma.user.create({
-            data : {
-                username,
-                password : hashedPassword, // based off the kudos code 
-                training,
-                skills,
-                location,
-                age,
-                avatarUrl, 
-                // when creating a user, they will have no opportunities initially
-            },
-        })
-        // excluding pass from response
-        const { password: _, ...userWithoutPassword } = user;
-        return res.status(201).json(userWithoutPassword);
-    } catch (error) {
-        console.error("Error creating user:", error);
-        return res.status(500).json({ error : "Internal server error" });
-    }
-};
+  try {
+    const { username, firebaseUid } = req.body;
 
-exports.updateUser = async (req, res) => {
-    try {
-        const userId = Number(req.params.id);
-        const {username, password, training, skills, location, age, opportunities, savedOpportunities, avatarUrl, level} = req.body;
-        if (!username || !password || !Array.isArray(training) || training.length === 0 || !Array.isArray(skills) || skills.length === 0 || !location || typeof age !== 'number') {
-            return res.status(400).json({ error : "Missing required field!" });
-        }
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const updatedUser = await prisma.user.update({
-            where : { id : userId },
-            data : { 
-                username,
-                password: hashedPassword, 
-                training,
-                skills,
-                location,
-                age,
-                avatarUrl,
-                level,
-                // pass in opportunities by arrary of ids : [1,2] -> adding opps 1 & 2
-                opportunities: opportunities?.length
-                ? { connect: opportunities.map(oppId => ({ id: Number(oppId) })) }
-                : undefined,
-
-                savedOpportunities: savedOpportunities?.length
-                ? { connect: savedOpportunities.map(oppId => ({ id: Number(oppId) })) }
-                : undefined,
-            }
-        })
-        // excluding pass from response
-        const { password: _, ...userWithoutPassword } = updatedUser;
-        return res.json(userWithoutPassword);
-    } catch (error) {
-        console.error("Errror updating user:", error);
-        return res.status(500).json({ error: "Internal server error" });
+    // Basic required fields validation
+    if (!username  || !firebaseUid) {
+      return res.status(400).json({ error: "Missing required field!" });
     }
+
+    // Create user with only these fields
+    const user = await prisma.user.create({
+      data: {
+        username,
+        firebaseUid,
+        // other fields remain null or defaults
+      },
+    });
+
+    // Don't return sensitive info (none here, but good habit)
+    return res.status(201).json(user);
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 exports.deleteUser = async (req, res) => {
@@ -166,7 +126,6 @@ exports.getUserByFirebaseUid = async (req, res) => {
 // Send information to database and firebase 
 exports.onboarding = async (req, res) => {
   const firebaseUid = req.user.uid; // comes from token middleware
-  const newRank = await prisma.user.count() + 1;
   const {
     name,
     username,

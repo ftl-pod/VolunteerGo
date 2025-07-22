@@ -19,7 +19,7 @@ router.post("/:id/saved-opportunities/add", controller.addSavedOpportunity);
 // remove saved opportunity for user
 router.post("/:id/saved-opportunities/remove", controller.removeSavedOpportunity);
 // update user 
-router.put("/:id", controller.updateUser);
+// router.put("/:id", controller.updateUser);
 // delete user 
 router.delete("/:id", controller.deleteUser);
 // login user

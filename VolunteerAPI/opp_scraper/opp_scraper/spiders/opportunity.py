@@ -29,7 +29,7 @@ class OpportunitySpider(scrapy.Spider):
     name = "opportunity"
     allowed_domains = ["idealist.org", "volunteermatch.org"]
     start_urls = [
-        f"https://www.idealist.org/en/volunteer-opportunities?page={i}" for i in range(1, 20)
+        f"https://www.idealist.org/en/volunteer-opportunities?page={i}" for i in range(1, 25)
     ]
 
     def parse(self, response):

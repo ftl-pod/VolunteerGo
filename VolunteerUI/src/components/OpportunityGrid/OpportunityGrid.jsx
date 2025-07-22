@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import ApplyModal from '../ApplyModal/ApplyModal';
+import { BsBookmarkFill } from "react-icons/bs";
+import { BsBookmark } from "react-icons/bs";
 import { useProfile } from '../../contexts/ProfileContext';
 import { useOpportunity } from '../../contexts/OpportunityContext'; // Import OpportunityContext
 
@@ -131,7 +133,6 @@ useEffect(() => {
                     </span>
                   ))}
                 </div>
-
                 <div className="card-actions">
                   <button
                     className="btn-primary"
@@ -146,10 +147,10 @@ useEffect(() => {
                   >
                     {savingOppId === opportunity.id
                       ? savedOpps.includes(opportunity.id)
-                        ? "Unsaving..."
-                        : "Saving..."
+                        ? <BsBookmark className="save-icon"/>
+                        : <BsBookmarkFill className="save-icon"/>
                       : savedOpps.includes(opportunity.id)
-                      ? "Saved"
+                      ? <BsBookmarkFill className="save-icon"/>
                       : "Save"}
                   </button>
                 </div>

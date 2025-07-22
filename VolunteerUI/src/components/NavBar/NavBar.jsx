@@ -70,6 +70,9 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-links">
+            <div className="gif-media">
+                <img src="https://i.postimg.cc/6QZjyGQc/organic-ezgif-com-effects.gif" className="gif-media"/>
+            </div>
         <NavLink to="/" className="nav-link">Home</NavLink>
         <NavLink to="/search" className="nav-link">Search</NavLink>
         {isLoaded && isSignedIn && (
@@ -78,7 +81,6 @@ function Navbar() {
         <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
         <NavLink to="/map" className="nav-link">Map</NavLink>
       </div>
-
       <div className="profile-menu">
         {isSignedIn ? (
           <>

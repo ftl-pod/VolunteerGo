@@ -153,17 +153,17 @@ useEffect(() => {
                     I Want to Help
                   </button>
                   <button
-                    className="btn-secondary"
+                    className="save-btn"
                     onClick={(e) => handleSavedClick(e, opportunity.id)}
                     disabled={savingOppId === opportunity.id}
                   >
-                    {savingOppId === opportunity.id
-                      ? savedOpps.includes(opportunity.id)
-                        ? <BsBookmark className="save-icon"/>
-                        : <BsBookmarkFill className="save-icon"/>
-                      : savedOpps.includes(opportunity.id)
-                      ? <BsBookmarkFill className="save-icon"/>
-                      : "Save"}
+                    {
+                      savedOpps.includes(opportunity.id) ? (
+                        <BsBookmarkFill className="save-icon" />
+                      ) : (
+                        <BsBookmark className="save-icon" />
+                      )
+                    }
                   </button>
                 </div>
               </div>

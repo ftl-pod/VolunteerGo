@@ -26,29 +26,9 @@ function SignupPage() {
 
       await updateProfile(user, { displayName: username });
 
-      const token = await user.getIdToken();
+      // Skip backend user creation
 
-      // POST to backend to create user in DB
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          username: username,
-          firebaseUid: user.uid,
-          name: user.displayName || null,
-        }),
-      });
-
-      if (!res.ok) {
-        // Read backend error message for better debugging
-        const errorText = await res.text();
-        throw new Error(`Backend user creation failed: ${errorText}`);
-      }
-
-      // Only redirect after successful user creation
+      // Redirect to onboarding
       navigate("/onboarding");
 
     } catch (err) {
@@ -56,7 +36,6 @@ function SignupPage() {
       setError(err.message);
     }
   };
-
 
   return (
     <div className="auth-page-container">

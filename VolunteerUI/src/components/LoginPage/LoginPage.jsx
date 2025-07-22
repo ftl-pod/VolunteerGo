@@ -34,33 +34,43 @@ function LoginPage() {
       </div>
       <div className="auth-right">
         <form
-          className="w-full h-full flex flex-col items-center justify-center"
           onSubmit={handleLogin}
         >
           <h2>Login</h2>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="username"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="current-password"
-          />
+          {error && <p style={{ color: "white" }}>{error}</p>}
+          
+          <div className="form-field">
+            <label htmlFor="email">Email Address</label>
+            <input
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="username"
+            />
+          </div>
+          
+          <div className="form-field">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+            />
+          </div>
+          
           <button type="submit">Sign In</button>
           <p>
             Don't have an account?{" "}
             <span
               onClick={() => navigate("/signup")}
-              style={{ color: "blue", cursor: "pointer" }}
+              style={{ color: "white", cursor: "pointer" }}
             >
               Sign Up
             </span>

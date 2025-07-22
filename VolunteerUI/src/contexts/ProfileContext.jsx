@@ -9,19 +9,30 @@ export function ProfileProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async () => {
-    if (!user?.uid || !isSignedIn) return;
+    if (!user?.uid || !isSignedIn) {
+      setProfile(null);
+      setLoading(false);
+      return;
+    }
 
     try {
       setLoading(true);
       const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${user.uid}`, {
-        cache: "no-store",  // prevent caching issues
+        cache: "no-store", // prevent caching issues
       });
-      if (!res.ok) throw new Error("Failed to fetch profile");
-      const data = await res.json();
-      setProfile(data);
+
+      if (res.status === 404) {
+        // Profile not found in backend DB yet — not an error, but profile is null
+        setProfile(null);
+      } else if (!res.ok) {
+        throw new Error("Failed to fetch profile");
+      } else {
+        const data = await res.json();
+        setProfile(data);
+      }
     } catch (err) {
       console.error("Error loading profile:", err);
-      setProfile(null); // clear stale profile on error
+      setProfile(null);
     } finally {
       setLoading(false);
     }

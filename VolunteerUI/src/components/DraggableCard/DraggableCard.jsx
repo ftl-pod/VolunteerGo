@@ -2,8 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import '../OpportunityPage/OpportunityPage.css'
 import { useAuth } from "../../hooks/useAuth";
 import { Link } from 'react-router-dom';
-  import ApplyModal from '../ApplyModal/ApplyModal';
-  import { useProfile } from "../../contexts/ProfileContext";
+import ApplyModal from '../ApplyModal/ApplyModal';
+import { useProfile } from "../../contexts/ProfileContext";
 
 const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -22,6 +22,35 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   const savedOpps = profile?.savedOpportunities?.map((opp) => opp.id) || [];
   const [savingOppId, setSavingOppId] = useState(null);
   const [loadingSave, setLoadingSave] = useState({});
+
+  // Function to enhance image URL for better quality
+  const enhanceImageUrl = (url) => {
+    if (!url) return url;
+    try {
+      // Example: remove or increase size parameters like h_180,w_180 to h_600,w_600
+      // Also remove compression parameters like fl_lossy, q_auto for better quality
+      let newUrl = url;
+
+      // Replace height and width parameters to larger values
+      newUrl = newUrl.replace(/h_\\d+/g, 'h_600');
+      newUrl = newUrl.replace(/w_\\d+/g, 'w_600');
+
+      // Remove fl_lossy parameter
+      newUrl = newUrl.replace(/fl_lossy,?/g, '');
+
+      // Remove q_auto parameter
+      newUrl = newUrl.replace(/q_auto,?/g, '');
+
+      // Clean up any double commas or trailing commas
+      newUrl = newUrl.replace(/,,/g, ',');
+      newUrl = newUrl.replace(/,(\.|\/)/g, '$1');
+
+      return newUrl;
+    } catch (error) {
+      console.error('Error enhancing image URL:', error);
+      return url;
+    }
+  };
 
   const handleApplyClick = () => {
     setIsApplyModalOpen(true);
@@ -205,7 +234,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
       <div className ="left-side">
         <div className="opportunity-image">
           <img
-            src={opportunity.imageUrl || "https://picsum.photos/1000/500"}
+            src={enhanceImageUrl(opportunity.imageUrl) || "https://picsum.photos/1000/500"}
             alt="Random image"
             draggable={false}
             loading="lazy"

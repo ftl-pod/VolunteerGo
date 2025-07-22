@@ -49,7 +49,7 @@
 }
 
 .search-button,
-.smart-search-button {
+.smart-search-button, .tag-dropdown {
   padding: 16px 24px;
   font-size: 1rem;
   font-weight: 600;
@@ -87,4 +87,22 @@
 .main-input {
   flex: 1 1 auto;
   min-width: 250px;
+}
+
+
+select {
+  padding-right: 1rem; 
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3e%3cpath fill='black' d='M0 0l5 6 5-6z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px 6px;
+  cursor: pointer;
+  border-radius: 30px;
+  border: 2px solid #ccc;
+  font-size: 1rem;
+  color: var(--text-color);
+  background-color: white;
 }

@@ -12,49 +12,49 @@ function SignupPage() {
   const [username, setUsername] = useState("");
   const [error, setError] = useState(null);
 
-const handleSignup = async (e) => {
-  e.preventDefault();
-  setError(null);
-  try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setError(null);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
-    const user = userCredential.user;
+      const user = userCredential.user;
 
-    await updateProfile(user, { displayName: username });
+      await updateProfile(user, { displayName: username });
 
-    const token = await user.getIdToken();
+      const token = await user.getIdToken();
 
-    // POST to backend to create user in DB
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        username: username,
-        firebaseUid: user.uid,
-      }),
-    });
+      // POST to backend to create user in DB
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          username: username,
+          firebaseUid: user.uid,
+        }),
+      });
 
-    if (!res.ok) {
-      // Read backend error message for better debugging
-      const errorText = await res.text();
-      throw new Error(`Backend user creation failed: ${errorText}`);
+      if (!res.ok) {
+        // Read backend error message for better debugging
+        const errorText = await res.text();
+        throw new Error(`Backend user creation failed: ${errorText}`);
+      }
+
+      // Only redirect after successful user creation
+      navigate("/onboarding");
+
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
     }
-
-    // Only redirect after successful user creation
-    navigate("/onboarding");
-
-  } catch (err) {
-    console.error(err);
-    setError(err.message);
-  }
-};
+  };
 
 
   return (

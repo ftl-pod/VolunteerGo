@@ -123,8 +123,8 @@ function HomePage() {
                <img src="https://i.postimg.cc/xTcnDyGk/futureforce-day-30908-720.jpg" className="about-pic" alt="Ayomide Isinkaye"/>
                <div className="founder-info">
                 <div>Ayomide Isinkaye</div>
-                <div>email</div>
-                <div>university</div>
+                <div>aisinkaye@salesforce.com</div>
+                <div>Huston-Tillotson University</div>
                </div>
             </div>
             <div>

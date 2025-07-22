@@ -2,16 +2,15 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const fs = require("fs");
 const path = require("path");
-const bcrypt = require("bcrypt");
+const admin = require("../VolunteerAPI/firebase/firebaseAdmin.js");
 
 async function seed() {
   try {
     console.log("🌱 Seeding database...\n");
 
-    // Clear existing data (in order due to relations)
+    // Clear existing data
     await prisma.opportunity.deleteMany();
     await prisma.organization.deleteMany();
-    //await prisma.user.deleteMany();
 
     // Load JSON data
     const opportunityData = JSON.parse(
@@ -21,10 +20,6 @@ async function seed() {
     const organizationData = JSON.parse(
       fs.readFileSync(path.join(__dirname, "./data/organizations.json"), "utf8")
     );
-
-    // const userData = JSON.parse(
-    //   fs.readFileSync(path.join(__dirname, "./data/user.json"), "utf8")
-    // );
 
     console.log("📋 Seeding organizations...");
     for (const org of organizationData) {
@@ -38,7 +33,6 @@ async function seed() {
     }
     console.log(`✅ Created ${organizationData.length} organizations`);
 
-    // Fetch all organizations to get their IDs
     const organizations = await prisma.organization.findMany();
 
     console.log("\n🎯 Seeding opportunities...");
@@ -69,7 +63,6 @@ async function seed() {
           location: opportunity.location,
           skills: opportunity.skills,
           imageUrl: opportunity.imageUrl,
-          //volunteersNeeded: opportunity.volunteersNeeded,
           status: opportunity.status,
           points: opportunity.points,
           organizationId: opportunity.organizationId,
@@ -78,27 +71,30 @@ async function seed() {
     }
     console.log(`✅ Created ${opportunityData.length} opportunities`);
 
-    // console.log("\n👤 Seeding users...");
-    // for (let i = 0; i < userData.length; i++) {
-    //   const user = userData[i];
-    //   const hashedPassword = await bcrypt.hash(user.password, 10); // hash pass
-    //   await prisma.user.create({
-    //     data: {
-    //       username: user.username,
-    //       password: hashedPassword,
-    //       skills: user.skills,
-    //       training: user.training,
-    //       location: user.location,
-    //       age: user.age,
-    //       level: user.level ?? 1,
-    //       points: user.points ?? 0,
-    //       leaderboardRank: i + 1, // ensure this is unique and not null
-    //       avatarUrl: user.avatarUrl ??
-    //       "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
-    //     },
-    //   });
-    // }
-    // console.log(`✅ Created ${userData.length} users`);
+    // ✅ Firebase user seeding
+    console.log("\n👤 Seeding users from Firebase Auth...");
+    const { users: firebaseUsers } = await admin.auth().listUsers(1000);
+
+    for (const fbUser of firebaseUsers) {
+      const { uid, email, displayName, photoURL } = fbUser;
+
+      await prisma.user.upsert({
+        where: { firebaseUid: uid },
+        update: {},
+        create: {
+          firebaseUid: uid,
+          username: displayName || email?.split("@")[0] || `user_${uid.slice(0, 6)}`,
+          name: displayName || null,
+          avatarUrl:
+            photoURL ||
+            "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
+          points: 0,
+          level: 1,
+        },
+      });
+    }
+
+    console.log(`✅ Seeded ${firebaseUsers.length} Firebase users`);
 
     console.log("\n🎉 Seeding complete!");
   } catch (err) {

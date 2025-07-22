@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import './Onboarding.css'
 import { useNavigate } from "react-router-dom";  
-
+import { useLeaderboard } from "../../contexts/LeaderboardContext"
 export default function Onboarding() {
   const { user, token, isLoaded } = useAuth();
   const navigate = useNavigate();  

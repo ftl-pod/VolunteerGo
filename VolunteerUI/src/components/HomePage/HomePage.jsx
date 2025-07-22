@@ -36,7 +36,7 @@ function HomePage() {
               className="volunteering-media-1"
             />
             <img
-              src="src/assets/pexels-shvetsa-5029919.jpg"
+              src="pexels-shvetsa-5029919.jpghttps://images.pexels.com/photos/5029919/pexels-photo-5029919.jpeg?auto=compress&cs=tinysrgb&h=627&fit=crop&w=1200"
               alt="group of people volunteering"
               className="volunteering-media-1"
             />

@@ -1,10 +1,11 @@
 import "./HomeHeader.css";
 import { FaRegPaperPlane } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import { useUser, useClerk} from '@clerk/clerk-react';
+import { useAuth } from "../../hooks/useAuth";
 
 function HomeHeader() {
-  const {isSignedIn, isLoaded} = useUser();
+  const { user, loading } = useAuth();
+
   return (
     <div className="home-header">
       <div className="header-left">
@@ -15,21 +16,19 @@ function HomeHeader() {
           <h1>VolunteerGo</h1>
         </div>
       </div>
-      {!isLoaded ? null : isSignedIn ? null : (
-  <div className="buttons-for-access header-right">
-    <NavLink to="/login" className="nav-link">
-      <button className="login">Login</button>
-    </NavLink>
-    <NavLink to="/signup" className="nav-link">
-      <button className="register">Register</button>
-    </NavLink>
-  </div>
-)}
-      
-    </div>
-  
-);
-}
 
+      {loading ? null : !user && (
+        <div className="buttons-for-access header-right">
+          <NavLink to="/login" className="nav-link">
+            <button className="login">Login</button>
+          </NavLink>
+          <NavLink to="/signup" className="nav-link">
+            <button className="register">Register</button>
+          </NavLink>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default HomeHeader;

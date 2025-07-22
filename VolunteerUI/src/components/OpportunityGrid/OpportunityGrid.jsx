@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import ApplyModal from '../ApplyModal/ApplyModal';
+import { BsBookmarkFill } from "react-icons/bs";
+import { BsBookmark } from "react-icons/bs";
 
 function OpportunityGrid({ searchResults }) {
   const { user, isSignedIn, openSignIn } = useUser();
@@ -151,10 +153,11 @@ function OpportunityGrid({ searchResults }) {
                   I Want to Help
                 </button>
                 <button
-                  className="btn-secondary"
+                  className="save-btn"
                   onClick={(e) => handleSavedClick(e, opportunity.id)}
                 >
-                  {savedOpps.includes(opportunity.id) ? "Saved" : "Save"}
+                  {savedOpps.includes(opportunity.id) ? 
+                  <BsBookmarkFill className="save-icon"/> : <BsBookmark className="save-icon"/>}
                 </button>
               </div>
             </div>

@@ -32,6 +32,9 @@ function Navbar() {
                 <NavLink to="/map" className="nav-link">Map</NavLink>
 
             </div>
+            <div className="gif-media">
+                <img src="https://i.postimg.cc/6QZjyGQc/organic-ezgif-com-effects.gif" className="gif-media"/>
+            </div>
 
             <div className="profile-menu">
                 {isLoggedIn ? (

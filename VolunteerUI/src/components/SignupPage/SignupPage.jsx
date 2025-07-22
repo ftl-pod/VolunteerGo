@@ -16,7 +16,7 @@ function SignupPage() {
         </div>
         <div className="auth-right">
           <div className="w-full h-full flex items-center justify-center">
-          <SignUp
+          <SignUp 
             signInUrl="/login"
             fallbackRedirectUrl="/onboarding" 
           />

@@ -38,6 +38,7 @@ function SignupPage() {
         body: JSON.stringify({
           username: username,
           firebaseUid: user.uid,
+          name: user.displayName || null,
         }),
       });
 

@@ -47,7 +47,7 @@ exports.getUserById = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
-    const { username, firebaseUid } = req.body;
+    const { username, firebaseUid, name } = req.body;
 
     // Basic required fields validation
     if (!username  || !firebaseUid) {
@@ -59,6 +59,7 @@ exports.createUser = async (req, res) => {
       data: {
         username,
         firebaseUid,
+        name: name || null, // Optional field
         // other fields remain null or defaults
       },
     });

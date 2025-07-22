@@ -43,6 +43,7 @@ const fetchProfile = async () => {
           body: JSON.stringify({
             firebaseUid: user.uid,
             username: user.displayName || "Anonymous",
+            name: user.displayName || null,
           }),
         }
       );

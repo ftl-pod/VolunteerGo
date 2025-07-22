@@ -61,7 +61,7 @@ function LocationPage() {
     geocodeOpportunities();
   }, [opportunities]);
 
-  if (!isLoaded || !user) {
+  if (!isLoaded) {
     return <div>Loading user data...</div>;
   }
 

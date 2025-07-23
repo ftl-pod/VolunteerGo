@@ -14,11 +14,9 @@ exports.getAll = async (req, res) => {
     }
 
     if (city) {
-        filters.organization = {
-        location: {
+        filters.location = {
             contains: city,
             mode: 'insensitive'
-        }
         };
     }
 

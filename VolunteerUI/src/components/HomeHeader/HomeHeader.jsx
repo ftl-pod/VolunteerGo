@@ -10,7 +10,7 @@ function HomeHeader() {
     <div className="home-header">
       <div className="header-left">
         <div className="logo-placeholder-1">
-          <FaRegPaperPlane />
+          <img src="https://i.postimg.cc/QCP1hvbY/save-ezgif-com-effects.gif" className="earth-media" alt="logo-animation"/>
         </div>
         <div className="org-name">
           <h1>VolunteerGo</h1>

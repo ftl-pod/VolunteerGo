@@ -2,14 +2,16 @@ import "./SearchHeader.css";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import CitySearch from '../CitySearch/CitySearch';
+import { useProfile } from '../../contexts/ProfileContext';
 
 function SearchHeader({onSearch, onSmartSearch, tags = [], selectedTag = '', onTagChange}) {
-    const [city, setCity] = useState(''); // This state needs to be updated by CitySearch
+    const [city, setCity] = useState(''); 
     const [citySuggestions, setCitySuggestions] = useState([]); // This can likely be removed as CitySearch handles its own suggestions
     const [searchTerm, setSearchTerm] = useState('');
     const [tag, setTag] = useState(selectedTag);
     const { user } = useAuth();
-
+    const { profile } = useProfile();
+    
     const handleClick = () => {
         onSearch({ keyword: searchTerm, city, tag });
     };
@@ -21,6 +23,10 @@ function SearchHeader({onSearch, onSmartSearch, tags = [], selectedTag = '', onT
     };
 
     const handleSmartSearch = async () => {
+          if (!profile) {
+            console.error("Profile not loaded yet");
+            return;
+          }
         try {
             console.log("Smart Search triggered");
             const res = await fetch("http://localhost:8000/search", {
@@ -31,11 +37,12 @@ function SearchHeader({onSearch, onSmartSearch, tags = [], selectedTag = '', onT
                 body: JSON.stringify({
                     search_prompt: searchTerm,
                     user_profile: {
-                        skills: ["guitar", "singing"], // TODO: replace with real profile data
-                        training: ["music therapy"],
-                        interests: ["seniors", "health"],
-                        saved_opportunities: [] // TODO: also get from profile
-                    }
+                      skills: profile.skills || ["guitar", "singing"],
+                      training: profile.training || ["music therapy"],
+                      interests: profile.interests || ["seniors", "health", "education"],
+                      saved_opportunities:
+                        profile.savedOpportunities?.map((opp) => opp.id) || [],
+                    },
                 })
             });
 

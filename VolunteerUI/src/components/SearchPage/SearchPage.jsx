@@ -6,7 +6,7 @@ import './SearchPage.css';
 
 function SearchPage() {
   const [searchResults, setSearchResults] = useState({ keyword: '', city: '', tag: '' });
-const [smartResults, setSmartResults] = useState([]);
+  const [smartResults, setSmartResults] = useState([]);
   const { opportunities } = useOpportunity();
 
   // take the unique tags from opportunities by flattening all tags arrays and creating a Set

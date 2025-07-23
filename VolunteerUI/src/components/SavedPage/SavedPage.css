@@ -70,7 +70,7 @@
     align-items: center;
 }
 
-.saved-card-tag {
+.saved-card-tag, .suggested-card-tag {
   background: var(--tertiary-color);
   padding: 4px 8px;
   border-radius: 40px;
@@ -78,14 +78,14 @@
   color: var(--secondary-color);
 }
 
-.saved-card-actions {
+.saved-card-actions, .suggested-card-actions {
   display: flex;
   gap: 10px;
   margin-top: auto;
   justify-content: center;
 }
 
-/* Link styling */
+
 a {
   text-decoration: none;
   color: inherit;

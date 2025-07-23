@@ -270,21 +270,21 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
                 ))}
               </ul>
             </div>
-            <div className="skills">
-              <h2>Skills</h2>
-              <ul className="skills-list">
-                {(
-                  opportunity?.skills || ["Environment", "Community", "Education"]
-                ).map((skill) => (
-                  <li key={skill}>
-                    {skill
-                      .split(" ")
-                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                      .join(" ")}
-                  </li>
-                ))}
-              </ul>
-            </div>
+              {opportunity?.skills && opportunity.skills.length > 0 && (
+                <div className="skills">
+                  <h2>Skills</h2>
+                  <ul className="skills-list">
+                    {opportunity.skills.map((skill) => (
+                      <li key={skill}>
+                        {skill
+                          .split(" ")
+                          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                          .join(" ")}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
           </div>
       </div>
       <div className="opportunity-info">

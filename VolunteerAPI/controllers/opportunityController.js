@@ -56,6 +56,28 @@ exports.getAll = async (req, res) => {
     }
 };
 
+// GET /cities?q=searchTerm
+exports.getCities = async (req, res) => {
+  const { q } = req.query;
+  if (!q) return res.json([]);
+
+  const cities = await prisma.organization.findMany({
+    where: {
+      location: { contains: q, mode: 'insensitive' }
+    },
+    select: {
+      location: true
+    },
+    distinct: ['location'],
+    take: 10,
+  });
+
+  // Parse or clean addresses to extract city names only here
+
+  res.json(cities.map(c => c.location));
+};
+
+
 exports.getById = async (req, res) => {
     const id = Number(req.params.id);
 

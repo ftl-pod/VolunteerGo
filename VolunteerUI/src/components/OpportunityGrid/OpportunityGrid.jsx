@@ -6,20 +6,23 @@ import ApplyModal from '../ApplyModal/ApplyModal';
 import { BsBookmarkFill } from "react-icons/bs";
 import { BsBookmark } from "react-icons/bs";
 import { useProfile } from '../../contexts/ProfileContext';
-import { useOpportunity } from '../../contexts/OpportunityContext'; // Import OpportunityContext
+import { useOpportunity } from '../../contexts/OpportunityContext'; 
 
-function OpportunityGrid({ searchResults }) {
+function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
   const { user } = useAuth();
   const { profile, setProfile } = useProfile();
-  const { opportunities, loading, fetchOpportunities } = useOpportunity(); // Use OpportunityContext
+  const { opportunities, loading, fetchOpportunities } = useOpportunity(); 
 
   const [savingOppId, setSavingOppId] = useState(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
 
-  // Use profile ID and saved opportunities from context
+  // use profile ID and saved opportunities from context
   const prismaUserId = profile?.id || null;
   const savedOpps = profile?.savedOpportunities?.map((opp) => opp.id) || [];
+  const resultsToShow = (overrideOpportunities && overrideOpportunities.length > 0) 
+    ? overrideOpportunities 
+    : opportunities;
 
 
   const formatDate = (dateStr) => {
@@ -40,12 +43,13 @@ function OpportunityGrid({ searchResults }) {
     setIsApplyModalOpen(false);
   };
 
-  // Fetch opportunities when searchResults change
+  // fetch opportunities when searchResults change
 useEffect(() => {
   fetchOpportunities(searchResults);
-}, [searchResults.keyword, searchResults.city, fetchOpportunities]);
+}, [searchResults.keyword, searchResults.city, searchResults.tag, fetchOpportunities]);
 
-  // Handle Save/Unsave logic - update profile context
+  // filtering all the opportunities by tag if tag is selectedddd
+  // handle Save/Unsave logic - update the profile context becuase we need it to be saved in the profile
   const handleSavedClick = async (e, oppId) => {
     e.stopPropagation();
 
@@ -54,7 +58,7 @@ useEffect(() => {
       return;
     }
 
-    setSavingOppId(oppId); // start saving
+    setSavingOppId(oppId); // start savinggg
 
     try {
       const isSaved = savedOpps.includes(oppId);
@@ -99,6 +103,7 @@ useEffect(() => {
       setSavingOppId(null); // done saving
     }
   };
+  console.log("Results to show:", resultsToShow);
 
   return (
     <>
@@ -107,27 +112,35 @@ useEffect(() => {
           <div className="loading-spinner">Loading opportunities...</div>
         ) : (
           <div className="opportunity-grid">
-            {opportunities.map((opportunity) => (
-              <div key={opportunity.id} className="opportunity-card">
-                <Link to={`/opportunity/${opportunity.id}`}>
-                  <div className="card-header">
-                    <div className="card-header-left">
-                      <h3 className="card-title">{opportunity.name}</h3>
-                      <p className="card-org">
-                        {opportunity.organization.name}
-                      </p>
+            {resultsToShow
+              .filter((opportunity) => {
+                if (!searchResults.tag) return true;
+                if (!opportunity.tags) return false;
+                return opportunity.tags.includes(searchResults.tag);
+              })
+              .map((opportunity) => (
+                <div key={opportunity.id} className="opportunity-card">
+                  <Link to={`/opportunity/${opportunity.id}`}>
+                    <div className="card-header">
+                      <div className="card-header-left">
+                        <h3 className="card-title">{opportunity.name}</h3>
+                        <p className="card-org">
+                          {opportunity.organization.name}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="card-details">
-                    <span>{opportunity.location} | </span>
-                    <span>
-                      {opportunity?.date
-                        ? formatDate
-                          ? formatDate(opportunity.date)
-                          : opportunity.date
-                        : "Flexible schedule"}
-                    </span>
-                  </div>
+                    <div className="card-details">
+                      <span>{opportunity.location} | </span>
+                      <span>
+                        {opportunity?.date
+                          ? formatDate
+                            ? formatDate(opportunity.date)
+                            : opportunity.date
+                          : "Flexible schedule"}
+                      </span>
+                    </div>
+         
+
                   <p
                     className="card-description"
                     title={opportunity.description}
@@ -169,9 +182,10 @@ useEffect(() => {
                       )
                     }
                   </button>
+
                 </div>
-              </div>
-            ))}
+                </div>
+              ))}
           </div>
         )}
       </div>

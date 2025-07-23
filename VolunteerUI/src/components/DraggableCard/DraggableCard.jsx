@@ -2,8 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import '../OpportunityPage/OpportunityPage.css'
 import { useAuth } from "../../hooks/useAuth";
 import { Link } from 'react-router-dom';
-  import ApplyModal from '../ApplyModal/ApplyModal';
-  import { useProfile } from "../../contexts/ProfileContext";
+import ApplyModal from '../ApplyModal/ApplyModal';
+import { useProfile } from "../../contexts/ProfileContext";
 
 const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -22,6 +22,8 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   const savedOpps = profile?.savedOpportunities?.map((opp) => opp.id) || [];
   const [savingOppId, setSavingOppId] = useState(null);
   const [loadingSave, setLoadingSave] = useState({});
+
+
 
   const handleApplyClick = () => {
     setIsApplyModalOpen(true);

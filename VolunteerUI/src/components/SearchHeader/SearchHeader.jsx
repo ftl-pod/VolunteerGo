@@ -1,20 +1,44 @@
 import "./SearchHeader.css";
 import { useState } from 'react';
 
-function SearchHeader({ onSearch, tags = [], selectedTag = '', onTagChange }) {
-  const [city, setCity] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [tag, setTag] = useState(selectedTag);
+function SearchHeader({onSearch, onSmartSearch, tags = [], selectedTag = '', onTagChange}) {
+    const [city, setCity] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [tag, setTag] = useState(selectedTag);
 
-  const handleClick = () => {
-    onSearch({ keyword: searchTerm, city, tag });
-  };
+    const handleClick = () => {
+        onSearch({ keyword: searchTerm, city, tag });
+    };
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleClick();
+        }
+    };
+    const handleSmartSearch = async () => {
+    try {
+            console.log("Smart Search triggered");
+        const res = await fetch("http://localhost:8000/search", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            search_prompt: searchTerm,
+            user_profile: {
+            skills: ["guitar", "singing"], // TODO: replace with real profile data
+            training: ["music therapy"],
+            interests: ["seniors", "health"],
+            saved_opportunities: [] // TODO: also get from profile
+            }
+        })
+        });
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleClick();
+        const data = await res.json();
+        onSmartSearch(data.recommendations); // send back to SearchPage
+    } catch (err) {
+        console.error("Smart search failed:", err);
     }
-  };
+    };
 
   const handleTagChange = (e) => {
     const newTag = e.target.value;
@@ -55,7 +79,9 @@ function SearchHeader({ onSearch, tags = [], selectedTag = '', onTagChange }) {
           <button className="search-button" onClick={handleClick}>
             Search
           </button>
-          <button className="smart-search-button">Smart Search</button>
+            <button className="smart-search-button" onClick={handleSmartSearch}>
+                Smart Search
+            </button>
           <select
             className="tag-dropdown"
             value={tag}

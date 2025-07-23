@@ -6,6 +6,7 @@ import './SearchPage.css';
 
 function SearchPage() {
   const [searchResults, setSearchResults] = useState({ keyword: '', city: '', tag: '' });
+const [smartResults, setSmartResults] = useState([]);
   const { opportunities } = useOpportunity();
 
   // take the unique tags from opportunities by flattening all tags arrays and creating a Set
@@ -20,8 +21,12 @@ function SearchPage() {
           tags={uniqueTags}
           selectedTag={searchResults.tag}
           onTagChange={(tag) => setSearchResults((prev) => ({ ...prev, tag }))}
+          onSmartSearch={setSmartResults}
         />
-        <OpportunityGrid searchResults={searchResults} />
+        <OpportunityGrid
+            searchResults={searchResults}
+            overrideOpportunities={smartResults}
+        />
       </div>
     </div>
   );

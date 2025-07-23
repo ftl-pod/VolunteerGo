@@ -8,7 +8,7 @@ import { BsBookmark } from "react-icons/bs";
 import { useProfile } from '../../contexts/ProfileContext';
 import { useOpportunity } from '../../contexts/OpportunityContext'; 
 
-function OpportunityGrid({ searchResults }) {
+function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
   const { user } = useAuth();
   const { profile, setProfile } = useProfile();
   const { opportunities, loading, fetchOpportunities } = useOpportunity(); 
@@ -20,6 +20,9 @@ function OpportunityGrid({ searchResults }) {
   // use profile ID and saved opportunities from context
   const prismaUserId = profile?.id || null;
   const savedOpps = profile?.savedOpportunities?.map((opp) => opp.id) || [];
+  const resultsToShow = (overrideOpportunities && overrideOpportunities.length > 0) 
+    ? overrideOpportunities 
+    : opportunities;
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -99,6 +102,7 @@ useEffect(() => {
       setSavingOppId(null); // done saving
     }
   };
+  console.log("Results to show:", resultsToShow);
 
   return (
     <>
@@ -107,7 +111,7 @@ useEffect(() => {
           <div className="loading-spinner">Loading opportunities...</div>
         ) : (
           <div className="opportunity-grid">
-            {opportunities
+            {resultsToShow
               .filter((opportunity) => {
                 if (!searchResults.tag) return true;
                 if (!opportunity.tags) return false;

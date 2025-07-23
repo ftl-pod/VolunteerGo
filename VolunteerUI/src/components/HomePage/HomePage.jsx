@@ -104,18 +104,19 @@ return (
         </svg>
       ))}
     </div>
-        <div className="info-section">
-          <div className="info-cat">
-            <a href="#mission-statement">Our Mission</a>
-            </div>
-          <div className="info-cat">
-            <NavLink to="/search">Help Now</NavLink></div>
-            <div className="info-cat">
-              <a href="#about-us">About Us</a>
-              </div>
-        </div>
         <div className="section-wrapper">
+
             <div id="mission-statement" className="mission">
+                <div className="info-section">
+              <div className="info-cat">
+                <a href="#mission-statement">Our Mission</a>
+                </div>
+              <div className="info-cat">
+                <NavLink to="/search">Help Now</NavLink></div>
+                <div className="info-cat">
+                  <a href="#about-us">About Us</a>
+                  </div>
+            </div>
           <h1>Our Mission Statement</h1>
           <div className="mission-text">
             Our mission is to inspire and empower individuals from all walks of life to make a meaningful and lasting impact in 

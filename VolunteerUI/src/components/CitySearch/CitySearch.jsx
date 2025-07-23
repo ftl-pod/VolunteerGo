@@ -24,8 +24,8 @@ function CitySearch({ onSelect }) {
         const city = place.address_components.find(c =>
           c.types.includes('locality') || c.types.includes('administrative_area_level_3')
         )?.long_name;
-
         onSelect(city || place.name);
+        console.log("Selected city:", city || place.name);
       });
     });
   }, [onSelect]);

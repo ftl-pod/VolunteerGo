@@ -47,7 +47,7 @@ function SearchHeader({onSearch, onSmartSearch, tags = [], selectedTag = '', onT
             });
 
             const data = await res.json();
-            onSmartSearch(data.recommendations); // send back to SearchPage
+            onSmartSearch(data.recommendations, city);
         } catch (err) {
             console.error("Smart search failed:", err);
         }
@@ -86,9 +86,6 @@ function SearchHeader({onSearch, onSmartSearch, tags = [], selectedTag = '', onT
                         onKeyDown={handleKeyDown}
                     />
 
-                    <button className="search-button" onClick={handleClick}>
-                        Search
-                    </button>
                     <button className="smart-search-button" onClick={handleSmartSearch}>
                         Smart Search
                     </button>

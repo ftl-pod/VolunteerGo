@@ -109,6 +109,7 @@ useEffect(() => {
   .filter((opportunity) => {
     if (!searchResults.tag) return true;
     if (!opportunity.tags) return false;
+    console.log("Smart Search results:", searchResults.city);
     return opportunity.tags.includes(searchResults.tag);
   });
 

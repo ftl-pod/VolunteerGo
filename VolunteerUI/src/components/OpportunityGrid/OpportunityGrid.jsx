@@ -21,6 +21,7 @@ function OpportunityGrid({ searchResults }) {
   const prismaUserId = profile?.id || null;
   const savedOpps = profile?.savedOpportunities?.map((opp) => opp.id) || [];
 
+
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString("en-US", {
@@ -146,12 +147,15 @@ useEffect(() => {
                   ))}
                 </div>
                 <div className="card-actions">
-                  <button
+                    {profile?.opportunities?.some((opp) => opp.id === opportunity.id)
+                        ?(<button
                     className="btn-primary"
-                    onClick={() => handleApplyClick(opportunity)}
-                  >
-                    I Want to Help
-                  </button>
+                  > Applied </button>)
+                        : <button
+                    className="btn-primary"
+                    onClick={() => handleApplyClick(opportunity)}> 
+                    I want to Help </button>
+                    }
                   <button
                     className="save-btn"
                     onClick={(e) => handleSavedClick(e, opportunity.id)}

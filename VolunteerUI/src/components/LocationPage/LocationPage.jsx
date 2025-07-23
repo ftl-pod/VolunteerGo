@@ -7,12 +7,13 @@ import { useNavigate } from "react-router";
 import { MdLocationOn } from "react-icons/md";
 import { useProfile } from "../../contexts/ProfileContext";
 import { useOpportunity } from "../../contexts/OpportunityContext";
+import MapSearch from "../MapSearch/MapSearch"; 
 
 function LocationPage() {
   Geocode.setKey(import.meta.env.VITE_GOOGLE_GEOCODE_API_KEY);
   const [coords, setCoords] = useState([]);
   const [userLatLng, setUserLatLng] = useState({ lat: 37.7749, lng: -122.4194 }); // default SF coords
-
+  const [mapsApiLoaded, setMapsApiLoaded] = useState(false);
   const { user, token, isLoaded } = useAuth();
   const { profile } = useProfile();
   const { opportunities, loading, fetchOpportunities } = useOpportunity();
@@ -71,10 +72,19 @@ function LocationPage() {
 
   return (
     <>
-      <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} onLoad={() => console.log("Google Maps API loaded :)")}>
-        <div className="map-container">
+        <APIProvider
+          apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+          libraries={["places"]}
+          onLoad={() => {
+            console.log("Google Maps API fully loaded ✅");
+            setMapsApiLoaded(true);
+          }}>
+        <div className="map-container" style={{ position: "relative" }}>
+        {mapsApiLoaded && (
+          <MapSearch onPlaceSelect={(coords) => setUserLatLng(coords)} />
+        )}
           <Map
-            key={`${userLatLng.lat}-${userLatLng.lng}`}
+            key={`${userLatLng.lat}-${userLatLng.lng}`} // re-center map when coords change
             mapId={import.meta.env.VITE_GOOGLE_MAP_ID}
             defaultCenter={userLatLng}
             defaultZoom={10}

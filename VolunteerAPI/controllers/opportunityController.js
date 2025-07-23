@@ -61,20 +61,31 @@ exports.getCities = async (req, res) => {
   const { q } = req.query;
   if (!q) return res.json([]);
 
-  const cities = await prisma.organization.findMany({
-    where: {
-      location: { contains: q, mode: 'insensitive' }
-    },
-    select: {
-      location: true
-    },
-    distinct: ['location'],
-    take: 10,
-  });
+  try {
+    const results = await prisma.organization.findMany({
+      where: {
+        location: {
+          contains: q,
+          mode: 'insensitive',
+        },
+      },
+      select: {
+        location: true,
+      },
+      take: 20,
+    });
 
-  // Parse or clean addresses to extract city names only here
+    const cityNames = results.map(({ location }) => {
+      const match = location.match(/([^,]+),\s?[A-Z]{2}/); // captures city before ", CA"
+      return match ? match[1].trim() : null;
+    });
 
-  res.json(cities.map(c => c.location));
+    const uniqueCities = [...new Set(cityNames.filter(Boolean))];
+    res.json(uniqueCities);
+  } catch (err) {
+    console.error("Failed to get cities:", err);
+    res.status(500).json({ error: "Failed to get cities" });
+  }
 };
 
 

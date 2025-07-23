@@ -13,7 +13,6 @@ function CitySearch({ onSelect }) {
 
       const options = {
         types: ['(cities)'],
-        componentRestrictions: { country: 'us' },
       };
 
       const autocomplete = new window.google.maps.places.Autocomplete(input, options);

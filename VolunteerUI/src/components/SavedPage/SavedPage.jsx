@@ -3,6 +3,9 @@ import { useProfile } from '../../contexts/ProfileContext';
 import RemoveModal from '../RemoveModal/RemoveModal';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useOpportunity } from "../../contexts/OpportunityContext"; 
+import { BsBookmarkFill } from "react-icons/bs";
+import { BsBookmark } from "react-icons/bs";
 
 function SavedPage() {
   const { profile, setProfile } = useProfile();
@@ -11,6 +14,9 @@ function SavedPage() {
   const [removing, setRemoving] = useState(false); // loading state
   const [smartSuggestions, setSmartSuggestions] = useState([]);
   const [allSmartSuggestions, setAllSmartSuggestions] = useState([]); // store all the top 15 suggestions for now, might change the value later idk
+  const [savingOppId, setSavingOppId] = useState(null);
+  const { opportunities } = useOpportunity(); 
+  const prismaUserId = profile?.id || null;
 
   const savedOpps = profile?.savedOpportunities || [];
 
@@ -86,6 +92,65 @@ function SavedPage() {
 
     fetchRecommendations();
   }, [profile]);
+
+  const handleSavedClick = async (e, oppId) => {
+    e.stopPropagation();
+    if (!prismaUserId) {
+      console.error("Profile ID not available");
+      return;
+    }
+
+    setSavingOppId(oppId); // start savinggg
+
+    try {
+      const isSaved = savedOpps.includes(oppId);
+      const url = `${
+        import.meta.env.VITE_API_BASE_URL
+      }/users/${prismaUserId}/saved-opportunities/${
+        isSaved ? "remove" : "add"
+      }`;
+      const method = "POST";
+      const body = JSON.stringify({ opportunityId: oppId });
+      const headers = { "Content-Type": "application/json" };
+
+      const res = await fetch(url, { method, headers, body });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      if (data.success) {
+        setProfile((prev) => {
+          if (!prev) return prev;
+
+          if (isSaved) {
+            return {
+              ...prev,
+              savedOpportunities: prev.savedOpportunities.filter(
+                (opp) => opp.id !== oppId
+              ),
+            };
+          } else {
+            const oppToAdd = opportunities.find((opp) => opp.id === oppId);
+            if (!oppToAdd) return prev;
+
+            return {
+              ...prev,
+              savedOpportunities: [...prev.savedOpportunities, oppToAdd],
+            };
+          }
+        });
+      } else {
+        console.error("Failed to update saved opportunities:", data);
+      }
+    } catch (error) {
+      console.error("Error updating saved opportunities:", error);
+    } finally {
+      setSavingOppId(null); // done saving
+    }
+  };
 
   const confirmRemove = async () => {
     if (!oppToRemove || !profile?.id) return;
@@ -184,11 +249,24 @@ function SavedPage() {
                     className="btn-secondary"
                     onClick={() => handleRemoveSuggestion(opportunity)}
                   >
-                    Remove
+                    Not Interested
                   </button>
                   <Link to={`/opportunity/${opportunity.id}`}>
                     <button className="btn-primary">I Want to Help</button>
                   </Link>
+                  <button
+                    className="btn-secondary"
+                    onClick={(e) => handleSavedClick(e, opportunity.id)}
+                    disabled={savingOppId === opportunity.id}
+                  >
+                    {savingOppId === opportunity.id
+                       ? savedOpps.includes(opportunity.id)
+                          ? <BsBookmark className="save-icon"/>
+                          : <BsBookmarkFill className="save-icon"/>
+                        : savedOpps.includes(opportunity.id)
+                        ? <BsBookmarkFill className="save-icon"/>
+                        : "Save"}
+                  </button>
                 </div>
               </div>
             ))

@@ -14,11 +14,12 @@ import torch
 # Model loading is okay globally
 model = SentenceTransformer('all-MiniLM-L6-v2')
 embedding_path = "opportunity_vecs.pkl"
+API_BASE_URL = os.getenv("VITE_API_BASE_URL", "http://localhost:3000")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
-        response = requests.get("http://localhost:3000/opportunities")
+        response = requests.get(f"{API_BASE_URL}/opportunities")
         response.raise_for_status()
         opps = response.json()
         print(f"✅ Loaded {len(opps)} opportunities")

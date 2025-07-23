@@ -184,3 +184,48 @@ html {
     transform: translate(200px, 200px) rotate(-1deg);
   }
 }
+
+.org-name {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.org-name.fade-in {
+  opacity: 1;
+}
+
+.org-name.fade-out {
+  opacity: 0;
+}
+
+/* Glassomorphic background for mission section */
+.mission {
+  position: relative;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Enhanced text readability */
+.mission h1,
+.about h1 {
+  color: rgba(0, 0, 0, 0.9);
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.mission-text,
+.about-text {
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);
+  line-height: 1.6;
+}
+
+/* Optional: Add some spacing to section-wrapper */
+.section-wrapper {
+  padding: 2rem 1rem;
+}

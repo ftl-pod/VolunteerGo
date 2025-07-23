@@ -6,6 +6,8 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 function HomePage() {
   const [orgs, setOrgs] = useState([]);
   const [ranIdx, setRanIdx] = useState(null);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [displayedOrg, setDisplayedOrg] = useState('');
   useEffect (()=> {
     const fetchOrgs = async () => {
       try {
@@ -25,18 +27,38 @@ function HomePage() {
     }
     fetchOrgs();
   }, []); 
-  useEffect( ()=> {
-    if (orgs.length === 0) return;
-    const updateIdx = () => {
-      const idx = Math.floor(Math.random() * orgs.length);
-      setRanIdx(idx);
-    }
-    updateIdx();
-    const intervalId = setInterval(updateIdx, 5000); // every 5 seconds
-    return () => clearInterval(intervalId); // cleanup on unmount
-  }, [orgs]);
-  
-    return (
+    useEffect(() => {
+      if (orgs.length === 0) return;
+      
+      const updateIdx = () => {
+        const idx = Math.floor(Math.random() * orgs.length);
+        const newOrg = orgs[idx];
+        
+        // Only animate if the org actually changes
+        if (newOrg !== displayedOrg) {
+          setIsAnimating(true);
+          
+          // After fade out, update the org and fade back in
+          setTimeout(() => {
+            setDisplayedOrg(newOrg);
+            setRanIdx(idx);
+            setIsAnimating(false);
+          }, 300);
+        }
+      };
+
+      // Set initial org immediately
+      if (!displayedOrg && orgs.length > 0) {
+        const initialIdx = Math.floor(Math.random() * orgs.length);
+        setDisplayedOrg(orgs[initialIdx]);
+        setRanIdx(initialIdx);
+      }
+
+      const intervalId = setInterval(updateIdx, 5000);
+      return () => clearInterval(intervalId);
+    }, [orgs, displayedOrg]);
+
+return (
       <>
         <HomeHeader />
         <div className="waterfall-media">
@@ -44,7 +66,7 @@ function HomePage() {
             src="https://i.postimg.cc/prkQspDb/1-copy-3.jpg"
             alt="waterfall"
           />
-        </div>
+        </div> 
         <div className="imprint">
           <div className="imprint-pic">
             <img src="https://i.postimg.cc/6pqKjnLz/output-onlinepngtools-Photoroom.png" className="imprint-pic"/>
@@ -52,7 +74,9 @@ function HomePage() {
           <div>
             <h2>
               Make Your Mark, Leave a Lasting Imprint with{" "}
-              <span className="org-name">{orgs[ranIdx]}</span>
+              <span className={`org-name ${isAnimating ? 'fade-out' : 'fade-in'}`}>
+                {displayedOrg}
+              </span>
             </h2>
           </div>
         </div>

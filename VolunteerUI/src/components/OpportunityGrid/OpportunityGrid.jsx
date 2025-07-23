@@ -26,6 +26,7 @@ function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
     ? overrideOpportunities 
     : opportunities;
 
+
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString("en-US", {
@@ -152,45 +153,51 @@ useEffect(() => {
                           : "Flexible schedule"}
                       </span>
                     </div>
-                    <p
-                      className="card-description"
-                      title={opportunity.description}
-                    >
-                      {opportunity.description &&
-                      opportunity.description.length > 150
-                        ? opportunity.description.slice(0, 150) + "..."
-                        : opportunity.description}
-                    </p>
-                  </Link>
+         
 
-                  <div className="card-tags">
-                    {opportunity.tags.map((tag) => (
-                      <span key={tag} className="card-tag">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="card-actions">
-                    <button
-                      className="btn-primary"
-                      onClick={() => handleApplyClick(opportunity)}
-                    >
-                      I Want to Help
-                    </button>
-                    <button
-                      className="btn-secondary"
-                      onClick={(e) => handleSavedClick(e, opportunity.id)}
-                      disabled={savingOppId === opportunity.id}
-                    >
-                      {savingOppId === opportunity.id
-                        ? savedOpps.includes(opportunity.id)
-                          ? <BsBookmark className="save-icon"/>
-                          : <BsBookmarkFill className="save-icon"/>
-                        : savedOpps.includes(opportunity.id)
-                        ? <BsBookmarkFill className="save-icon"/>
-                        : "Save"}
-                    </button>
-                  </div>
+                  <p
+                    className="card-description"
+                    title={opportunity.description}
+                  >
+                    {opportunity.description &&
+                    opportunity.description.length > 150
+                      ? opportunity.description.slice(0, 150) + "..."
+                      : opportunity.description}
+                  </p>
+                </Link>
+
+                <div className="card-tags">
+                  {opportunity.tags.map((tag) => (
+                    <span key={tag} className="card-tag">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="card-actions">
+                    {profile?.opportunities?.some((opp) => opp.id === opportunity.id)
+                        ?(<button
+                    className="btn-primary"
+                  > Applied </button>)
+                        : <button
+                    className="btn-primary"
+                    onClick={() => handleApplyClick(opportunity)}> 
+                    I want to Help </button>
+                    }
+                  <button
+                    className="save-btn"
+                    onClick={(e) => handleSavedClick(e, opportunity.id)}
+                    disabled={savingOppId === opportunity.id}
+                  >
+                    {
+                      savedOpps.includes(opportunity.id) ? (
+                        <BsBookmarkFill className="save-icon" />
+                      ) : (
+                        <BsBookmark className="save-icon" />
+                      )
+                    }
+                  </button>
+
+                </div>
                 </div>
               ))}
           </div>

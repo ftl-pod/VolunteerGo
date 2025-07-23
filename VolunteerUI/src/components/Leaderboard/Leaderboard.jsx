@@ -2,7 +2,7 @@ import "./Leaderboard.css";
 import { useLeaderboard } from "../../contexts/LeaderboardContext";
 
 function Leaderboard() {
-  const { users, loading } = useLeaderboard();
+  const { users, loading} = useLeaderboard();
 
   if (loading) {
     return <div className="page"><div className="title">Loading leaderboard...</div></div>;

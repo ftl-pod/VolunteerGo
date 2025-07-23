@@ -4,18 +4,30 @@ import { useAuth } from "../../hooks/useAuth";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useProfile } from "../../contexts/ProfileContext";
+import { useEffect, useState } from 'react';
 
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   const { user, isSignedIn, isLoaded } = useAuth();
-  const { profile, loading } = useProfile();
+  const { profile, loading, refreshProfile } = useProfile();
+  const [showGif, setShowGif] = useState(false)
+  const points =profile?.points;
 
   const handleLogout = async () => {
     await signOut(auth);
     navigate('/login');
   };
+  useEffect(() => {
+  const handleShowGif = () => {
+    setShowGif(true);
+    setTimeout(() => setShowGif(false), 10000); 
+  };
+
+  window.addEventListener("showPointsGif", handleShowGif);
+  return () => window.removeEventListener("showPointsGif", handleShowGif);
+  }, []);
 
   const avatarUrl =
     profile?.avatarUrl ||  // From backend DB (shared context)
@@ -70,9 +82,6 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-links">
-            <div className="gif-media">
-                <img src="https://i.postimg.cc/6QZjyGQc/organic-ezgif-com-effects.gif" className="gif-media"/>
-            </div>
         <NavLink to="/" className="nav-link">Home</NavLink>
         <NavLink to="/search" className="nav-link">Search</NavLink>
         {isLoaded && isSignedIn && (
@@ -81,6 +90,18 @@ function Navbar() {
         <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
         <NavLink to="/map" className="nav-link">Map</NavLink>
       </div>
+      {isLoaded && isSignedIn && (
+        <div className="user-points">
+        <div className="gif-media">
+          {showGif ? 
+           <img src="https://i.postimg.cc/6QZjyGQc/organic-ezgif-com-effects.gif" className="gif-media"/> : 
+           <img src="https://i.postimg.cc/RZbpC6ks/organic-removebg-preview.png" className="gif-media"/>
+           }
+          <div>{points}</div>
+       </div>
+      </div>
+      )}
+      
       <div className="profile-menu">
         {isSignedIn ? (
           <>

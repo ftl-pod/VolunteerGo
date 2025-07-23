@@ -2,6 +2,7 @@ const prisma = require('../db/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const admin = require('../firebase/firebaseAdmin');
+const { connect } = require('../routes/userRoutes');
 
 exports.getAllUsers = async (req, res) => {
     try {
@@ -121,6 +122,24 @@ exports.getUserByFirebaseUid = async (req, res) => {
     console.error("Error fetching user by firebaseUid:", error);
     res.status(500).json({ error: "Internal server error" });
   }
+};
+
+exports.updateUserPoints = async (req, res) => {
+    try {
+        const firebaseUid = req.user.uid;
+        const {points} = req.body;
+        if (!firebaseUid || points === undefined) {
+            return res.status(400).json({ error: "Missing user ID or points value." });
+        }
+        const user = await prisma.user.update ({
+            where : {firebaseUid},
+            data : {points}
+        })
+        res.json({ success: true, user });
+    } catch (error) {
+        console.error("Error Updating User Points ", error);
+        return res.status(500).json({ error: "Failed to update user points." });
+    }
 };
 
 
@@ -254,3 +273,49 @@ exports.removeSavedOpportunity = async (req, res) => {
         return res.status(500).json({ error: "Internal server error" });
     }
 };
+
+exports.getUserOppsById = async (req, res) => {
+    try {
+        const userId = Number(req.params.id)
+        const user = await prisma.user.findUnique({
+            where : {id : userId},
+            include : {opportunities : true},
+        })
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        return res.json(user.opportunities);
+    } catch (error) {
+        console.error("Error Getting User Opportunities: ", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+exports.AddOpportunity = async (req, res) => {
+    try {
+        const userId = Number(req.params.id);
+        const { opportunityId } = req.body;
+        if (!opportunityId) {
+            return res.status(400).json({error : "Opportunity ID is required"})
+        }
+        const user = await prisma.user.findUnique({
+            where : {id : userId},
+            include : {opportunities : true},
+        });
+        if (!user) {
+            return res.status(404).json({error : "User not found"})
+        }
+        const updatedUser = await prisma.user.update({
+            where : {id : userId},
+            data : {opportunities : 
+                {connect : {id : opportunityId},
+                }
+            },
+            include: { opportunities: true },
+        })
+        res.json({ success: true, opportunities: updatedUser.opportunities });
+    } catch (error) {
+        console.error("Error Adding Opportunity: ", error);
+        return res.status(500).json({error : "Internal server error"})
+    }
+}

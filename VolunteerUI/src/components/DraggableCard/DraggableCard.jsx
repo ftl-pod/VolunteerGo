@@ -1,9 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import '../OpportunityPage/OpportunityPage.css'
+import '../DraggableCard/DraggableCard.css'
 import { useAuth } from "../../hooks/useAuth";
 import { Link } from 'react-router-dom';
 import ApplyModal from '../ApplyModal/ApplyModal';
 import { useProfile } from "../../contexts/ProfileContext";
+import { ArrowLeft } from "lucide-react";
+import { getPexelsImage } from "../../utils/getImage";
 
 const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -22,6 +25,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   const savedOpps = profile?.savedOpportunities?.map((opp) => opp.id) || [];
   const [savingOppId, setSavingOppId] = useState(null);
   const [loadingSave, setLoadingSave] = useState({});
+  const [imageUrl, setImageUrl] = useState(null);
 
   // Function to enhance image URL for better quality
   const enhanceImageUrl = (url) => {
@@ -201,6 +205,16 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   };
 
   useEffect(() => {
+    const fetchImage = async () => {
+        const query = opportunity.name || opportunity.tags?.[0] || "volunteering";
+        const fallbackImage = await getPexelsImage(query);
+        setImageUrl(fallbackImage);
+    };
+
+    fetchImage();
+  }, [opportunity]);
+
+  useEffect(() => {
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
@@ -234,7 +248,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
       <div className ="left-side">
         <div className="opportunity-image">
           <img
-            src={enhanceImageUrl(opportunity.imageUrl) || "https://picsum.photos/1000/500"}
+            src={imageUrl || "https://picsum.photos/800/400"}
             alt="Random image"
             draggable={false}
             loading="lazy"
@@ -275,7 +289,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
       </div>
       <div className="opportunity-info">
         <button className="back-button" onClick={() => window.history.back()}>
-          ← Back
+            <ArrowLeft size={16} />  Back
         </button>
         <h1>{opportunity?.name || "Sample Opportunity"}</h1>
         <p className="organization">

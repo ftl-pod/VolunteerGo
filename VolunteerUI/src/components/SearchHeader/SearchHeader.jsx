@@ -1,10 +1,14 @@
 import "./SearchHeader.css";
 import { useState } from 'react';
+import { useProfile } from '../../contexts/ProfileContext';
+
 
 function SearchHeader({onSearch, onSmartSearch, tags = [], selectedTag = '', onTagChange}) {
     const [city, setCity] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [tag, setTag] = useState(selectedTag);
+    const { profile } = useProfile();
+    
 
     const handleClick = () => {
         onSearch({ keyword: searchTerm, city, tag });
@@ -15,22 +19,24 @@ function SearchHeader({onSearch, onSmartSearch, tags = [], selectedTag = '', onT
         }
     };
     const handleSmartSearch = async () => {
+      if (!profile) return;
     try {
             console.log("Smart Search triggered");
         const res = await fetch("http://localhost:8000/search", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             search_prompt: searchTerm,
             user_profile: {
-            skills: ["guitar", "singing"], // TODO: replace with real profile data
-            training: ["music therapy"],
-            interests: ["seniors", "health"],
-            saved_opportunities: [] // TODO: also get from profile
-            }
-        })
+              skills: profile.skills || ["guitar", "singing"],
+              training: profile.training || ["music therapy"],
+              interests: profile.interests || ["seniors", "health", "education"],
+              saved_opportunities:
+                profile.savedOpportunities?.map((opp) => opp.id) || [],
+            },
+          }),
         });
 
         const data = await res.json();

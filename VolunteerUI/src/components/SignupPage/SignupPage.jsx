@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../firebase";
-import { useProfile } from "../../contexts/ProfileContext";
+//import { useProfile } from "../../contexts/ProfileContext";
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -26,8 +26,8 @@ function SignupPage() {
 
       await updateProfile(user, { displayName: username });
 
-      // Skip backend user creation
-
+      //need tp add logic for poiints for signing up here, prolly make a modal or something
+      
       // Redirect to onboarding
       navigate("/onboarding");
 

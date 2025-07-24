@@ -7,6 +7,7 @@ import { BsBookmarkFill } from "react-icons/bs";
 import { BsBookmark } from "react-icons/bs";
 import { useProfile } from '../../contexts/ProfileContext';
 import { useOpportunity } from '../../contexts/OpportunityContext'; 
+import PopupPill from '../PopupPill/PopupPill';
 
 function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
   const { user } = useAuth();
@@ -18,6 +19,8 @@ function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const opportunitiesPerPage = 10;
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showUnsaved, setShowUnsaved] = useState(false);
 
   // use profile ID and saved opportunities from context
   const prismaUserId = profile?.id || null;
@@ -82,11 +85,13 @@ useEffect(() => {
           if (!prev) return prev;
 
           if (isSaved) {
+            setShowUnsaved(true);
             return {
               ...prev,
               savedOpportunities: prev.savedOpportunities.filter((opp) => opp.id !== oppId),
             };
           } else {
+            setShowSuccess(true);
             const oppToAdd = opportunities.find((opp) => opp.id === oppId);
             if (!oppToAdd) return prev;
 
@@ -183,19 +188,21 @@ useEffect(() => {
                     onClick={() => handleApplyClick(opportunity)}> 
                     I want to Help </button>
                     }
-                  <button
-                    className="save-btn"
-                    onClick={(e) => handleSavedClick(e, opportunity.id)}
-                    disabled={savingOppId === opportunity.id}
-                  >
-                    {
-                      savedOpps.includes(opportunity.id) ? (
-                        <BsBookmarkFill className="save-icon" />
+                    <button                     
+                      className={`save-btn ${savingOppId === opportunity.id ? 'loading' : ''}`}                     
+                      onClick={(e) => handleSavedClick(e, opportunity.id)}                     
+                      disabled={savingOppId === opportunity.id}                   
+                    >                     
+                      {savingOppId === opportunity.id ? (
+                        <div className="loading-spinner"></div>
                       ) : (
-                        <BsBookmark className="save-icon" />
-                      )
-                    }
-                  </button>
+                        savedOpps.includes(opportunity.id) ? (
+                          <BsBookmarkFill className="save-icon" />
+                        ) : (
+                          <BsBookmark className="save-icon" />
+                        )
+                      )}                   
+                    </button>
 
                 </div>
                 </div>
@@ -226,6 +233,26 @@ useEffect(() => {
         applicant={user?.firstName || user?.fullName || "Anonymous"}
         opportunity={selectedOpportunity}
       />
+      {/* Saved popup */}
+      <PopupPill
+        message="Volunteer opportunity saved!"
+        type="success"
+        duration={3000}
+        isVisible={showSuccess}
+        onClose={() => setShowSuccess(false)}
+        position="bottom-center"
+      />
+
+      {/* Unsaved popup */}
+      <PopupPill
+        message="Volunteer opportunity unsaved"
+        type="success"
+        duration={3000}
+        isVisible={showUnsaved}
+        onClose={() => setShowUnsaved(false)}
+        position="bottom-center"
+      />
+
     </>
   );
 }

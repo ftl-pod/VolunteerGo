@@ -16,3 +16,22 @@
 .marker-icon:hover {
   transform: scale(1.2);
 }
+
+.map-search-container {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 300px;
+}
+
+.map-search-input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}

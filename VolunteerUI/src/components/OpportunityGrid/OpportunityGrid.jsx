@@ -16,6 +16,8 @@ function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
   const [savingOppId, setSavingOppId] = useState(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const opportunitiesPerPage = 10;
 
   // use profile ID and saved opportunities from context
   const prismaUserId = profile?.id || null;
@@ -103,7 +105,19 @@ useEffect(() => {
       setSavingOppId(null); // done saving
     }
   };
-  console.log("Results to show:", resultsToShow);
+
+  const filteredResults = resultsToShow
+  .filter((opportunity) => {
+    if (!searchResults.tag) return true;
+    if (!opportunity.tags) return false;
+    console.log("Smart Search results:", searchResults.city);
+    return opportunity.tags.includes(searchResults.tag);
+  });
+
+  const totalPages = Math.ceil(filteredResults.length / opportunitiesPerPage);
+  const startIndex = (currentPage - 1) * opportunitiesPerPage;
+  const endIndex = startIndex + opportunitiesPerPage;
+  const currentOpportunities = filteredResults.slice(startIndex, endIndex);
 
   return (
     <>
@@ -112,7 +126,7 @@ useEffect(() => {
           <div className="loading-spinner">Loading opportunities...</div>
         ) : (
           <div className="opportunity-grid">
-            {resultsToShow
+            {currentOpportunities
               .filter((opportunity) => {
                 if (!searchResults.tag) return true;
                 if (!opportunity.tags) return false;
@@ -189,6 +203,22 @@ useEffect(() => {
           </div>
         )}
       </div>
+      <div className="pagination">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
+
 
       <ApplyModal
         isOpen={isApplyModalOpen}

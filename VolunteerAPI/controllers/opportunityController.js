@@ -14,11 +14,9 @@ exports.getAll = async (req, res) => {
     }
 
     if (city) {
-        filters.organization = {
-        location: {
+        filters.location = {
             contains: city,
             mode: 'insensitive'
-        }
         };
     }
 
@@ -55,6 +53,39 @@ exports.getAll = async (req, res) => {
         res.status(500).json({ error: "Failed to fetch opportunities" });
     }
 };
+
+// GET /cities?q=searchTerm
+exports.getCities = async (req, res) => {
+  const { q } = req.query;
+  if (!q) return res.json([]);
+
+  try {
+    const results = await prisma.organization.findMany({
+      where: {
+        location: {
+          contains: q,
+          mode: 'insensitive',
+        },
+      },
+      select: {
+        location: true,
+      },
+      take: 20,
+    });
+
+    const cityNames = results.map(({ location }) => {
+      const match = location.match(/([^,]+),\s?[A-Z]{2}/); // captures city before ", CA"
+      return match ? match[1].trim() : null;
+    });
+
+    const uniqueCities = [...new Set(cityNames.filter(Boolean))];
+    res.json(uniqueCities);
+  } catch (err) {
+    console.error("Failed to get cities:", err);
+    res.status(500).json({ error: "Failed to get cities" });
+  }
+};
+
 
 exports.getById = async (req, res) => {
     const id = Number(req.params.id);

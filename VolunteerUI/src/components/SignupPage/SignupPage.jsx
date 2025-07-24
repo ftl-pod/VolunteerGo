@@ -42,7 +42,7 @@ function SignupPage() {
       <div className="auth-left">
         <div className="left-pic">
           <img
-            src="https://i.postimg.cc/fWvtkTqv/image.jpg"
+            src="https://i.postimg.cc/LsgmDdpv/1-copy-2.jpg"
             alt="logo-placeholder"
             className="logo-placeholder"
           />

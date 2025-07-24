@@ -22,7 +22,7 @@ function Navbar() {
   useEffect(() => {
   const handleShowGif = () => {
     setShowGif(true);
-    setTimeout(() => setShowGif(false), 10000); 
+    setTimeout(() => setShowGif(false), 3000); 
   };
 
   window.addEventListener("showPointsGif", handleShowGif);

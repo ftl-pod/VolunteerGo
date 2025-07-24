@@ -115,8 +115,8 @@ function HomePage() {
               <img src="https://i.postimg.cc/Vv9MYPPR/img-5175-720.jpg" className="about-pic" alt="Jasmine Andresol"/>
               <div className="founder-info">
                 <div>Jasmine Andresol</div>
-                <div>email</div>
-                <div>university</div>
+                <div>jandresol@salesforce.com</div>
+                <div>Harvard University</div>
               </div>
             </div>
             <div>

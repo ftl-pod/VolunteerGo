@@ -258,6 +258,7 @@
 }
 
 .s2-content > div {
+  min-height: fit-content; 
   background: var(--primary-color);
   color: white;
   padding: 12px 20px;

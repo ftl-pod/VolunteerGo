@@ -6,8 +6,6 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 function HomePage() {
   const [orgs, setOrgs] = useState([]);
   const [ranIdx, setRanIdx] = useState(null);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [displayedOrg, setDisplayedOrg] = useState('');
   useEffect (()=> {
     const fetchOrgs = async () => {
       try {
@@ -27,38 +25,18 @@ function HomePage() {
     }
     fetchOrgs();
   }, []); 
-    useEffect(() => {
-      if (orgs.length === 0) return;
-      
-      const updateIdx = () => {
-        const idx = Math.floor(Math.random() * orgs.length);
-        const newOrg = orgs[idx];
-        
-        // Only animate if the org actually changes
-        if (newOrg !== displayedOrg) {
-          setIsAnimating(true);
-          
-          // After fade out, update the org and fade back in
-          setTimeout(() => {
-            setDisplayedOrg(newOrg);
-            setRanIdx(idx);
-            setIsAnimating(false);
-          }, 300);
-        }
-      };
-
-      // Set initial org immediately
-      if (!displayedOrg && orgs.length > 0) {
-        const initialIdx = Math.floor(Math.random() * orgs.length);
-        setDisplayedOrg(orgs[initialIdx]);
-        setRanIdx(initialIdx);
-      }
-
-      const intervalId = setInterval(updateIdx, 5000);
-      return () => clearInterval(intervalId);
-    }, [orgs, displayedOrg]);
-
-return (
+  useEffect( ()=> {
+    if (orgs.length === 0) return;
+    const updateIdx = () => {
+      const idx = Math.floor(Math.random() * orgs.length);
+      setRanIdx(idx);
+    }
+    updateIdx();
+    const intervalId = setInterval(updateIdx, 5000); // every 5 seconds
+    return () => clearInterval(intervalId); // cleanup on unmount
+  }, [orgs]);
+  
+    return (
       <>
         <HomeHeader />
         <div className="waterfall-media">
@@ -66,7 +44,7 @@ return (
             src="https://i.postimg.cc/prkQspDb/1-copy-3.jpg"
             alt="waterfall"
           />
-        </div> 
+        </div>
         <div className="imprint">
           <div className="imprint-pic">
             <img src="https://i.postimg.cc/6pqKjnLz/output-onlinepngtools-Photoroom.png" className="imprint-pic"/>
@@ -74,9 +52,7 @@ return (
           <div>
             <h2>
               Make Your Mark, Leave a Lasting Imprint with{" "}
-              <span className={`org-name ${isAnimating ? 'fade-out' : 'fade-in'}`}>
-                {displayedOrg}
-              </span>
+              <span className="org-name">{orgs[ranIdx]}</span>
             </h2>
           </div>
         </div>
@@ -104,19 +80,18 @@ return (
         </svg>
       ))}
     </div>
-        <div className="section-wrapper">
-
-            <div id="mission-statement" className="mission">
-                <div className="info-section">
-              <div className="info-cat">
-                <a href="#mission-statement">Our Mission</a>
-                </div>
-              <div className="info-cat">
-                <NavLink to="/search">Help Now</NavLink></div>
-                <div className="info-cat">
-                  <a href="#about-us">About Us</a>
-                  </div>
+        <div className="info-section">
+          <div className="info-cat">
+            <a href="#mission-statement">Our Mission</a>
             </div>
+          <div className="info-cat">
+            <NavLink to="/search">Help Now</NavLink></div>
+            <div className="info-cat">
+              <a href="#about-us">About Us</a>
+              </div>
+        </div>
+        <div className="section-wrapper">
+            <div id="mission-statement" className="mission">
           <h1>Our Mission Statement</h1>
           <div className="mission-text">
             Our mission is to inspire and empower individuals from all walks of life to make a meaningful and lasting impact in 
@@ -140,8 +115,8 @@ return (
               <img src="https://i.postimg.cc/Vv9MYPPR/img-5175-720.jpg" className="about-pic" alt="Jasmine Andresol"/>
               <div className="founder-info">
                 <div>Jasmine Andresol</div>
-                <div>email</div>
-                <div>university</div>
+                <div>jandresol@salesforce.com</div>
+                <div>Harvard University</div>
               </div>
             </div>
             <div>

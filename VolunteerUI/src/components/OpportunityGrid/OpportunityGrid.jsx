@@ -10,7 +10,7 @@ import { useOpportunity } from '../../contexts/OpportunityContext';
 import PopupPill from '../PopupPill/PopupPill';
 
 function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
-  const { user } = useAuth();
+  const { user, isSignedIn } = useAuth();
   const { profile, setProfile } = useProfile();
   const { opportunities, loading, fetchOpportunities } = useOpportunity(); 
 
@@ -21,6 +21,8 @@ function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
   const opportunitiesPerPage = 10;
   const [showSuccess, setShowSuccess] = useState(false);
   const [showUnsaved, setShowUnsaved] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSave, setShowSave] = useState(false);
 
   // use profile ID and saved opportunities from context
   const prismaUserId = profile?.id || null;
@@ -185,12 +187,12 @@ useEffect(() => {
                   > Applied </button>)
                         : <button
                     className="btn-primary"
-                    onClick={() => handleApplyClick(opportunity)}> 
+                    onClick={() => {handleApplyClick(opportunity), setShowLogin(true)}}> 
                     I want to Help </button>
                     }
                     <button                     
                       className={`save-btn ${savingOppId === opportunity.id ? 'loading' : ''}`}                     
-                      onClick={(e) => handleSavedClick(e, opportunity.id)}                     
+                      onClick={(e) => {handleSavedClick(e, opportunity.id), setShowSave(true)}}                     
                       disabled={savingOppId === opportunity.id}                   
                     >                     
                       {savingOppId === opportunity.id ? (
@@ -226,13 +228,13 @@ useEffect(() => {
         </button>
       </div>
 
-
-      <ApplyModal
+        {isSignedIn ? <ApplyModal
         isOpen={isApplyModalOpen}
         onClose={handleCloseModal}
         applicant={user?.firstName || user?.fullName || "Anonymous"}
         opportunity={selectedOpportunity}
-      />
+        /> : null}
+
       {/* Saved popup */}
       <PopupPill
         message="Volunteer opportunity saved!"
@@ -250,6 +252,26 @@ useEffect(() => {
         duration={3000}
         isVisible={showUnsaved}
         onClose={() => setShowUnsaved(false)}
+        position="bottom-center"
+      />
+
+      {/* login popup */}
+      <PopupPill
+        message="Please Login To Apply"
+        type="warning"
+        duration={3000}
+        isVisible={showLogin}
+        onClose={() => setShowLogin(false)}
+        position="bottom-center"
+      />
+
+      {/* save popup -> not logged in */}
+      <PopupPill
+        message="Please Login To Save"
+        type="warning"
+        duration={3000}
+        isVisible={showSave}
+        onClose={() => setShowSave(false)}
         position="bottom-center"
       />
 

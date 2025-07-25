@@ -1,26 +1,27 @@
 import "./ProfilePage.css";
 import { IoLocationSharp, IoCalendarSharp } from "react-icons/io5";
-import { MdCake } from "react-icons/md";
+import { MdCake, MdEmojiEvents } from "react-icons/md";
 import { GiThreeLeaves } from "react-icons/gi";
-import { FaBarsProgress, FaFireFlameCurved } from "react-icons/fa6";
-import { BsBookmarkHeartFill } from "react-icons/bs";
+import { FaBarsProgress, FaFireFlameCurved, FaMedal, FaTrophy, FaStar } from "react-icons/fa6";
+import { BsBookmarkHeartFill, BsAwardFill } from "react-icons/bs";
 import { TbTargetArrow } from "react-icons/tb";
 import { PiCertificateFill } from "react-icons/pi";
 import { BiSolidDonateHeart } from "react-icons/bi";
 import { useAuth } from "../../hooks/useAuth";
-import { useProfile } from "../../contexts/ProfileContext"; // Import profile context
+import { useProfile } from "../../contexts/ProfileContext";
 import { useNavigate } from "react-router-dom";
-import { useLeaderboard } from "../../contexts/LeaderboardContext"; // Import leaderboard context
+import { useLeaderboard } from "../../contexts/LeaderboardContext";
 import { useEffect, useState } from "react";
 
 function ProfilePage() {
-  const [orgs, setOrgs] = useState([]);
+  const [activeTab, setActiveTab] = useState('overview');
   const { user, isLoaded } = useAuth();
-  const { profile, loading, error } = useProfile(); // Use context for profile data, loading, and error
+  const { profile, loading, error } = useProfile();
   const navigate = useNavigate();
   const { users = [] } = useLeaderboard();
   const currentUser = users.find(u => u.firebaseUid === user?.uid);
   const leaderboardRank = currentUser?.leaderboardRank;
+
   if (!user) {
     return (
       <div className="page-container">
@@ -51,82 +52,42 @@ function ProfilePage() {
     );
   }
 
-
   // Destructure profile fields
-const {
-  location,
-  name = user?.displayName || "Unnamed User",
-  age,
-  points = 0,
-  level = "1",
-  skills = [],
-  training = [],
-  interests = [],
-  avatarUrl ,
-  createdAt,
-  opportunities,
-} = profile || {}; 
+  const {
+    location,
+    name = user?.displayName || "Unnamed User",
+    age,
+    points = 0,
+    level = "1",
+    skills = [],
+    training = [],
+    interests = [],
+    avatarUrl,
+    createdAt,
+    opportunities,
+  } = profile || {};
 
-let opps = [];
+  let opps = [];
+  if (isLoaded && Array.isArray(opportunities)) {
+    opps = opportunities.map((o) => o.name);
+  }
 
-if (isLoaded && Array.isArray(opportunities)) {
-  opps = opportunities.map((o) => o.name);
-}
-console.log(opps)
-  return (
-    <div className="page-container">
-      <div className="section">
-        <div className="profile">
-          <div className="name">{name}</div>
-          <div className="img-container">
-            <img
-              src={avatarUrl || "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png"}
-              alt="Profile"
-              className="profile-img"
-            />
-          </div>
-          <div className="bio">
-            <div className="info">
-              <div>
-                <IoLocationSharp className="icon" />
-                <b>Location</b>
-              </div>
-              <div>
-                <MdCake className="icon" />
-                <b>Age</b>
-              </div>
-              <div>
-                <GiThreeLeaves className="icon" />
-                <b>Points</b>
-              </div>
-              <div>
-                <FaBarsProgress className="icon" />
-                <b>Level</b>
-              </div>
-              <div>
-                <IoCalendarSharp className="icon" />
-                <b>Joined</b>
-              </div>
-            </div>
-            <div className="info">
-              <div>{location || "Not set"}</div>
-              <div>{age || "Unknown"}</div>
-              <div>{points || 0}</div>
-              <div>{level || "1"}</div>
-              <div>
-                {createdAt ? new Date(createdAt).toLocaleDateString() : "N/A"}
-              </div>
-            </div>
-          </div>
-          <button
-            className="btn-primary profile-button"
-            onClick={() => navigate("/onboarding")}
-          >
-            Edit Profile
-          </button>
-        </div>
-      </div>
+  // Mock badges data - replace with actual badge data from your backend
+  const badges = [
+    { id: 1, name: "First Volunteer", icon: FaMedal, color: "#63806f", earned: true },
+    { id: 2, name: "Community Helper", icon: FaTrophy, color: "#86654b", earned: true },
+    { id: 3, name: "Rising Star", icon: FaStar, color: "#3f4a1b", earned: points > 100 },
+    { id: 4, name: "Dedicated Volunteer", icon: BsAwardFill, color: "#63806f", earned: opps.length >= 5 },
+    { id: 5, name: "Top Contributor", icon: MdEmojiEvents, color: "#86654b", earned: leaderboardRank <= 10 },
+    { id: 6, name: "Skill Master", icon: FaStar, color: "#3f4a1b", earned: skills.length >= 3 }
+  ];
 
+  const earnedBadges = badges.filter(badge => badge.earned);
+  const lockedBadges = badges.filter(badge => !badge.earned);
+
+  const renderOverview = () => (
+    <>
+    <div className="section-grid">
       <div className="section">
         <div className="box">
           <div className="box-header">
@@ -142,35 +103,35 @@ console.log(opps)
           </div>
         </div>
 
-        <div className="box">
-          <div className="box-header">
-            <TbTargetArrow className="icon" />
-            <b>Skills</b>
-          </div>
-          <div className="box-content">
-            {skills.length ? (
-              skills.map((skill, index) => <div key={index}>{skill}</div>)
-            ) : (
-              <div>No skills listed.</div>
-            )}
-          </div>
+      <div className="box">
+        <div className="box-header">
+          <TbTargetArrow className="icon" />
+          <b>Skills</b>
         </div>
-
-        <div className="box">
-          <div className="box-header">
-            <PiCertificateFill className="icon" />
-            <b>Certifications</b>
-          </div>
-          <div className="box-content">
-            {training.length ? (
-              training.map((t, index) => <div key={index}>{t}</div>)
-            ) : (
-              <div>No certifications listed.</div>
-            )}
-          </div>
+        <div className="box-content">
+          {skills.length ? (
+            skills.map((skill, index) => <div key={index}>{skill}</div>)
+          ) : (
+            <div>No skills listed.</div>
+          )}
         </div>
       </div>
 
+      <div className="box">
+        <div className="box-header">
+          <PiCertificateFill className="icon" />
+          <b>Certifications</b>
+        </div>
+        <div className="box-content">
+          {training.length ? (
+            training.map((t, index) => <div key={index}>{t}</div>)
+          ) : (
+            <div>No certifications listed.</div>
+          )}
+        </div>
+      </div>
+
+      </div>
       <div className="section">
         <div className="box">
           <div className="box-header">
@@ -184,13 +145,139 @@ console.log(opps)
           </div>
         </div>
 
-        <div className="section2">
-          <div className="s2-header">
+        <div className="box org-box">
+          <div className="box-header">
             <BiSolidDonateHeart className="icon" />
             <b>You Have Made A Difference With</b>
           </div>
-          <div className="s2-content">
+          <div className="box-content">
             {opps.map((name, index) => (<div key={index}> {name} </div>))}
+          </div>
+      </div>
+      </div>
+      </div>
+    </>
+  );
+
+  const renderBadges = () => (
+    <div className="badges-container">
+      <div className="badges-section">
+        <h3>Earned Badges ({earnedBadges.length})</h3>
+        <div className="badges-grid">
+          {earnedBadges.map((badge) => {
+            const IconComponent = badge.icon;
+            return (
+              <div key={badge.id} className="badge earned">
+                <div className="badge-icon" style={{ color: badge.color }}>
+                  <IconComponent />
+                </div>
+                <div className="badge-name">{badge.name}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="badges-section">
+        <h3>Locked Badges ({lockedBadges.length})</h3>
+        <div className="badges-grid">
+          {lockedBadges.map((badge) => {
+            const IconComponent = badge.icon;
+            return (
+              <div key={badge.id} className="badge locked">
+                <div className="badge-icon">
+                  <IconComponent />
+                </div>
+                <div className="badge-name">{badge.name}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="page-container">
+      <div className="profile-layout">
+        {/* Left Side - Profile */}
+        <div className="profile-sidebar">
+          <div className="profile">
+            <div className="name">{name}</div>
+            <div className="img-container">
+              <img
+                src={avatarUrl || "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png"}
+                alt="Profile"
+                className="profile-img"
+              />
+            </div>
+            <div className="bio">
+              <div className="info">
+                <div>
+                  <IoLocationSharp className="icon" />
+                  <b>Location</b>
+                </div>
+                <div>
+                  <MdCake className="icon" />
+                  <b>Age</b>
+                </div>
+                <div>
+                  <GiThreeLeaves className="icon" />
+                  <b>Points</b>
+                </div>
+                <div>
+                  <FaBarsProgress className="icon" />
+                  <b>Level</b>
+                </div>
+                <div>
+                  <IoCalendarSharp className="icon" />
+                  <b>Joined</b>
+                </div>
+              </div>
+              <div className="info">
+                <div>{location || "Not set"}</div>
+                <div>{age || "Unknown"}</div>
+                <div>{points || 0}</div>
+                <div>{level || "1"}</div>
+                <div>
+                  {createdAt ? new Date(createdAt).toLocaleDateString() : "N/A"}
+                </div>
+              </div>
+            </div>
+            <button
+              className="btn-primary profile-button"
+              onClick={() => navigate("/onboarding")}
+            >
+              Edit Profile
+            </button>
+          </div>
+        </div>
+
+        <div className="profile-content">
+          {/* Navigation Tabs */}
+          <div className="profile-nav">
+            <button
+              className={`nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
+              onClick={() => setActiveTab('overview')}
+            >
+              Overview
+            </button>
+            <button
+              className={`nav-tab ${activeTab === 'badges' ? 'active' : ''}`}
+              onClick={() => setActiveTab('badges')}
+            >
+              Badges
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          <div className="tab-content">
+            {activeTab === 'overview' && (
+              <div className="section">
+                {renderOverview()}
+              </div>
+            )}
+            {activeTab === 'badges' && renderBadges()}
           </div>
         </div>
       </div>

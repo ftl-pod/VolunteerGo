@@ -92,20 +92,22 @@ function Navbar() {
         <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
         <NavLink to="/map" className="nav-link">Map</NavLink>
       </div>
-      <ProgressBar points={points} size="small"/>
-      {isLoaded && isSignedIn && (
-        <div className="user-points">
-        <div className="gif-media">
-          {showGif ? 
-           <img src="https://i.postimg.cc/6QZjyGQc/organic-ezgif-com-effects.gif" className="gif-media"/> : 
-           <img src="https://i.postimg.cc/RZbpC6ks/organic-removebg-preview.png" className="gif-media"/>
-           }
-          <div>{points}</div>
-       </div>
+      <div className="navbar-right">
+        {isLoaded && isSignedIn && (
+          <div className="user-points">
+          <div className="gif-media">
+            {showGif ? 
+            <img src="https://i.postimg.cc/6QZjyGQc/organic-ezgif-com-effects.gif" className="gif-media"/> : 
+            <img src="https://i.postimg.cc/RZbpC6ks/organic-removebg-preview.png" className="gif-media"/>
+            }
+            <div>{points}</div>
+        </div>
+        </div>
+        )}
+              <ProgressBar points={points} size="small"/>
+        <div className="profile-menu">
       </div>
-      )}
-      
-      <div className="profile-menu">
+
         {isSignedIn ? (
           <>
             <NavLink to="/profile" className="profile-icon">

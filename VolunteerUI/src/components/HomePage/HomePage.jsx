@@ -2,7 +2,7 @@ import HomeHeader from "../HomeHeader/HomeHeader"
 import "./HomePage.css"
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-
+import HomeHero from "../HomeHero/HomeHero";
 function HomePage() {
   const [orgs, setOrgs] = useState([]);
   const [ranIdx, setRanIdx] = useState(null);
@@ -40,12 +40,13 @@ function HomePage() {
       <>
         <HomeHeader />
         <div className="home-page">
-        <div className="waterfall-media">
+        <HomeHero/>
+        {/* <div className="waterfall-media">
           <img
             src="https://i.postimg.cc/prkQspDb/1-copy-3.jpg"
             alt="waterfall"
           />
-        </div>
+        </div> */}
         <div className="imprint">
           <div className="imprint-pic">
             <img src="https://i.postimg.cc/6pqKjnLz/output-onlinepngtools-Photoroom.png" className="imprint-pic"/>

@@ -33,7 +33,7 @@ const PopupPill = ({
         return '⚠';
       case 'info':
       default:
-        return '✓';
+        return 'ℹ';
     }
   };
 

@@ -27,4 +27,7 @@ router.delete("/:id", controller.deleteUser); // delete user
 
 router.post("/onboarding", verifyFirebaseToken, controller.onboarding); // login user
 
+router.post('/send-confirmation-email', verifyFirebaseToken, controller.sendApplicationConfirmation);
+
+
 module.exports = router;

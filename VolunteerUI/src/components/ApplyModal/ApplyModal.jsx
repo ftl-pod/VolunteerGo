@@ -9,11 +9,13 @@ import './ApplyModal.css';
 
 function ApplyModal({ isOpen, onClose, applicant, opportunity}) {
   const [message, setMessage] = useState('');
+  const [name, setName] = useState("")
   const { profile, loading, refreshProfile } = useProfile();
   const { user, token, isLoaded } = useAuth();
   const points = profile?.points;
   const prismaUserId = profile?.id || null;
   const { refreshLeaderboard } = useLeaderboard();
+
  
   
   const handleSubmit = async (e) => {
@@ -45,6 +47,27 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity}) {
       const pointsData = await pointsRes.json();
       await refreshProfile();
       await refreshLeaderboard();
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/send-confirmation-email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,  // your auth token here
+      },
+      body: JSON.stringify({
+        to: user.email, 
+        subject: 'VolunteerGo Application Confirmation!',
+        text: `Thank you for serving the community and making your mark! We have sent this over to ${opportunity.organization?.name}, they will reach out to you via the email associated with your account. 
+              Here is a copy of your VolunteerGo application: ${message} Thank you from VolunteerGo — the platform where you do good and level up!`,
+        html: `
+              <p>Thank you for serving the community and making your mark!</p>
+              <p>We have sent this over to <strong>${opportunity.organization?.name}</strong>, they will reach out to you via the email associated with your account.</p>
+              <p>Here is a copy of your VolunteerGo application:</p>
+              <p>${message}</p>
+              <br />
+              <p>Thank you from VolunteerGo — the platform where you do good and level up!</p>
+            `
+      }),
+    });
     } catch (error) {
       console.error("Error Submitting Application", error)
     };
@@ -57,9 +80,11 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity}) {
         opportunityId: opportunity?.id,
         opportunityName: opportunity?.name,
         organization: opportunity?.organization?.name,
-        message: message.trim()
+        message: message.trim(),
+        name : name.trim()
       });
       setMessage('');
+      setName('');
     }
   };
 
@@ -94,6 +119,7 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity}) {
           <div className="form-group">
             <label>Applicant:</label>
             <input
+              onChange={(e) => setName(e.target.value)}
               placeholder='Enter your name...'
               type="text"
               className="form-input"

@@ -23,6 +23,7 @@
   "dependencies": {
     "@clerk/express": "^1.7.9",
     "@prisma/client": "^6.11.1",
+    "@sendgrid/mail": "^8.1.5",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",

@@ -92,6 +92,7 @@ function Navbar() {
         <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
         <NavLink to="/map" className="nav-link">Map</NavLink>
       </div>
+      <ProgressBar points={points} size="small"/>
       {isLoaded && isSignedIn && (
         <div className="user-points">
         <div className="gif-media">

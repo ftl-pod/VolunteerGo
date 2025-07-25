@@ -286,7 +286,7 @@ min-height: 100%;}
 
 .badge.earned {
   background: white;
-  border-color: var(--primary-color);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
 .badge.earned:hover {
@@ -381,4 +381,8 @@ min-height: 100%;}
     grid-template-columns: 1fr;
   }
 
+}
+
+.badge-img.locked-img {
+  filter: grayscale(100%) opacity(0.5);
 }

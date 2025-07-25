@@ -121,7 +121,7 @@ const badges = [
     name: "Newcomer Badge",
     image: "https://i.postimg.cc/4mLJ701P/7-removebg-preview.png",
     color: "#b4aee8",
-    earned: true
+    earned: false
   }
 ];
 
@@ -206,38 +206,29 @@ const badges = [
       <div className="badges-section">
         <h3>Earned Badges ({earnedBadges.length})</h3>
         <div className="badges-grid">
-          {earnedBadges.map((badge) => {
-            const IconComponent = badge.icon;
-            return (
-              <div key={badge.id} className="badge earned">
-                <div className="badge-icon" style={{ color: badge.color }}>
-                  {badge.image ? (
-                    <img src={badge.image} alt={badge.name} className="badge-img" />
-                  ) : (
-                    <IconComponent />
-                  )}
-                </div>
-                <div className="badge-name">{badge.name}</div>
+          {earnedBadges.map((badge) => (
+            <div key={badge.id} className="badge earned">
+              <div className="badge-icon" style={{ color: badge.color }}>
+                <img src={badge.image} alt={badge.name} className="badge-img" />
               </div>
-            );
-          })}
+              <div className="badge-name">{badge.name}</div>
+            </div>
+          ))}
+
         </div>
       </div>
 
       <div className="badges-section">
         <h3>Locked Badges ({lockedBadges.length})</h3>
         <div className="badges-grid">
-          {lockedBadges.map((badge) => {
-            const IconComponent = badge.icon;
-            return (
-              <div key={badge.id} className="badge locked">
-                <div className="badge-icon">
-                  <IconComponent />
-                </div>
-                <div className="badge-name">{badge.name}</div>
+          {lockedBadges.map((badge) => (
+            <div key={badge.id} className="badge locked">
+              <div className="badge-icon" style={{ color: badge.color }}>
+                <img src={badge.image} alt={badge.name} className="badge-img locked-img" />
               </div>
-            );
-          })}
+              <div className="badge-name">{badge.name}</div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ import { BsBookmarkFill } from "react-icons/bs";
 import { BsBookmark } from "react-icons/bs";
 import { useProfile } from '../../contexts/ProfileContext';
 import { useOpportunity } from '../../contexts/OpportunityContext'; 
+import PopupPill from '../PopupPill/PopupPill';
 
 function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
   const { user } = useAuth();
@@ -16,6 +17,10 @@ function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
   const [savingOppId, setSavingOppId] = useState(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const opportunitiesPerPage = 10;
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showUnsaved, setShowUnsaved] = useState(false);
 
   // use profile ID and saved opportunities from context
   const prismaUserId = profile?.id || null;
@@ -80,11 +85,13 @@ useEffect(() => {
           if (!prev) return prev;
 
           if (isSaved) {
+            setShowUnsaved(true);
             return {
               ...prev,
               savedOpportunities: prev.savedOpportunities.filter((opp) => opp.id !== oppId),
             };
           } else {
+            setShowSuccess(true);
             const oppToAdd = opportunities.find((opp) => opp.id === oppId);
             if (!oppToAdd) return prev;
 
@@ -103,7 +110,19 @@ useEffect(() => {
       setSavingOppId(null); // done saving
     }
   };
-  console.log("Results to show:", resultsToShow);
+
+  const filteredResults = resultsToShow
+  .filter((opportunity) => {
+    if (!searchResults.tag) return true;
+    if (!opportunity.tags) return false;
+    console.log("Smart Search results:", searchResults.city);
+    return opportunity.tags.includes(searchResults.tag);
+  });
+
+  const totalPages = Math.ceil(filteredResults.length / opportunitiesPerPage);
+  const startIndex = (currentPage - 1) * opportunitiesPerPage;
+  const endIndex = startIndex + opportunitiesPerPage;
+  const currentOpportunities = filteredResults.slice(startIndex, endIndex);
 
   return (
     <>
@@ -112,7 +131,7 @@ useEffect(() => {
           <div className="loading-spinner">Loading opportunities...</div>
         ) : (
           <div className="opportunity-grid">
-            {resultsToShow
+            {currentOpportunities
               .filter((opportunity) => {
                 if (!searchResults.tag) return true;
                 if (!opportunity.tags) return false;
@@ -169,19 +188,21 @@ useEffect(() => {
                     onClick={() => handleApplyClick(opportunity)}> 
                     I want to Help </button>
                     }
-                  <button
-                    className="save-btn"
-                    onClick={(e) => handleSavedClick(e, opportunity.id)}
-                    disabled={savingOppId === opportunity.id}
-                  >
-                    {
-                      savedOpps.includes(opportunity.id) ? (
-                        <BsBookmarkFill className="save-icon" />
+                    <button                     
+                      className={`save-btn ${savingOppId === opportunity.id ? 'loading' : ''}`}                     
+                      onClick={(e) => handleSavedClick(e, opportunity.id)}                     
+                      disabled={savingOppId === opportunity.id}                   
+                    >                     
+                      {savingOppId === opportunity.id ? (
+                        <div className="loading-spinner"></div>
                       ) : (
-                        <BsBookmark className="save-icon" />
-                      )
-                    }
-                  </button>
+                        savedOpps.includes(opportunity.id) ? (
+                          <BsBookmarkFill className="save-icon" />
+                        ) : (
+                          <BsBookmark className="save-icon" />
+                        )
+                      )}                   
+                    </button>
 
                 </div>
                 </div>
@@ -189,6 +210,22 @@ useEffect(() => {
           </div>
         )}
       </div>
+      <div className="pagination">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
+
 
       <ApplyModal
         isOpen={isApplyModalOpen}
@@ -196,6 +233,26 @@ useEffect(() => {
         applicant={user?.firstName || user?.fullName || "Anonymous"}
         opportunity={selectedOpportunity}
       />
+      {/* Saved popup */}
+      <PopupPill
+        message="Volunteer opportunity saved!"
+        type="success"
+        duration={3000}
+        isVisible={showSuccess}
+        onClose={() => setShowSuccess(false)}
+        position="bottom-center"
+      />
+
+      {/* Unsaved popup */}
+      <PopupPill
+        message="Volunteer opportunity unsaved"
+        type="success"
+        duration={3000}
+        isVisible={showUnsaved}
+        onClose={() => setShowUnsaved(false)}
+        position="bottom-center"
+      />
+
     </>
   );
 }

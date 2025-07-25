@@ -11,14 +11,15 @@ import { useAuth } from "../../hooks/useAuth";
 import { useProfile } from "../../contexts/ProfileContext"; // Import profile context
 import { useNavigate } from "react-router-dom";
 import { useLeaderboard } from "../../contexts/LeaderboardContext"; // Import leaderboard context
+import { useEffect, useState } from "react";
 
 function ProfilePage() {
-  const { user } = useAuth();
+  const [orgs, setOrgs] = useState([]);
+  const { user, isLoaded } = useAuth();
   const { profile, loading, error } = useProfile(); // Use context for profile data, loading, and error
   const navigate = useNavigate();
   const { users = [] } = useLeaderboard();
   const currentUser = users.find(u => u.firebaseUid === user?.uid);
-
   const leaderboardRank = currentUser?.leaderboardRank;
   if (!user) {
     return (
@@ -63,8 +64,15 @@ const {
   interests = [],
   avatarUrl ,
   createdAt,
+  opportunities,
 } = profile || {}; 
 
+let opps = [];
+
+if (isLoaded && Array.isArray(opportunities)) {
+  opps = opportunities.map((o) => o.name);
+}
+console.log(opps)
   return (
     <div className="page-container">
       <div className="section">
@@ -181,7 +189,9 @@ const {
             <BiSolidDonateHeart className="icon" />
             <b>You Have Made A Difference With</b>
           </div>
-          <div className="s2-content"></div>
+          <div className="s2-content">
+            {opps.map((name, index) => (<div key={index}> {name} </div>))}
+          </div>
         </div>
       </div>
     </div>

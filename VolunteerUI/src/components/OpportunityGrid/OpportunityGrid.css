@@ -198,10 +198,65 @@ ul{
     color: var(--primary-color);
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
 
+.pagination button {
+  padding: 0.5rem 1rem;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Save button loading state */
+.save-btn.loading {
+  background-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  transition: all 0.3s ease;
+  max-height:40px
+}
+
+.save-btn.loading:hover {
+  background-color: #e5e7eb;
+}
+
+/* Loading spinner animation */
 .loading-spinner {
-  text-align: center;
-  padding: 2rem;
-  font-size: 1.2rem;
-  color: #666;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d1d5db;
+  border-top: 2px solid #9ca3af;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Optional: Fade animation for the button content */
+.save-btn {
+  transition: all 0.3s ease;
+}
+
+.save-icon {
+  transition: opacity 0.2s ease;
+}
+
+.save-btn.loading .save-icon {
+  opacity: 0;
 }

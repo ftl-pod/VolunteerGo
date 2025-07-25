@@ -39,6 +39,7 @@ function HomePage() {
     return (
       <>
         <HomeHeader />
+        <div className="home-page">
         <div className="waterfall-media">
           <img
             src="https://i.postimg.cc/prkQspDb/1-copy-3.jpg"
@@ -103,7 +104,8 @@ function HomePage() {
             build stronger, more connected communities and cultivate a culture of generosity and social responsibility that lasts 
             well beyond a single act of service. Our goal is to redefine what it means to give back by leveraging technology and 
             gamification to spark enthusiasm and commitment for positive change in the world.
-          </div>        
+          </div>     
+        </div>   
         <div id="about-us" className="about">
           <h1>Meet Our Founders</h1>
           <div className="about-text">
@@ -115,8 +117,8 @@ function HomePage() {
               <img src="https://i.postimg.cc/Vv9MYPPR/img-5175-720.jpg" className="about-pic" alt="Jasmine Andresol"/>
               <div className="founder-info">
                 <div>Jasmine Andresol</div>
-                <div>email</div>
-                <div>university</div>
+                <div>jandresol@salesforce.com</div>
+                <div>Harvard University</div>
               </div>
             </div>
             <div>

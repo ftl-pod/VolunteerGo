@@ -12,7 +12,7 @@ import { useProfile } from "../../contexts/ProfileContext";
 import { useNavigate } from "react-router-dom";
 import { useLeaderboard } from "../../contexts/LeaderboardContext";
 import { useEffect, useState } from "react";
-
+import ProgressBar from "../ProgressBar/ProgressBar";
 function ProfilePage() {
   const [activeTab, setActiveTab] = useState('overview');
   const { user, isLoaded } = useAuth();
@@ -73,18 +73,60 @@ function ProfilePage() {
   }
 
   // Mock badges data - replace with actual badge data from your backend
-  const badges = [
-    { id: 1, name: "First Volunteer", icon: FaMedal, color: "#63806f", earned: true },
-    { id: 2, name: "Community Helper", icon: FaTrophy, color: "#86654b", earned: true },
-    { id: 3, name: "Rising Star", icon: FaStar, color: "#3f4a1b", earned: points > 100 },
-    { id: 4, name: "Dedicated Volunteer", icon: BsAwardFill, color: "#63806f", earned: opps.length >= 5 },
-    { id: 5, name: "Top Contributor", icon: MdEmojiEvents, color: "#86654b", earned: leaderboardRank <= 10 },
-    { id: 6, name: "Skill Master", icon: FaStar, color: "#3f4a1b", earned: skills.length >= 3 }
-  ];
+const badges = [
+  {
+    id: 1,
+    name: "Animal Advocate",
+    image: "https://i.postimg.cc/vDy8pfBr/1-removebg-preview.png",
+    color: "#6fbf92",
+    earned: true
+  },
+  {
+    id: 2,
+    name: "Planet Protector",
+    image: "https://i.postimg.cc/KRvGYbt4/2-removebg-preview.png",
+    color: "#b0a46c",
+    earned: true
+  },
+  {
+    id: 3,
+    name: "Heart of the Community",
+    image: "https://i.postimg.cc/RWWvcTsB/3-removebg-preview.png",
+    color: "#d88a99",
+    earned: true
+  },
+  {
+    id: 4,
+    name: "Volunteer Connector",
+    image: "https://i.postimg.cc/dhgwnTpT/4-removebg-preview.png",
+    color: "#85c9d6",
+    earned: true
+  },
+  {
+    id: 5,
+    name: "Impact Leader",
+    image: "https://i.postimg.cc/QB5szdZY/5-removebg-preview.png",
+    color: "#d4a855",
+    earned: true
+  },
+  {
+    id: 6,
+    name: "First Steps",
+    image: "https://i.postimg.cc/nM1VZrj6/6-removebg-preview.png",
+    color: "#cc6c5b",
+    earned: true
+  },
+  {
+    id: 7,
+    name: "Newcomer Badge",
+    image: "https://i.postimg.cc/4mLJ701P/7-removebg-preview.png",
+    color: "#b4aee8",
+    earned: true
+  }
+];
 
   const earnedBadges = badges.filter(badge => badge.earned);
   const lockedBadges = badges.filter(badge => !badge.earned);
-
   const renderOverview = () => (
     <>
     <div className="section-grid">
@@ -169,7 +211,11 @@ function ProfilePage() {
             return (
               <div key={badge.id} className="badge earned">
                 <div className="badge-icon" style={{ color: badge.color }}>
-                  <IconComponent />
+                  {badge.image ? (
+                    <img src={badge.image} alt={badge.name} className="badge-img" />
+                  ) : (
+                    <IconComponent />
+                  )}
                 </div>
                 <div className="badge-name">{badge.name}</div>
               </div>
@@ -255,6 +301,7 @@ function ProfilePage() {
 
         <div className="profile-content">
           {/* Navigation Tabs */}
+          
           <div className="profile-nav">
             <button
               className={`nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
@@ -269,7 +316,7 @@ function ProfilePage() {
               Badges
             </button>
           </div>
-
+          <ProgressBar points={points} size="normal" />
           {/* Tab Content */}
           <div className="tab-content">
             {activeTab === 'overview' && (
@@ -279,6 +326,7 @@ function ProfilePage() {
             )}
             {activeTab === 'badges' && renderBadges()}
           </div>
+          
         </div>
       </div>
     </div>

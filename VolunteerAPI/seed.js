@@ -103,7 +103,7 @@ async function seed() {
           name: displayName || null,
           avatarUrl:
             photoURL ||
-            "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
+            "https://i.ibb.co/rf6XN61Q/plant.png",
           points: 0,
           level: 1,
         },

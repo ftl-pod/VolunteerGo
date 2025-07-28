@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const admin = require('../firebase/firebaseAdmin');
 const { connect } = require('../routes/userRoutes');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.VITE_SENDGRID_API_KEY);
 
 exports.getAllUsers = async (req, res) => {
     try {
@@ -11,6 +13,7 @@ exports.getAllUsers = async (req, res) => {
             include: {
                 opportunities: true,
                 savedOpportunities: true,
+                badges: true,
             },
         });
         const rankedUsers = users.map((user, index) => ({
@@ -34,6 +37,7 @@ exports.getUserById = async (req, res) => {
         include: {
             opportunities: true,
             savedOpportunities: true, 
+            badges: true,
         }
     });
     if (!user) {
@@ -110,6 +114,7 @@ exports.getUserByFirebaseUid = async (req, res) => {
       include: {
         opportunities: true,
         savedOpportunities: true,
+        badges: true,
       },
     });
 
@@ -153,8 +158,8 @@ exports.onboarding = async (req, res) => {
     training,
     location,
     age,
-    points = 0,
-    level = 1,
+    points,
+    level,
     interests,
     avatarUrl
   } = req.body;
@@ -319,3 +324,20 @@ exports.AddOpportunity = async (req, res) => {
         return res.status(500).json({error : "Internal server error"})
     }
 }
+
+exports.sendApplicationConfirmation = async (req, res) => {
+  const { to, subject, text, html } = req.body;
+  try {
+    await sgMail.send({
+      to,
+      from: 'volunteergoconfirmation@outlook.com', 
+      subject,
+      text,
+      html,
+    });
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error('SendGrid error:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+};

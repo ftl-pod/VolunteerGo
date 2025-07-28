@@ -1,0 +1,387 @@
+.volunteer-hero {
+  position: relative;
+  height: 100vh;
+  background: linear-gradient(180deg, var(--primary-color) 0%, rgba(44, 83, 68, 0.865));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+}
+
+.hero-background-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.08;
+  background-image: 
+    radial-gradient(circle at 20% 30%, #d1c8c1 3px, transparent 3px),
+    radial-gradient(circle at 70% 60%, #f6f4f3 2px, transparent 2px),
+    radial-gradient(circle at 40% 80%, #d1c8c1 2px, transparent 2px);
+  background-size: 120px 120px, 80px 80px, 150px 150px;
+  animation: patternDrift 30s linear infinite;
+}
+
+@keyframes patternDrift {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(120px, 120px) rotate(5deg); }
+}
+
+.floating-leaf {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 0 100% 0 100%;
+  opacity: 0.7;
+  animation: leafFloat 10s infinite ease-in-out;
+}
+
+.leaf-1 { 
+  background: #7ea68a;
+  top: 15%; left: 12%; 
+  animation-delay: 0s; 
+  animation-duration: 12s;
+}
+.leaf-2 { 
+  background: #a8916b;
+  top: 25%; left: 85%; 
+  animation-delay: 2s; 
+  animation-duration: 14s;
+}
+.leaf-3 { 
+  background: #8a9b7a;
+  top: 45%; left: 8%; 
+  animation-delay: 4s; 
+  animation-duration: 11s;
+}
+.leaf-4 { 
+  background: #9c8560;
+  top: 60%; left: 90%; 
+  animation-delay: 1s; 
+  animation-duration: 13s;
+}
+.leaf-5 { 
+  background: #7ea68a;
+  top: 35%; left: 70%; 
+  animation-delay: 3s; 
+  animation-duration: 15s;
+}
+.leaf-6 { 
+  background: #a8916b;
+  top: 75%; left: 25%; 
+  animation-delay: 5s; 
+  animation-duration: 12s;
+}
+
+@keyframes leafFloat {
+  0%, 100% { 
+    transform: translateY(0) rotate(0deg) scale(1); 
+  }
+  25% { 
+    transform: translateY(-30px) rotate(90deg) scale(1.1); 
+  }
+  50% { 
+    transform: translateY(-15px) rotate(180deg) scale(0.9); 
+  }
+  75% { 
+    transform: translateY(-40px) rotate(270deg) scale(1.05); 
+  }
+}
+
+.badge-decorations {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: white;
+  animation: badgeBounce 6s infinite ease-in-out;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  border: 3px solid rgba(255,255,255,0.3);
+}
+
+.badge-1 {
+  background: linear-gradient(135deg, #7ea68a, #63806f);
+  top: 20%; left: 15%;
+  animation-delay: 0s;
+}
+.badge-2 {
+  background: linear-gradient(135deg, #a8916b, #86654b);
+  top: 30%; right: 12%;
+  animation-delay: 1s;
+}
+.badge-3 {
+  background: linear-gradient(135deg, #8a9b7a, #7ea68a);
+  bottom: 25%; left: 10%;
+  animation-delay: 2s;
+}
+.badge-4 {
+  background: linear-gradient(135deg, #9c8560, #a8916b);
+  bottom: 30%; right: 15%;
+  animation-delay: 3s;
+}
+
+@keyframes badgeBounce {
+  0%, 100% { 
+    transform: translateY(0) scale(1) rotate(0deg); 
+  }
+  25% { 
+    transform: translateY(-15px) scale(1.1) rotate(10deg); 
+  }
+  50% { 
+    transform: translateY(-5px) scale(0.95) rotate(-5deg); 
+  }
+  75% { 
+    transform: translateY(-20px) scale(1.05) rotate(5deg); 
+  }
+}
+
+.hero-content {
+  text-align: center;
+  z-index: 10;
+  position: relative;
+  color: white;
+}
+
+.hero-title {
+  font-size: clamp(3.5rem, 8vw, 8rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  opacity: 0;
+  transform: translateY(40px);
+  animation: heroFadeUp 2s ease-out 0.5s forwards;
+  letter-spacing: -3px;
+  background: linear-gradient(135deg, #ffffff, #d1c8c1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: heroFadeUp 2s ease-out 1s forwards;
+  font-weight: 400;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 1.2rem 3rem;
+  background-color:  var(--primary-color);
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 50px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  transition: all 0.4s ease;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: heroFadeUp 2s ease-out 1.5s forwards;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+  border: 2px solid rgba(255,255,255,0.3);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.hero-cta:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+  background: var(--primary-hover);
+}
+
+.mouse-sparkle {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1000;
+  animation: sparkleGlow 2s ease-out forwards;
+}
+
+@keyframes sparkleGlow {
+  0% { 
+    opacity: 1; 
+    transform: scale(0) rotate(0deg);
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.2) rotate(180deg);
+  }
+  100% { 
+    opacity: 0; 
+    transform: scale(0.8) rotate(360deg);
+  }
+}
+
+@keyframes heroFadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-badges-text {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #f6f4f3;
+  font-size: 1rem;
+  opacity: 0.8;
+  animation: pulseGlow 3s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Squiggly Lines */
+.squiggly-line {
+  position: absolute;
+  width: 200%;
+  height: auto;
+  opacity: 0.6;
+  animation: squiggleFloat 12s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.line-1 { 
+  top: 10%; 
+  left: -50%; 
+  animation-delay: 0s; 
+  animation-duration: 15s;
+}
+.line-2 { 
+  top: 60%; 
+  left: -60%; 
+  animation-delay: 3s; 
+  animation-duration: 18s;
+}
+.line-3 { 
+  bottom: 20%; 
+  left: -40%; 
+  animation-delay: 6s; 
+  animation-duration: 20s;
+}
+
+@keyframes squiggleFloat {
+  0% { 
+    transform: translateX(0) translateY(0) rotate(0deg); 
+  }
+  50% { 
+    transform: translateX(30px) translateY(-20px) rotate(2deg); 
+  }
+  100% { 
+    transform: translateX(60px) translateY(10px) rotate(-1deg); 
+  }
+}
+
+/* Swirly Decorations */
+.swirl-decoration {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  opacity: 0.4;
+  animation: swirlSpin 8s linear infinite;
+  pointer-events: none;
+}
+
+.swirl-1 {
+  top: 25%;
+  right: 20%;
+  animation-delay: 0s;
+  animation-duration: 10s;
+}
+
+.swirl-2 {
+  bottom: 35%;
+  left: 15%;
+  animation-delay: 2s;
+  animation-duration: 12s;
+}
+
+.swirl-3 {
+  top: 40%;
+  left: 25%;
+  animation-delay: 4s;
+  animation-duration: 14s;
+}
+
+@keyframes swirlSpin {
+  0% { 
+    transform: rotate(0deg) scale(1);
+    opacity: 0.3;
+  }
+  50% { 
+    transform: rotate(180deg) scale(1.1);
+    opacity: 0.6;
+  }
+  100% { 
+    transform: rotate(360deg) scale(1);
+    opacity: 0.3;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .badge-decorations {
+    width: 45px;
+    height: 45px;
+    font-size: 1.4rem;
+  }
+  
+  .hero-title {
+    letter-spacing: -2px;
+  }
+  
+  .hero-cta {
+    padding: 1rem 2.5rem;
+    font-size: 1.2rem;
+  }
+  
+  .floating-leaf {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .swirl-decoration {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .squiggly-line {
+    width: 250%;
+  }
+}
+
+@media (max-width: 480px) {
+  .badge-decorations {
+    width: 35px;
+    height: 35px;
+    font-size: 1.2rem;
+  }
+  
+  .hero-cta {
+    padding: 0.9rem 2rem;
+    font-size: 1.1rem;
+  }
+  
+  .swirl-decoration {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .squiggly-line {
+    width: 300%;
+  }
+}

@@ -270,7 +270,12 @@ function ProfilePage({avatarUrl}) {
                 Badges
               </button>
             </div>
-            <div className="box">
+            <div className="box progress-box">
+              <div className="box-header">
+            <FaBarsProgress className="icon" />
+            <b>Progress Bar</b>
+          </div>
+
                 <ProgressBar points={points} size="normal" />
             </div>
           </div>

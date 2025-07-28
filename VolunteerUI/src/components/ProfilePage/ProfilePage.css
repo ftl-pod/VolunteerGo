@@ -356,6 +356,12 @@
   padding: 4px;
 }
 
+.profile-header{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .profile-layout {

@@ -20,6 +20,7 @@ import './App.css'
 
 function App() {
   const { user, loading } = useAuth();
+  const [avatarUrl, setAvatarUrl] = useState("https://i.postimg.cc/D0RRVwPw/plant.png");
 
   return (
     <OpportunityProvider>
@@ -27,19 +28,19 @@ function App() {
         <LeaderboardProvider>
           <Router>  
             <div className="App">        
-              <NavBar user={user}/>
+              <NavBar user={user} avatarUrl={avatarUrl}/>
               {/* Routes */}
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/search" element={<SearchPage/>} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
-                <Route path="/profile" element={<ProfilePage user={user} />} />
+                <Route path="/profile" element={<ProfilePage user={user} avatarUrl={avatarUrl}/>} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/saved" element={<SavedPage />} />
                 <Route path="/opportunity/:id" element={<OpportunityPage />} />
                 <Route path="/map" element={<LocationPage/>} />
-                <Route path="/onboarding" element={<Onboarding/>} />
+                <Route path="/onboarding" element={<Onboarding setAvatarUrl={setAvatarUrl} avatarUrl={avatarUrl} />} />
               </Routes>
             </div>
           </Router>

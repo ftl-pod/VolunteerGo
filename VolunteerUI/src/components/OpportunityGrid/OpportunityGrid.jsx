@@ -254,26 +254,22 @@ useEffect(() => {
         onClose={() => setShowUnsaved(false)}
         position="bottom-center"
       />
-
-      {/* login popup */}
+      {!isSignedIn ? 
       <PopupPill
         message="Please Login To Apply"
         type="warning"
         duration={3000}
         isVisible={showLogin}
         onClose={() => setShowLogin(false)}
-        position="bottom-center"
-      />
-
-      {/* save popup -> not logged in */}
-      <PopupPill
+        position="bottom-center"/> : null}
+      {!isSignedIn ? <PopupPill
         message="Please Login To Save"
         type="warning"
         duration={3000}
         isVisible={showSave}
         onClose={() => setShowSave(false)}
         position="bottom-center"
-      />
+      /> : null}
 
     </>
   );

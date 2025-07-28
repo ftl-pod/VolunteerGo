@@ -13,7 +13,7 @@ export default function Onboarding({avatarUrl, setAvatarUrl}) {
   const navigate = useNavigate();  
   const [currentStep, setCurrentStep] = useState(1);
   const { refreshLeaderboard } = useLeaderboard();
-  const { refreshProfile } = useProfile();
+  const { refreshProfile, loading: userLoading  } = useProfile();
   const [showSuccess, setShowSuccess] = useState(false);
   const [earnedBadge, setEarnedBadge] = useState(null);
   //const [avatarUrl, setAvatarUrl] = useState("https://i.postimg.cc/D0RRVwPw/plant.png")
@@ -289,14 +289,14 @@ const handleSubmit = async (e) => {
               </div>
 
               <div className="button-group">
-                <button 
-                  type="button" 
-                  onClick={nextStep}
-                  className="btn-primary"
-                  disabled={!isStep1Valid}
-                >
-                  Continue
-                </button>
+              <button 
+                type="button" 
+                onClick={nextStep}
+                className="btn-primary"
+                disabled={!isStep1Valid || userLoading}
+              >
+                {userLoading ? 'Loading...' : 'Continue'}
+              </button>
               </div>
             </div>
           )}

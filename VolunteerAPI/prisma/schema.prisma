@@ -44,7 +44,7 @@ model User {
   location               String?
   points                 Int             @default(0)
   age                    Int?
-  avatarUrl              String?         @default("https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png")
+  avatarUrl              String?         @default("https://i.ibb.co/rf6XN61Q/plant.png")
   level                  Int             @default(1)
   name                   String?
   interests              String[]        @default([])

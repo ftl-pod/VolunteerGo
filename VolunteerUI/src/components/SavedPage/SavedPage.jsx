@@ -56,7 +56,7 @@ function SavedPage() {
 
     const fetchRecommendations = async () => {
       try {
-        const url = "http://localhost:8000/search";
+        const url = `${import.meta.env.VITE_SEARCH_URL}/search`;
         const body = {
           search_prompt: "",
           user_profile: {

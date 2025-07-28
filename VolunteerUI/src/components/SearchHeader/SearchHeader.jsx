@@ -53,7 +53,7 @@ function SearchHeader({onSearch, onSmartSearch, tags = [], selectedTag = '', onT
         }
         try {
             console.log("Smart Search triggered");
-            const res = await fetch("http://localhost:8000/search", {
+            const res = await fetch(`${import.meta.env.VITE_SEARCH_URL}/search`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

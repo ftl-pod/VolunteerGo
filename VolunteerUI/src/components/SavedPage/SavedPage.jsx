@@ -20,6 +20,9 @@ function SavedPage() {
 
   const savedOpps = profile?.savedOpportunities || [];
 
+  // Helper function to check if an opportunity is saved
+  const isSaved = (oppId) => savedOpps.some((opp) => opp.id === oppId);
+
   const closeModal = () => {
     if (!removing) {
       setShowModal(false);
@@ -81,10 +84,10 @@ function SavedPage() {
         const data = await res.json();
         console.log(data);
         // taking the top 15 recommendations for testing
-        const top15 = data.recommendations.slice(0, 15);
-        setAllSmartSuggestions(top15);
+        const top25 = data.recommendations.slice(0, 25);
+        setAllSmartSuggestions(top25);
         // show first 3 suggestions first, idk
-        setSmartSuggestions(top15.slice(0, 3));
+        setSmartSuggestions(top25.slice(0, 3));
       } catch (error) {
         console.error("Failed to fetch recommendations:", error);
       }
@@ -103,7 +106,7 @@ function SavedPage() {
     setSavingOppId(oppId); // start savinggg
 
     try {
-      const isSaved = savedOpps.includes(oppId);
+      const isSaved = savedOpps.some((opp) => opp.id === oppId);
       const url = `${
         import.meta.env.VITE_API_BASE_URL
       }/users/${prismaUserId}/saved-opportunities/${
@@ -122,26 +125,45 @@ function SavedPage() {
       const data = await res.json();
 
       if (data.success) {
-        setProfile((prev) => {
-          if (!prev) return prev;
+        if (isSaved) {
+          setProfile((prev) => {
+            if (!prev) return prev;
 
-          if (isSaved) {
             return {
               ...prev,
               savedOpportunities: prev.savedOpportunities.filter(
                 (opp) => opp.id !== oppId
               ),
             };
-          } else {
-            const oppToAdd = opportunities.find((opp) => opp.id === oppId);
-            if (!oppToAdd) return prev;
+          });
+        } else {
+          let oppToAdd = opportunities.find((opp) => opp.id === oppId);
+          if (!oppToAdd) {
+            try {
+              const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/opportunities/${oppId}`);
+              if (res.ok) {
+                oppToAdd = await res.json();
+              } else {
+                console.error(`Failed to fetch opportunity ${oppId}: ${res.status}`);
+                setSavingOppId(null);
+                return;
+              }
+            } catch (error) {
+              console.error(`Error fetching opportunity ${oppId}:`, error);
+              setSavingOppId(null);
+              return;
+            }
+          }
+
+          setProfile((prev) => {
+            if (!prev) return prev;
 
             return {
               ...prev,
-              savedOpportunities: [...prev.savedOpportunities, oppToAdd],
+              savedOpportunities: [oppToAdd, ...prev.savedOpportunities],
             };
-          }
-        });
+          });
+        }
       } else {
         console.error("Failed to update saved opportunities:", data);
       }
@@ -254,19 +276,23 @@ function SavedPage() {
                   <Link to={`/opportunity/${opportunity.id}`}>
                     <button className="btn-primary">I Want to Help</button>
                   </Link>
-                  <button
-                    className="btn-secondary"
-                    onClick={(e) => handleSavedClick(e, opportunity.id)}
-                    disabled={savingOppId === opportunity.id}
-                  >
-                    {savingOppId === opportunity.id
-                       ? savedOpps.includes(opportunity.id)
-                          ? <BsBookmark className="save-icon"/>
-                          : <BsBookmarkFill className="save-icon"/>
-                        : savedOpps.includes(opportunity.id)
-                        ? <BsBookmarkFill className="save-icon"/>
-                        : "Save"}
-                  </button>
+                <button
+                  className="suggestion-save"
+                  onClick={(e) => handleSavedClick(e, opportunity.id)}
+                  disabled={savingOppId === opportunity.id}
+                >
+                  {savingOppId === opportunity.id ? (
+                    isSaved(opportunity.id) ? (
+                      <BsBookmark className="save-icon" />
+                    ) : (
+                      <BsBookmarkFill className="save-icon" />
+                    )
+                  ) : isSaved(opportunity.id) ? (
+                    <BsBookmarkFill className="save-icon" />
+                  ) : (
+                    <BsBookmark className="save-icon" />
+                  )}
+                </button>
                 </div>
               </div>
             ))

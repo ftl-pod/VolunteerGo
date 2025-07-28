@@ -159,7 +159,7 @@ a:hover {
   background: var(--tertiary-color);
 }
 
-.suggested-card .btn-secondary {
+.suggested-card .btn-secondary, .suggestion-save {
   background: transparent;
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -170,12 +170,22 @@ a:hover {
   transition: background-color 0.2s ease;
 }
 
+.suggestion-save {
+  background: rgba(241, 3, 3, 0.2);
+}
 .suggested-card .btn-secondary:hover {
   background: rgba(241, 3, 3, 0.2);
 }
 
+.save-icon{
+  color:rgba(225, 225, 225, 0.9);
+}
+.suggested-card .suggestion-save:hover {
+  background: rgba(225, 225, 225, 0.2);
+}
+.suggestion-save {margin-top:0.5rem;}
 .suggested-card .saved-card-title {
-  color: white;
+  color: rgba(225, 225, 225, 0.2);
 }
 
 .suggested-card .saved-card-org {

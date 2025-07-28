@@ -15,6 +15,9 @@ const badgeService = {
           });
           if (setBadgeEarned) setBadgeEarned(badge);
         }
+        else{
+          if (setBadgeEarned) setBadgeEarned(null);
+        }
       } catch (err) {
         console.error("Error checking Newcomer badge:", err);
       }

@@ -362,6 +362,195 @@
   gap: 1rem;
 }
 
+/* Friends Page Styling */
+.friends-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.friends-toggle {
+  display: flex;
+  gap: 4px;
+  background: white;
+  padding: 6px;
+  border-radius: 2rem;
+  width: fit-content;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+.toggle-btn {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  background: transparent;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--subtitle-color);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+}
+
+.toggle-btn:hover {
+  background: var(--tertiary-color);
+}
+
+.toggle-btn.active {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.friends-section {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.friends-section:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.friends-section h3 {
+  color: var(--header-color);
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.friend-item {
+  display: grid;
+  grid-template-columns: 60px 1fr auto auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  border: 2px solid var(--tertiary-color);
+}
+
+.friend-item:hover {
+  background: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.friend-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-color);
+}
+
+.friend-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.friend-name {
+  font-weight: 600;
+  color: var(--header-color);
+  font-size: 1.1rem;
+}
+
+.friend-points {
+  color: var(--subtitle-color);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.friend-points .icon {
+  color: var(--primary-color);
+}
+
+.friend-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.accept-btn {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: 0 2px 8px rgba(140, 140, 140, 0.3);
+}
+
+.accept-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(121, 121, 121, 0.4);
+}
+
+.deny-btn {
+  background: #be2020;
+  color: white;
+  box-shadow: 0 2px 8px rgba(186, 186, 186, 0.3);
+}
+
+.deny-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(173, 173, 173, 0.4);
+}
+
+.friend-status {
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  background: rgba(99, 128, 111, 0.1);
+  border-radius: 1rem;
+  border: 1px solid var(--primary-color);
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--subtitle-color);
+  font-style: italic;
+  padding: 3rem 1rem;
+  background: var(--tertiary-color);
+  border-radius: 1rem;
+  border: 2px dashed var(--subtitle-color);
+  opacity: 0.7;
+}
+
+.request-meta {
+  font-size: 0.8rem;
+  color: var(--subtitle-color);
+  margin-top: 0.25rem;
+}
+
+
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .profile-layout {
@@ -415,7 +604,25 @@
     grid-template-columns: 1fr;
   }
   
-  .profile-nav {
-    align-self: center;
-  }
+    .profile-nav, .friends-toggle {
+      align-self: center;
+    }
+    
+    .friend-item {
+      grid-template-columns: 50px 1fr auto;
+      gap: 0.75rem;
+      padding: 0.75rem;
+    }
+    
+    .friend-actions {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    
+    .action-btn {
+      width: 32px;
+      height: 32px;
+      font-size: 0.9rem;
+    }
+
 }

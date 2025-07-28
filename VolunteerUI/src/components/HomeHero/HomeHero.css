@@ -274,6 +274,12 @@
   animation-duration: 20s;
 }
 
+
+.hero-level-up{
+  padding-top: 0.5em;
+  height: 2em;
+}
+
 @keyframes squiggleFloat {
   0% { 
     transform: translateX(0) translateY(0) rotate(0deg); 

@@ -5,6 +5,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useProfile } from "../../contexts/ProfileContext";
 import { useEffect, useState } from 'react';
+import ProgressBar from '../ProgressBar/ProgressBar';
 
 function Navbar() {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ function Navbar() {
   const avatarUrl =
     profile?.avatarUrl ||  // From backend DB (shared context)
     user?.photoURL ||      // Fallback to Firebase photoURL
-    "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png"; // Final fallback
+    "https://i.ibb.co/rf6XN61Q/plant.png"; // Final fallback
 
   // Show a placeholder or spinner avatar while profile is loading
   if (loading) {
@@ -80,6 +81,7 @@ function Navbar() {
   }
 
   return (
+    
     <nav className="navbar">
       <div className="navbar-links">
         <NavLink to="/" className="nav-link">Home</NavLink>
@@ -90,6 +92,7 @@ function Navbar() {
         <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
         <NavLink to="/map" className="nav-link">Map</NavLink>
       </div>
+      <ProgressBar points={points} size="small"/>
       {isLoaded && isSignedIn && (
         <div className="user-points">
         <div className="gif-media">

@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import axios from "axios";
 
-function ProfilePage({avatarUrl}) {
+function ProfilePage() {
   const [activeTab, setActiveTab] = useState('overview');
   const { user, isLoaded } = useAuth();
   const { profile, loading, error } = useProfile();
@@ -71,7 +71,7 @@ function ProfilePage({avatarUrl}) {
     skills = [],
     training = [],
     interests = [],
-    //avatarUrl,
+    avatarUrl,
     createdAt,
     opportunities,
     badges = [],
@@ -201,7 +201,7 @@ function ProfilePage({avatarUrl}) {
             <div className="name">{name}</div>
             <div className="img-container">
               <img
-                src={avatarUrl || "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png"}
+                src={avatarUrl}
                 alt="Profile"
                 className="profile-img"
               />

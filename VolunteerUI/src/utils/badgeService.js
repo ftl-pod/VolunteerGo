@@ -21,24 +21,35 @@ const badgeService = {
     },
 
 
-  async checkFirstApplication(userId, userOpportunitiesCount, setBadgeEarned) {
-    if (userOpportunitiesCount !== 1) return;
+async checkFirstApplication(userId, userOpportunitiesCount, setBadgeEarned) {
+  console.log("[BadgeService] checkFirstApplication called with:", { userId, userOpportunitiesCount });
 
-    try {
-      const { data: user } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/${userId}`);
-      const hasBadge = user.badges.some(b => b.name === "First Steps");
+  if (userOpportunitiesCount !== 0) {
+    console.log("[BadgeService] Not first application, count =", userOpportunitiesCount);
+    return;
+  }
 
-      if (!hasBadge) {
-        const { data: badge } = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/badges/give`, {
-          userId,
-          badgeName: "First Steps",
-        });
-        if (setBadgeEarned) setBadgeEarned(badge);
-      }
-    } catch (err) {
-      console.error("Error checking First Steps badge:", err);
+  try {
+    const { data: user } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${userId}`);
+    console.log("[BadgeService] Fetched user data:", user);
+
+    const hasBadge = user.badges.some(b => b.name === "First Steps");
+    console.log("[BadgeService] User already has badge?", hasBadge);
+
+    if (!hasBadge) {
+      const { data: badge } = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/badges/give`, {
+        userId: user.id,
+        badgeName: "First Steps",
+      });
+      console.log("[BadgeService] Badge awarded:", badge);
+      if (setBadgeEarned) setBadgeEarned(badge);
+    } else {
+      console.log("[BadgeService] Badge not awarded because user already has it");
     }
-  },
+  } catch (err) {
+    console.error("[BadgeService] Error checking First Steps badge:", err);
+  }
+},
 
   async checkCategoryBadge(userId, opportunityTags, setBadgeEarned) {
     const tagToBadgeMap = {

@@ -13,6 +13,7 @@ exports.getAllUsers = async (req, res) => {
             include: {
                 opportunities: true,
                 savedOpportunities: true,
+                badges: true,
             },
         });
         const rankedUsers = users.map((user, index) => ({
@@ -36,6 +37,7 @@ exports.getUserById = async (req, res) => {
         include: {
             opportunities: true,
             savedOpportunities: true, 
+            badges: true,
         }
     });
     if (!user) {
@@ -112,6 +114,7 @@ exports.getUserByFirebaseUid = async (req, res) => {
       include: {
         opportunities: true,
         savedOpportunities: true,
+        badges: true,
       },
     });
 

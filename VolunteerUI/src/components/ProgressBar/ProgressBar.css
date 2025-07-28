@@ -2,6 +2,7 @@
 .progress-wrapper {
   position: relative !important;
   width: 100% !important;
+  min-width: 150px !important;
   max-width: 600px !important;
   margin: 20px auto !important;
   box-sizing: border-box !important;

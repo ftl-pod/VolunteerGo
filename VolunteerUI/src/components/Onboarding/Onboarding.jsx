@@ -4,6 +4,9 @@ import './Onboarding.css'
 import { useNavigate } from "react-router-dom";  
 import { useLeaderboard } from "../../contexts/LeaderboardContext"
 import { useProfile } from "../../contexts/ProfileContext";
+import badgeService from '../../utils/badgeService';
+import PopupPill from "../PopupPill/PopupPill";
+import BadgeModal from "../BadgeModal/BadgeModal";
 
 export default function Onboarding() {
   const { user, token, isLoaded } = useAuth();
@@ -11,10 +14,12 @@ export default function Onboarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const { refreshLeaderboard } = useLeaderboard();
   const { refreshProfile } = useProfile();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [earnedBadge, setEarnedBadge] = useState(null);
 
   // Initialize formData from firebase if available
   const [formData, setFormData] = useState({
-    avatarUrl: user?.photoURL || "https://i.postimg.cc/wT6j0qvg/Screenshot-2025-07-09-at-3-46-05-PM.png",
+    avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png",
     name: user?.displayName || "",
     email: user?.email || "",
     username: user?.email?.split("@")[0] || "", // default fallback
@@ -142,8 +147,17 @@ const handleSubmit = async (e) => {
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || "Failed to save user");
 
-    alert("Profile updated and saved!");
-    navigate("/profile");
+    // Call badge check and show modal if badge earned
+    await badgeService.checkNewcomerBadge(user.uid, (badge) => {
+      if (badge) {
+        console.log("Newcomer badge earned!", badge);
+        setEarnedBadge(badge);
+      } else {
+        // No badge earned, navigate immediately
+        navigate("/profile");
+      }
+    });
+
     refreshLeaderboard();
     refreshProfile();
   } catch (err) {
@@ -156,6 +170,7 @@ const handleSubmit = async (e) => {
   const isStep2Valid = formData.interests.length > 0;
 
   return (
+    <>
     <div className="onboarding-container">
       <div className="onboarding-card">
         <div className="progress-bar">
@@ -347,5 +362,22 @@ const handleSubmit = async (e) => {
         </div>
       </div>
     </div>
+      <PopupPill
+      message="Profile information saved!"
+      type="success"
+      duration={3000}
+      isVisible={showSuccess}
+      onClose={() => setShowSuccess(false)}
+      position="bottom-center"
+    />
+    {earnedBadge && (
+      <BadgeModal 
+        badge={earnedBadge} 
+        onClose={() => {setEarnedBadge(null); navigate("/profile")}} 
+      />
+    )}
+
+
+    </>
   );
 }

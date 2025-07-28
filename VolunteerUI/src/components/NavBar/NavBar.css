@@ -91,7 +91,13 @@
   object-fit: contain;
 }
 
-
+.navbar-right{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;  
+  align-items: center;
+  gap: 0px;
+}
 @media (max-width: 768px) {
   .navbar{
     flex-direction: column;

@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { useLeaderboard } from "../../contexts/LeaderboardContext";
 import { useEffect, useState } from "react";
 import ProgressBar from "../ProgressBar/ProgressBar";
+import axios from "axios";
+
 function ProfilePage() {
   const [activeTab, setActiveTab] = useState('overview');
   const { user, isLoaded } = useAuth();
@@ -21,6 +23,13 @@ function ProfilePage() {
   const { users = [] } = useLeaderboard();
   const currentUser = users.find(u => u.firebaseUid === user?.uid);
   const leaderboardRank = currentUser?.leaderboardRank;
+  const [allBadges, setAllBadges] = useState([]);
+  
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_BASE_URL}/badges`)
+      .then(res => setAllBadges(res.data))
+      .catch(err => console.error("Error fetching all badges:", err));
+  }, []);
 
   if (!user) {
     return (
@@ -65,6 +74,7 @@ function ProfilePage() {
     avatarUrl,
     createdAt,
     opportunities,
+    badges = [],
   } = profile || {};
 
   let opps = [];
@@ -72,61 +82,10 @@ function ProfilePage() {
     opps = opportunities.map((o) => o.name);
   }
 
-  // Mock badges data - replace with actual badge data from your backend
-const badges = [
-  {
-    id: 1,
-    name: "Animal Advocate",
-    image: "https://i.postimg.cc/vDy8pfBr/1-removebg-preview.png",
-    color: "#6fbf92",
-    earned: true
-  },
-  {
-    id: 2,
-    name: "Planet Protector",
-    image: "https://i.postimg.cc/KRvGYbt4/2-removebg-preview.png",
-    color: "#b0a46c",
-    earned: true
-  },
-  {
-    id: 3,
-    name: "Heart of the Community",
-    image: "https://i.postimg.cc/RWWvcTsB/3-removebg-preview.png",
-    color: "#d88a99",
-    earned: true
-  },
-  {
-    id: 4,
-    name: "Volunteer Connector",
-    image: "https://i.postimg.cc/dhgwnTpT/4-removebg-preview.png",
-    color: "#85c9d6",
-    earned: true
-  },
-  {
-    id: 5,
-    name: "Impact Leader",
-    image: "https://i.postimg.cc/QB5szdZY/5-removebg-preview.png",
-    color: "#d4a855",
-    earned: true
-  },
-  {
-    id: 6,
-    name: "First Steps",
-    image: "https://i.postimg.cc/nM1VZrj6/6-removebg-preview.png",
-    color: "#cc6c5b",
-    earned: true
-  },
-  {
-    id: 7,
-    name: "Newcomer Badge",
-    image: "https://i.postimg.cc/4mLJ701P/7-removebg-preview.png",
-    color: "#b4aee8",
-    earned: false
-  }
-];
 
-  const earnedBadges = badges.filter(badge => badge.earned);
-  const lockedBadges = badges.filter(badge => !badge.earned);
+  const earnedBadgeIds = new Set(badges.map(b => b.id));
+  const earnedBadges = allBadges.filter(badge => earnedBadgeIds.has(badge.id));
+  const lockedBadges = allBadges.filter(badge => !earnedBadgeIds.has(badge.id));
   const renderOverview = () => (
     <>
     <div className="section-grid">
@@ -208,13 +167,12 @@ const badges = [
         <div className="badges-grid">
           {earnedBadges.map((badge) => (
             <div key={badge.id} className="badge earned">
-              <div className="badge-icon" style={{ color: badge.color }}>
-                <img src={badge.image} alt={badge.name} className="badge-img" />
+              <div className="badge-icon">
+                <img src={badge.imageUrl} alt={badge.name} className="badge-img" />
               </div>
               <div className="badge-name">{badge.name}</div>
             </div>
           ))}
-
         </div>
       </div>
 
@@ -223,8 +181,8 @@ const badges = [
         <div className="badges-grid">
           {lockedBadges.map((badge) => (
             <div key={badge.id} className="badge locked">
-              <div className="badge-icon" style={{ color: badge.color }}>
-                <img src={badge.image} alt={badge.name} className="badge-img locked-img" />
+              <div className="badge-icon locked-img">
+                <img src={badge.imageUrl} alt={badge.name} className="badge-img" />
               </div>
               <div className="badge-name">{badge.name}</div>
             </div>

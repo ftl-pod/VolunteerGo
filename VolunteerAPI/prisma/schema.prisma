@@ -55,8 +55,17 @@ model User {
   points       Int           @default(0)
   level        Int           @default(1)
   age          Int?
+
   opportunities Opportunity[] @relation("UserOpportunities")
   savedOpportunities   Opportunity[] @relation("SavedOpportunities")
+
+  badges       Badge[]       @relation("UserBadges")
+
+  friends       User[]        @relation("UserFriends")
+  friendOf      User[]        @relation("UserFriends")
+  sentFriendRequests     FriendRequest[] @relation("SentFriendRequests")
+  receivedFriendRequests FriendRequest[] @relation("ReceivedFriendRequests")
+
 }
 model Chat {
   id             Int      @id @default(autoincrement())
@@ -66,6 +75,25 @@ model Chat {
   createdAt      DateTime @default(now())
 }
 
+model Badge {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  imageUrl    String?
+  users       User[]   @relation("UserBadges")
+}
 
+
+model FriendRequest {
+  id         Int      @id @default(autoincrement())
+  sender     User     @relation("SentFriendRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId   Int
+  receiver   User     @relation("ReceivedFriendRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiverId Int
+  status     String   @default("pending") // "pending", "accepted", "rejected"
+  createdAt  DateTime @default(now())
+
+  @@unique([senderId, receiverId])
+}
 
 

@@ -13,11 +13,25 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/profile"); 
+      navigate("/profile");
     } catch (err) {
-      setError(err.message);
+      console.error("Login Error:", err.code, err.message);
+
+      let message = "An unexpected error occurred. Please try again.";
+
+      switch (err.code) {
+        case "auth/invalid-credential":
+          message =
+            "Incorrect email or password. Please double-check your login details.";
+          break;
+        default:
+          message = "An unexpected error occurred. Please try again.";
+      }
+
+      setError(message);
     }
   };
 

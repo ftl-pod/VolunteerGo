@@ -112,6 +112,54 @@ async function seed() {
 
     console.log(`✅ Seeded ${firebaseUsers.length} Firebase users`);
 
+    console.log("\n🏅 Seeding badges...");
+    await prisma.badge.deleteMany();
+
+    const badges = [
+      {
+        name: "Animal Advocate",
+        description: "Awarded for applying to animal-related opportunities",
+        imageUrl: "https://i.postimg.cc/vDy8pfBr/1-removebg-preview.png"
+      },
+      {
+        name: "Planet Protector",
+        description: "Awarded for applying to environment-related opportunities",
+        imageUrl: "https://i.postimg.cc/KRvGYbt4/2-removebg-preview.png"
+      },
+      {
+        name: "Heart of the Community",
+        description: "Awarded for applying to community-related opportunities",
+        imageUrl: "https://i.postimg.cc/RWWvcTsB/3-removebg-preview.png"
+      },
+      {
+        name: "Volunteer Connector",
+        description: "Awarded for connecting with volunteer opportunities",
+        imageUrl: "https://i.postimg.cc/dhgwnTpT/4-removebg-preview.png"
+      },
+      {
+        name: "Impact Leader",
+        description: "Awarded for leadership in volunteering and impact",
+        imageUrl: "https://i.postimg.cc/QB5szdZY/5-removebg-preview.png"
+      },
+      {
+        name: "First Steps",
+        description: "Awarded for completing your first application",
+        imageUrl: "https://i.postimg.cc/nM1VZrj6/6-removebg-preview.png"
+      },
+      {
+        name: "Newcomer Badge",
+        description: "Awarded for completing onboarding",
+        imageUrl: "https://i.postimg.cc/4mLJ701P/7-removebg-preview.png"
+      }
+    ];
+
+    for (const badge of badges) {
+      await prisma.badge.create({ data: badge });
+    }
+
+    console.log(`✅ Created ${badges.length} badges`);
+
+
     console.log("\n🎉 Seeding complete!");
   } catch (err) {
     console.error("❌ Error seeding:", err);

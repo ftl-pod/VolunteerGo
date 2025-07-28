@@ -30,11 +30,31 @@ function SignupPage() {
       
       // Redirect to onboarding
       navigate("/onboarding");
-
     } catch (err) {
-      console.error(err);
-      setError(err.message);
+      console.error("Signup Error:", err.code, err.message); // dev log
+
+      let message = "An unexpected error occurred. Please try again.";
+
+      switch (err.code) {
+        case "auth/email-already-in-use":
+          message = "An account already exists with this email.";
+          break;
+        case "auth/invalid-email":
+          message = "Invalid email format.";
+          break;
+        case "auth/weak-password":
+          message = "Password should be at least 6 characters.";
+          break;
+        case "auth/operation-not-allowed":
+          message = "Email/password accounts are currently disabled.";
+          break;
+        default:
+          message = err.message;
+      }
+
+      setError(message);
     }
+
   };
 
   return (
@@ -54,7 +74,7 @@ function SignupPage() {
           onSubmit={handleSignup}
         >
           <h2>Sign Up</h2>
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {error && <p style={{ color: "white" }}>{error}</p>}
           
           <div className="form-field">
             <label htmlFor="username">Username</label>

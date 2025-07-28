@@ -39,7 +39,8 @@ function SearchHeader({onSearch, onSmartSearch, tags = [], selectedTag = '', onT
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-            handleClick();
+            e.preventDefault();
+            handleSmartSearch();
         }
     };
 

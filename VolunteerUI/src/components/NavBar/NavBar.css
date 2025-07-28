@@ -10,9 +10,9 @@
 
 .navbar-links {
   display: flex;
-  gap: 1.5rem; /* increase gap between nav links */
+  gap: 1.5rem;
   max-width: fit-content;
-  align-items: center; /* vertically center links */
+  align-items: center; 
 }
 
 .navbar a, .navbar button {
@@ -98,8 +98,60 @@
   align-items: center;
   gap: 8px;
 }
+
+/* Mobile fixes only */
 @media (max-width: 768px) {
-  .navbar{
+  .navbar {
     flex-direction: column;
+    width: 95%;
+    gap: 1.5rem;
+  }
+  
+  .navbar-links {
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .navbar-right {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .profile-menu {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .gif-media {
+    display: none;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.8rem;
+  }
+  
+  .navbar a, .navbar button {
+    font-size: 1rem;
+    padding: 0.5rem 0.8rem;
+  }
+  
+  .navbar-links {
+    gap: 0.8rem;
+  }
+  
+  .profile-menu {
+    gap: 0.8rem;
+  }
+  
+  
+  .gif-media img {
+    width: 20px;
+    height: 20px;
   }
 }

@@ -1,4 +1,4 @@
-.badge-modal-backdrop {
+.modal-backdrop {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.4);
@@ -8,10 +8,11 @@
   z-index: 1000;
 }
 
+
 .badge-modal {
   background: #fff;
   padding: 2rem;
-  border-radius: 2xl;
+  border-radius: 20px;
   text-align: center;
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
 }

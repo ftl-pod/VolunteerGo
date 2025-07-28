@@ -158,8 +158,8 @@ exports.onboarding = async (req, res) => {
     training,
     location,
     age,
-    points = 0,
-    level = 1,
+    points,
+    level,
     interests,
     avatarUrl
   } = req.body;

@@ -86,7 +86,6 @@ function ProfilePage() {
   const earnedBadgeIds = new Set(badges.map(b => b.id));
   const earnedBadges = allBadges.filter(badge => earnedBadgeIds.has(badge.id));
   const lockedBadges = allBadges.filter(badge => !earnedBadgeIds.has(badge.id));
-
   const renderOverview = () => (
     <>
     <div className="section-grid">

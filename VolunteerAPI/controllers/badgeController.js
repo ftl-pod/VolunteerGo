@@ -80,3 +80,28 @@ exports.remove = async (req, res) => {
         res.status(500).json({ error: "Delete failed" });
     }
 };
+
+exports.give = async (req, res) => {
+  const { userId, badgeName } = req.body;
+  try {
+    const badge = await prisma.badge.findFirst({ where: { name: badgeName } });
+    if (!badge) return res.status(404).json({ error: "Badge not found" });
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        badges: {
+          connect: { id: badge.id }
+        }
+      },
+      include: {
+        badges: true
+      }
+    });
+
+    return res.json(badge);
+  } catch (error) {
+    console.error("Error assigning badge:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

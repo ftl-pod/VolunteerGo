@@ -94,6 +94,7 @@ function Navbar() {
       </div>
       <div className="navbar-right">
         {isLoaded && isSignedIn && (
+          <>
           <div className="user-points">
           <div className="gif-media">
             {showGif ? 
@@ -103,8 +104,9 @@ function Navbar() {
             <div>{points}</div>
         </div>
         </div>
+        <ProgressBar points={points} size="small"/>
+        </>
         )}
-              <ProgressBar points={points} size="small"/>
         <div className="profile-menu">
       </div>
 

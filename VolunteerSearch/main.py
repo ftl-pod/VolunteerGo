@@ -21,7 +21,7 @@ async def lifespan(app: FastAPI):
     try:
         response = requests.get(f"{API_BASE_URL}/opportunities")
         response.raise_for_status()
-        opps = response.json()[:150]
+        opps = response.json()[:30]
         print(f"✅ Loaded {len(opps)} opportunities")
 
         for opp in opps:

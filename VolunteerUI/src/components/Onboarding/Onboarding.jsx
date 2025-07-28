@@ -16,6 +16,7 @@ export default function Onboarding() {
   const { refreshProfile } = useProfile();
   const [showSuccess, setShowSuccess] = useState(false);
   const [earnedBadge, setEarnedBadge] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   // Initialize formData from firebase if available
   const [formData, setFormData] = useState({
@@ -121,7 +122,7 @@ export default function Onboarding() {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-
+  setSubmitting(true);
   const skillsArray = formData.skills.split(",").map(s => s.trim()).filter(Boolean);
   const trainingArray = formData.training.split(",").map(t => t.trim()).filter(Boolean);
 
@@ -163,6 +164,8 @@ const handleSubmit = async (e) => {
   } catch (err) {
     console.error("Failed onboarding process", err);
     alert("Error during onboarding");
+  } finally {
+    setSubmitting(false);
   }
 };
 

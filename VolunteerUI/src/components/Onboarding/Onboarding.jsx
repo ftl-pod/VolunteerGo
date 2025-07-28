@@ -8,17 +8,17 @@ import badgeService from '../../utils/badgeService';
 import PopupPill from "../PopupPill/PopupPill";
 import BadgeModal from "../BadgeModal/BadgeModal";
 
-export default function Onboarding({avatarUrl, setAvatarUrl}) {
+export default function Onboarding() {
   const { user, token, isLoaded } = useAuth();
+  const {profile} = useProfile();
   const navigate = useNavigate();  
   const [currentStep, setCurrentStep] = useState(1);
   const { refreshLeaderboard } = useLeaderboard();
   const { refreshProfile, loading: userLoading  } = useProfile();
   const [showSuccess, setShowSuccess] = useState(false);
   const [earnedBadge, setEarnedBadge] = useState(null);
-  //const [avatarUrl, setAvatarUrl] = useState("https://i.postimg.cc/D0RRVwPw/plant.png")
   const [submitting, setSubmitting] = useState(false);
-
+  const [avatarUrl, setAvatarUrl] = useState("")
   // Initialize formData from firebase if available
   const [formData, setFormData] = useState({
     avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png",
@@ -57,9 +57,14 @@ export default function Onboarding({avatarUrl, setAvatarUrl}) {
             location: data.location || "",
             age: data.age || "",
             interests: data.interests || [],
-            avatarUrl: data.avatarUrl || ""
+            avatarUrl: data.avatarUrl || avatarUrl || ""
           });
+          if (data.avatarUrl) {
+            setAvatarUrl(data.avatarUrl);
+          }
+
           setLoading(false);
+          console.log("Fetched avatarUrl from backend:", data.avatarUrl);
         } catch (err) {
           console.error(err);
           setLoading(false);
@@ -109,6 +114,17 @@ const commonTraining = [
   "Mental Health Awareness"
 ];
 
+const avatarUrls = [
+  "https://i.postimg.cc/D0RRVwPw/plant.png",
+  "https://i.postimg.cc/vBZmT0F6/growing-plant.png",
+  "https://i.postimg.cc/QM4Fp2qq/cactus.png",
+  "https://i.postimg.cc/tTk2tCMM/Untitled-design-copy.png",
+  "https://i.postimg.cc/k4TvRYVr/Untitled-design-copy-4.png",
+  "https://i.postimg.cc/4ynb6vtY/Untitled-design-copy-3.png",
+  "https://i.postimg.cc/L5nQbL74/Untitled-design-4.png",
+  "https://i.postimg.cc/kgLz36cT/Untitled-design-1-copy.png",
+  "https://i.postimg.cc/vBsKTJC9/Untitled-design-1-copy-2.png"
+];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -167,11 +183,8 @@ const commonTraining = [
 const handleSubmit = async (e) => {
   e.preventDefault();
   setSubmitting(true);
-    console.log("Submitting started");
-
   const skillsArray = formData.skills;
   const trainingArray = formData.training;
-
   try {
     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/onboarding`, {
       method: "POST",
@@ -187,11 +200,13 @@ const handleSubmit = async (e) => {
         location: formData.location,
         age: Number(formData.age),
         interests: formData.interests,
-        avatarUrl: formData.avatarUrl,
+        avatarUrl: avatarUrl,
       }),
     });
 
     const result = await response.json();
+    console.log("Submitted data:", result);
+    console.log("!!!", profile)
     if (!response.ok) throw new Error(result.error || "Failed to save user");
 
     // Call badge check and show modal if badge earned
@@ -393,59 +408,25 @@ const handleSubmit = async (e) => {
           {currentStep === 4 && (
             <div className="step-content fade-in">
               <h2>Choose your profile picture</h2>
-              <p className="step-subtitle">Enter a URL and preview your avatar</p>
 
-              <div className="form-group">
-                 <div className="avatar-preview">
+            <div className="form-group">
+              <div className="avatar-preview">
                 <img src={avatarUrl} alt="Avatar preview" />
               </div>
+              
               <div className="avatar-container">
-                <div className="avatar-choice"
-                onClick={() => setAvatarUrl("https://i.postimg.cc/D0RRVwPw/plant.png")}
-                >
-                  <img src="https://i.postimg.cc/D0RRVwPw/plant.png" className="avatar-img" alt="plant"/>
-                </div>
-                <div className="avatar-choice"
-                onClick={() => setAvatarUrl("https://i.postimg.cc/vBZmT0F6/growing-plant.png")}
-                >
-                  <img src="https://i.postimg.cc/vBZmT0F6/growing-plant.png" className="avatar-img" alt="flowers"/>
-                </div>
-                <div className="avatar-choice"
-                onClick={() => setAvatarUrl("https://i.postimg.cc/QM4Fp2qq/cactus.png")}>
-                  <img src="https://i.postimg.cc/QM4Fp2qq/cactus.png" className="avatar-img" alt="cactus"/>
-                </div>
-                <div className="avatar-choice"
-                onClick={() => setAvatarUrl("https://i.postimg.cc/tTk2tCMM/Untitled-design-copy.png")}
-                >
-                  <img src="https://i.postimg.cc/tTk2tCMM/Untitled-design-copy.png" className="avatar-img" alt="girl"/>
-                </div>
-                <div className="avatar-choice"
-                onClick={() => setAvatarUrl("https://i.postimg.cc/k4TvRYVr/Untitled-design-copy-4.png")}
-                >
-                  <img src="https://i.postimg.cc/k4TvRYVr/Untitled-design-copy-4.png" className="avatar-img" alt="girl"/>
-                </div>
-                <div className="avatar-choice"
-                onClick={() => setAvatarUrl("https://i.postimg.cc/4ynb6vtY/Untitled-design-copy-3.png")}
-                >
-                  <img src="https://i.postimg.cc/4ynb6vtY/Untitled-design-copy-3.png" className="avatar-img" alt="girl"/>
-                </div>
-                <div className="avatar-choice"
-                onClick={() => setAvatarUrl("https://i.postimg.cc/L5nQbL74/Untitled-design-4.png")}
-                >
-                  <img src="https://i.postimg.cc/L5nQbL74/Untitled-design-4.png" className="avatar-img" alt="boy"/>
-                </div>
-                <div className="avatar-choice"
-                onClick={() => setAvatarUrl("https://i.postimg.cc/kgLz36cT/Untitled-design-1-copy.png")}
-                >
-                  <img src="https://i.postimg.cc/kgLz36cT/Untitled-design-1-copy.png" className="avatar-img" alt="boy"/>
-                </div>
-                <div className="avatar-choice"
-                onClick={() => setAvatarUrl("https://i.postimg.cc/vBsKTJC9/Untitled-design-1-copy-2.png")}
-                >
-                  <img src="https://i.postimg.cc/vBsKTJC9/Untitled-design-1-copy-2.png" className="avatar-img" alt="boy"/>
-                </div>
+                {avatarUrls.map((url, index) => (
+                  <div
+                    key={index}
+                    className="avatar-choice"
+                    onClick={() => setAvatarUrl(url)}
+                  >
+                    <img src={url} className="avatar-img" alt={`avatar-${index}`} />
+                  </div>
+                ))}
               </div>
-              </div>
+            </div>
+
               <div className="button-group">
                 <button type="button" onClick={prevStep} className="btn-secondary">
                   Back

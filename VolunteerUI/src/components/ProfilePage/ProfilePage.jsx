@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import axios from "axios";
 
-function ProfilePage({avatarUrl}) {
+function ProfilePage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [friendsView, setFriendsView] = useState('friends'); // 'friends', 'sent', 'received'
   const { user, isLoaded } = useAuth();
@@ -108,6 +108,7 @@ function ProfilePage({avatarUrl}) {
     skills = [],
     training = [],
     interests = [],
+    avatarUrl,
     createdAt,
     opportunities,
     badges = [],
@@ -383,7 +384,7 @@ function ProfilePage({avatarUrl}) {
             <div className="name">{name}</div>
             <div className="img-container">
               <img
-                src={avatarUrl || "https://i.ibb.co/rf6XN61Q/plant.png"}
+                src={avatarUrl}
                 alt="Profile"
                 className="profile-img"
               />

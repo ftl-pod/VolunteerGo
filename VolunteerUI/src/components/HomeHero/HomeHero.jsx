@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './HomeHero.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function HomeHero() {
   const [sparkles, setSparkles] = useState([]);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const navigate = useNavigate();
 
   // Create sparkles on mouse movement
   useEffect(() => {
@@ -32,28 +34,8 @@ export default function HomeHero() {
   }, []);
 
   const handleCTAClick = (e) => {
-    // Create badge burst effect
-    const rect = e.target.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    
-    for (let i = 0; i < 12; i++) {
-      setTimeout(() => {
-        const burstSparkle = {
-          id: Date.now() + Math.random() + i,
-          x: centerX + (Math.random() - 0.5) * 150,
-          y: centerY + (Math.random() - 0.5) * 150,
-          size: Math.random() * 8 + 4,
-          color: ['#7ea68a', '#a8916b', '#8a9b7a', '#9c8560'][Math.floor(Math.random() * 4)]
-        };
-        
-        setSparkles(prev => [...prev, burstSparkle]);
-        
-        setTimeout(() => {
-          setSparkles(prev => prev.filter(s => s.id !== burstSparkle.id));
-        }, 1500);
-      }, i * 80);
-    }
+    e.preventDefault();
+        navigate('/signup');
   };
 
   return (

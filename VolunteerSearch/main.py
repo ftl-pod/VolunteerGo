@@ -10,6 +10,7 @@ from sentence_transformers import SentenceTransformer, util
 from typing import Optional, List
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 import torch
+import psutil
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
 embedding_path = "opportunity_vecs.pkl"
@@ -20,7 +21,7 @@ async def lifespan(app: FastAPI):
     try:
         response = requests.get(f"{API_BASE_URL}/opportunities")
         response.raise_for_status()
-        opps = response.json()
+        opps = response.json()[:30]
         print(f"✅ Loaded {len(opps)} opportunities")
 
         for opp in opps:
@@ -38,7 +39,22 @@ async def lifespan(app: FastAPI):
                 opportunity_vecs = pickle.load(f).astype(np.float16)
         else:
             texts = [opp["text"] for opp in opps]
-            opportunity_vecs = model.encode(texts, convert_to_numpy=True).astype(np.float16)
+
+            batch_size = 50  # Tune this number lower if memory issues persist
+            vecs = []
+
+            print(f"📦 Encoding {len(texts)} opportunities in batches of {batch_size}")
+            for i in range(0, len(texts), batch_size):
+                batch = texts[i:i+batch_size]
+                batch_vecs = model.encode(batch, convert_to_numpy=True).astype(np.float16)
+                vecs.append(batch_vecs)
+
+                # Print memory usage after each batch
+                process = psutil.Process(os.getpid())
+                mem_mb = process.memory_info().rss / 1024 / 1024
+                print(f"🧠 Batch {i//batch_size + 1}: Memory used = {mem_mb:.2f} MB")
+                
+            opportunity_vecs = np.vstack(vecs)
             with open(embedding_path, "wb") as f:
                 pickle.dump(opportunity_vecs, f)
 
@@ -46,7 +62,10 @@ async def lifespan(app: FastAPI):
         
         # Convert once to torch tensor (float32 for compatibility) and store
         app.state.opportunity_vecs = torch.tensor(opportunity_vecs, dtype=torch.float32)
-        
+        process = psutil.Process(os.getpid())
+        mem_mb = process.memory_info().rss / 1024 / 1024
+        print(f"🔍 Memory used: {mem_mb:.2f} MB")
+
     except Exception as e:
         print("❌ Startup failed:", e)
         app.state.opps = []

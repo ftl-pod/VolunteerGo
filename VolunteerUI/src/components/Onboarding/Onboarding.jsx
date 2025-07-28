@@ -16,6 +16,7 @@ export default function Onboarding() {
   const { refreshProfile } = useProfile();
   const [showSuccess, setShowSuccess] = useState(false);
   const [earnedBadge, setEarnedBadge] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   // Initialize formData from firebase if available
   const [formData, setFormData] = useState({
@@ -25,8 +26,8 @@ export default function Onboarding() {
     username: user?.email?.split("@")[0] || "", // default fallback
     location: "",
     age: "",
-    skills: "",
-    training: "",
+    skills: [],
+    training: [],
     interests: []
   });
 
@@ -50,8 +51,8 @@ export default function Onboarding() {
             name: data.name || "",
             email: data.email || user.email || "",
             username: data.username || "",
-            skills: Array.isArray(data.skills) ? data.skills.join(", ") : (data.skills || ""),
-            training: Array.isArray(data.training) ? data.training.join(", ") : (data.training || ""),
+            skills: Array.isArray(data.skills) ? data.skills : (data.skills ? data.skills.split(",").map(s => s.trim()) : []),
+            training: Array.isArray(data.training) ? data.training : (data.training ? data.training.split(",").map(t => t.trim()) : []),
             location: data.location || "",
             age: data.age || "",
             interests: data.interests || [],
@@ -83,6 +84,31 @@ export default function Onboarding() {
     { id: 'human-rights', label: 'Human Rights', icon: '⚖️' }
   ];
 
+  const commonSkills = [
+  "Teaching",
+  "Web Development",
+  "Photography",
+  "Event Planning",
+  "Fundraising",
+  "Writing",
+  "Social Media",
+  "Data Analysis",
+  "Customer Service",
+  "Public Speaking"
+];
+
+const commonTraining = [
+  "First Aid",
+  "CPR",
+  "Project Management",
+  "Conflict Resolution",
+  "Leadership",
+  "Safety Training",
+  "Diversity & Inclusion",
+  "Mental Health Awareness"
+];
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -102,12 +128,30 @@ export default function Onboarding() {
     }));
     };
 
-  const handleInterestToggle = (interestId) => {
+    const handleInterestToggle = (interestId) => {
+      setFormData(prev => ({
+        ...prev,
+        interests: prev.interests.includes(interestId)
+          ? prev.interests.filter(id => id !== interestId)
+          : [...prev.interests, interestId]
+      }));
+    };
+
+    const toggleSkill = (skill) => {
     setFormData(prev => ({
       ...prev,
-      interests: prev.interests.includes(interestId)
-        ? prev.interests.filter(id => id !== interestId)
-        : [...prev.interests, interestId]
+      skills: prev.skills.includes(skill)
+        ? prev.skills.filter(s => s !== skill)
+        : [...prev.skills, skill]
+    }));
+  };
+
+  const toggleTraining = (trainingItem) => {
+    setFormData(prev => ({
+      ...prev,
+      training: prev.training.includes(trainingItem)
+        ? prev.training.filter(t => t !== trainingItem)
+        : [...prev.training, trainingItem]
     }));
   };
 
@@ -121,9 +165,11 @@ export default function Onboarding() {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+  setSubmitting(true);
+    console.log("Submitting started");
 
-  const skillsArray = formData.skills.split(",").map(s => s.trim()).filter(Boolean);
-  const trainingArray = formData.training.split(",").map(t => t.trim()).filter(Boolean);
+  const skillsArray = formData.skills;
+  const trainingArray = formData.training;
 
   try {
     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/onboarding`, {
@@ -163,6 +209,8 @@ const handleSubmit = async (e) => {
   } catch (err) {
     console.error("Failed onboarding process", err);
     alert("Error during onboarding");
+  } finally {
+    setSubmitting(false);
   }
 };
 
@@ -295,25 +343,39 @@ const handleSubmit = async (e) => {
               <p className="step-subtitle">Help us match you with the right opportunities</p>
 
               <div className="form-group">
-                <label>Skills (comma separated)</label>
-                <input
-                  type="text"
-                  name="skills"
-                  value={formData.skills}
-                  onChange={handleChange}
-                  placeholder="e.g., Teaching, Web Development, Photography"
-                />
+                <label>Skills</label>
+                <div className="pill-container">
+                  {commonSkills.map(skill => (
+                    <div
+                      key={skill}
+                      className={`pill ${formData.skills.includes(skill) ? "selected" : ""}`}
+                      onClick={() => toggleSkill(skill)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={e => { if(e.key === 'Enter') toggleSkill(skill); }}
+                    >
+                      {skill}
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="form-group">
-                <label>Training & Certifications (comma separated)</label>
-                <input
-                  type="text"
-                  name="training"
-                  value={formData.training}
-                  onChange={handleChange}
-                  placeholder="e.g., First Aid, CPR, Project Management"
-                />
+                <label>Training & Certifications</label>
+                <div className="pill-container">
+                  {commonTraining.map(training => (
+                    <div
+                      key={training}
+                      className={`pill ${formData.training.includes(training) ? "selected" : ""}`}
+                      onClick={() => toggleTraining(training)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={e => { if(e.key === 'Enter') toggleTraining(training); }}
+                    >
+                      {training}
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="button-group">
@@ -353,8 +415,13 @@ const handleSubmit = async (e) => {
                 <button type="button" onClick={prevStep} className="btn-secondary">
                   Back
                 </button>
-                <button type="button" onClick={handleSubmit} className="btn-primary">
-                  Complete Onboarding
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="btn-primary"
+                  disabled={submitting}
+                >
+                  {submitting ? "Submitting..." : "Complete Onboarding"}
                 </button>
               </div>
             </div>

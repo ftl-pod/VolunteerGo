@@ -164,6 +164,12 @@
     background: rgba(99, 128, 111, 0.7);
 }
 
+.list-item.current-user-highlight {
+    background: rgba(82, 124, 99, 0.12) !important;
+    border: 2px solid rgba(99, 128, 111, 0.3) !important;
+    box-shadow: 0 4px 12px rgba(99, 128, 111, 0.15) !important;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
     .page {

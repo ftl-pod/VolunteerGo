@@ -10,9 +10,9 @@ import { useOpportunity } from '../../contexts/OpportunityContext';
 import PopupPill from '../PopupPill/PopupPill';
 
 function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
-  const { user } = useAuth();
+  const { user, isSignedIn } = useAuth();
   const { profile, setProfile } = useProfile();
-  const { opportunities, loading, fetchOpportunities } = useOpportunity(); 
+  const { opportunities, loading, fetchOpportunities } = useOpportunity();
 
   const [savingOppId, setSavingOppId] = useState(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
@@ -21,14 +21,16 @@ function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
   const opportunitiesPerPage = 10;
   const [showSuccess, setShowSuccess] = useState(false);
   const [showUnsaved, setShowUnsaved] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSave, setShowSave] = useState(false);
 
   // use profile ID and saved opportunities from context
   const prismaUserId = profile?.id || null;
   const savedOpps = profile?.savedOpportunities?.map((opp) => opp.id) || [];
-  const resultsToShow = (overrideOpportunities && overrideOpportunities.length > 0) 
-    ? overrideOpportunities 
-    : opportunities;
-
+  const resultsToShow =
+    overrideOpportunities && overrideOpportunities.length > 0
+      ? overrideOpportunities
+      : opportunities;
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -49,9 +51,16 @@ function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
   };
 
   // fetch opportunities when searchResults change
-useEffect(() => {
-  fetchOpportunities(searchResults);
-}, [searchResults.keyword, searchResults.city, searchResults.tag, fetchOpportunities]);
+  useEffect(() => {
+    fetchOpportunities(searchResults);
+  }, [
+    searchResults.keyword,
+    searchResults.city,
+    searchResults.tag,
+    searchResults.format,
+    searchResults.skill,
+    fetchOpportunities,
+  ]);
 
   // filtering all the opportunities by tag if tag is selectedddd
   // handle Save/Unsave logic - update the profile context becuase we need it to be saved in the profile
@@ -67,7 +76,11 @@ useEffect(() => {
 
     try {
       const isSaved = savedOpps.includes(oppId);
-      const url = `${import.meta.env.VITE_API_BASE_URL}/users/${prismaUserId}/saved-opportunities/${isSaved ? "remove" : "add"}`;
+      const url = `${
+        import.meta.env.VITE_API_BASE_URL
+      }/users/${prismaUserId}/saved-opportunities/${
+        isSaved ? "remove" : "add"
+      }`;
       const method = "POST";
       const body = JSON.stringify({ opportunityId: oppId });
       const headers = { "Content-Type": "application/json" };
@@ -88,7 +101,9 @@ useEffect(() => {
             setShowUnsaved(true);
             return {
               ...prev,
-              savedOpportunities: prev.savedOpportunities.filter((opp) => opp.id !== oppId),
+              savedOpportunities: prev.savedOpportunities.filter(
+                (opp) => opp.id !== oppId
+              ),
             };
           } else {
             setShowSuccess(true);
@@ -111,13 +126,60 @@ useEffect(() => {
     }
   };
 
-  const filteredResults = resultsToShow
-  .filter((opportunity) => {
-    if (!searchResults.tag) return true;
-    if (!opportunity.tags) return false;
-    console.log("Smart Search results:", searchResults.city);
-    return opportunity.tags.includes(searchResults.tag);
+  // const filteredResults = resultsToShow
+  // .filter((opportunity) => {
+  //   if (!searchResults.tag) return true;
+  //   if (!opportunity.tags) return false;
+  //   console.log("Smart Search results:", searchResults.city);
+  //   return opportunity.tags.includes(searchResults.tag);
+  // });
+
+  const isVirtualAddress = (location) => {
+    if (!location) return true;
+    const virtualKeywords = ["virtual", "online", "remote", "zoom"];
+    return virtualKeywords.some((kw) => location.toLowerCase().includes(kw));
+  };
+
+
+  const filteredResults = resultsToShow.filter((opportunity) => {
+    if (
+      searchResults.tag &&
+      (!opportunity.tags || !opportunity.tags.includes(searchResults.tag))
+    ) {
+      return false;
+    }
+    if (
+      searchResults.skill &&
+      (!opportunity.skills || !opportunity.skills.includes(searchResults.skill))
+    ) {
+      return false;
+    }
+    const format = searchResults.format || "";
+    if (!format || format === "") return true;
+
+    if (format === "remote") {
+      return !opportunity.location || isVirtualAddress(opportunity.location);
+    }
+    if (format === "in-person") {
+      return (
+        opportunity.location &&
+        opportunity.date &&
+        !isVirtualAddress(opportunity.location)
+      );
+    }
+    if (format === "hybrid") {
+      return (
+        (opportunity.location &&
+          !opportunity.date &&
+          !isVirtualAddress(opportunity.location)) ||
+        (!opportunity.location &&
+          opportunity.date &&
+          isVirtualAddress(opportunity.location))
+      );
+    }
+    return true;
   });
+
 
   const totalPages = Math.ceil(filteredResults.length / opportunitiesPerPage);
   const startIndex = (currentPage - 1) * opportunitiesPerPage;
@@ -132,11 +194,11 @@ useEffect(() => {
         ) : (
           <div className="opportunity-grid">
             {currentOpportunities
-              .filter((opportunity) => {
-                if (!searchResults.tag) return true;
-                if (!opportunity.tags) return false;
-                return opportunity.tags.includes(searchResults.tag);
-              })
+              // .filter((opportunity) => {
+              //   if (!searchResults.tag) return true;
+              //   if (!opportunity.tags) return false;
+              //   return opportunity.tags.includes(searchResults.tag);
+              // })
               .map((opportunity) => (
                 <div key={opportunity.id} className="opportunity-card">
                   <Link to={`/opportunity/${opportunity.id}`}>
@@ -158,53 +220,58 @@ useEffect(() => {
                           : "Flexible schedule"}
                       </span>
                     </div>
-         
 
-                  <p
-                    className="card-description"
-                    title={opportunity.description}
-                  >
-                    {opportunity.description &&
-                    opportunity.description.length > 150
-                      ? opportunity.description.slice(0, 150) + "..."
-                      : opportunity.description}
-                  </p>
-                </Link>
+                    <p
+                      className="card-description"
+                      title={opportunity.description}
+                    >
+                      {opportunity.description &&
+                      opportunity.description.length > 150
+                        ? opportunity.description.slice(0, 150) + "..."
+                        : opportunity.description}
+                    </p>
+                  </Link>
 
-                <div className="card-tags">
-                  {opportunity.tags.map((tag) => (
-                    <span key={tag} className="card-tag">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <div className="card-actions">
-                    {profile?.opportunities?.some((opp) => opp.id === opportunity.id)
-                        ?(<button
-                    className="btn-primary"
-                  > Applied </button>)
-                        : <button
-                    className="btn-primary"
-                    onClick={() => handleApplyClick(opportunity)}> 
-                    I want to Help </button>
-                    }
-                    <button                     
-                      className={`save-btn ${savingOppId === opportunity.id ? 'loading' : ''}`}                     
-                      onClick={(e) => handleSavedClick(e, opportunity.id)}                     
-                      disabled={savingOppId === opportunity.id}                   
-                    >                     
+                  <div className="card-tags">
+                    {opportunity.tags.map((tag) => (
+                      <span key={tag} className="card-tag">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="card-actions">
+                    {profile?.opportunities?.some(
+                      (opp) => opp.id === opportunity.id
+                    ) ? (
+                      <button className="btn-primary"> Applied </button>
+                    ) : (
+                      <button
+                        className="btn-primary"
+                        onClick={() => {
+                          handleApplyClick(opportunity), setShowLogin(true);
+                        }}
+                      >
+                        I want to Help{" "}
+                      </button>
+                    )}
+                    <button
+                      className={`save-btn ${
+                        savingOppId === opportunity.id ? "loading" : ""
+                      }`}
+                      onClick={(e) => {
+                        handleSavedClick(e, opportunity.id), setShowSave(true);
+                      }}
+                      disabled={savingOppId === opportunity.id}
+                    >
                       {savingOppId === opportunity.id ? (
                         <div className="loading-spinner"></div>
+                      ) : savedOpps.includes(opportunity.id) ? (
+                        <BsBookmarkFill className="save-icon" />
                       ) : (
-                        savedOpps.includes(opportunity.id) ? (
-                          <BsBookmarkFill className="save-icon" />
-                        ) : (
-                          <BsBookmark className="save-icon" />
-                        )
-                      )}                   
+                        <BsBookmark className="save-icon" />
+                      )}
                     </button>
-
-                </div>
+                  </div>
                 </div>
               ))}
           </div>
@@ -217,22 +284,28 @@ useEffect(() => {
         >
           Prev
         </button>
-        <span>Page {currentPage} of {totalPages}</span>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
         <button
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
           disabled={currentPage === totalPages}
         >
           Next
         </button>
       </div>
 
+      {isSignedIn ? (
+        <ApplyModal
+          isOpen={isApplyModalOpen}
+          onClose={handleCloseModal}
+          applicant={user?.firstName || user?.fullName || "Anonymous"}
+          opportunity={selectedOpportunity}
+        />
+      ) : null}
 
-      <ApplyModal
-        isOpen={isApplyModalOpen}
-        onClose={handleCloseModal}
-        applicant={user?.firstName || user?.fullName || "Anonymous"}
-        opportunity={selectedOpportunity}
-      />
       {/* Saved popup */}
       <PopupPill
         message="Volunteer opportunity saved!"
@@ -252,7 +325,26 @@ useEffect(() => {
         onClose={() => setShowUnsaved(false)}
         position="bottom-center"
       />
-
+      {!isSignedIn ? (
+        <PopupPill
+          message="Please Login To Apply"
+          type="warning"
+          duration={3000}
+          isVisible={showLogin}
+          onClose={() => setShowLogin(false)}
+          position="bottom-center"
+        />
+      ) : null}
+      {!isSignedIn ? (
+        <PopupPill
+          message="Please Login To Save"
+          type="warning"
+          duration={3000}
+          isVisible={showSave}
+          onClose={() => setShowSave(false)}
+          position="bottom-center"
+        />
+      ) : null}
     </>
   );
 }

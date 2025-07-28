@@ -11,7 +11,6 @@ from typing import Optional, List
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 import torch
 
-# Model loading is okay globally
 model = SentenceTransformer('all-MiniLM-L6-v2')
 embedding_path = "opportunity_vecs.pkl"
 API_BASE_URL = os.getenv("VITE_API_BASE_URL", "http://localhost:3000")
@@ -35,19 +34,23 @@ async def lifespan(app: FastAPI):
             
         if os.path.exists(embedding_path):
             with open(embedding_path, "rb") as f:
-                opportunity_vecs = pickle.load(f)
+                # Load embeddings as float16 to save memory
+                opportunity_vecs = pickle.load(f).astype(np.float16)
         else:
             texts = [opp["text"] for opp in opps]
-            opportunity_vecs = model.encode(texts, convert_to_numpy=True)
+            opportunity_vecs = model.encode(texts, convert_to_numpy=True).astype(np.float16)
             with open(embedding_path, "wb") as f:
                 pickle.dump(opportunity_vecs, f)
 
         app.state.opps = opps
-        app.state.opportunity_vecs = opportunity_vecs
+        
+        # Convert once to torch tensor (float32 for compatibility) and store
+        app.state.opportunity_vecs = torch.tensor(opportunity_vecs, dtype=torch.float32)
+        
     except Exception as e:
         print("❌ Startup failed:", e)
         app.state.opps = []
-        app.state.opportunity_vecs = np.zeros((1, 384))  # Fallback
+        app.state.opportunity_vecs = torch.zeros((1, 384), dtype=torch.float32)  # Fallback
 
     yield
 
@@ -105,7 +108,7 @@ def get_opps(request: Request):
 @app.post("/search")
 async def search(request: Request, body: SearchRequest):
     opps = request.app.state.opps
-    opportunity_vecs = request.app.state.opportunity_vecs
+    opportunity_vecs = request.app.state.opportunity_vecs  # Torch tensor reused here
 
     user_profile = body.user_profile
     combined_vec = build_user_vector(body.search_prompt, user_profile, opps)
@@ -117,13 +120,13 @@ async def search(request: Request, body: SearchRequest):
     keyword_scores = [keyword_match_score(opp, keywords) for opp in opps]
     max_keyword_score = max(keyword_scores) or 1
 
-    final_scores = [vs + 0 * (ks / max_keyword_score) for vs, ks in zip(vector_scores, keyword_scores)]
+    final_scores = [vs + 0.4 * (ks / max_keyword_score) for vs, ks in zip(vector_scores, keyword_scores)]
     top_indices = sorted(range(len(final_scores)), key=lambda i: final_scores[i], reverse=True)
 
     recommendations = []
-    for i in top_indices[:50]:
+    for i in top_indices[:75]:
         if opps[i]["id"] not in user_profile.saved_opportunities:
-            rec = dict(opps[i])  # copy all fields of the opportunity
+            rec = dict(opps[i]) 
             rec["score"] = final_scores[i]
             recommendations.append(rec)
 

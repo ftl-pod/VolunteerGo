@@ -3,3 +3,4 @@ uvicorn
 sentence-transformers
 scikit-learn
 numpy
+psutil

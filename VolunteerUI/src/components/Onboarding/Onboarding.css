@@ -301,3 +301,29 @@ select[multiple] {
   background-color: white;
   cursor: pointer;
 }
+
+.pill-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  padding: 8px 14px;
+  border-radius: 20px;
+  background-color: #eee;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.pill:hover {
+  background-color: #ddd;
+}
+
+.pill.selected {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}

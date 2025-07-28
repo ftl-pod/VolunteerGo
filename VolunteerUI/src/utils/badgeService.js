@@ -7,7 +7,7 @@ const badgeService = {
         // Get full user with database ID
         const { data: user } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${firebaseUid}`);
 
-        const hasBadge = user.badges.some(b => b.name === "Newcomer");
+        const hasBadge = user.badges.some(b => b.name === "Newcomer Badge");
         if (!hasBadge) {
           const { data: badge } = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/badges/give`, {
             userId: user.id,

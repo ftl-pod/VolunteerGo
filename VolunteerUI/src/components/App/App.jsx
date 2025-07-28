@@ -35,7 +35,7 @@ function App() {
                 <Route path="/search" element={<SearchPage/>} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
-                <Route path="/profile" element={<ProfilePage user={user} />} />
+                <Route path="/profile" element={<ProfilePage user={user} avatarUrl={avatarUrl}/>} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/saved" element={<SavedPage />} />
                 <Route path="/opportunity/:id" element={<OpportunityPage />} />

@@ -311,15 +311,16 @@ select[multiple] {
 .pill {
   padding: 8px 14px;
   border-radius: 20px;
-  background-color: #eee;
+  background-color: #e8e3e0;
   cursor: pointer;
   user-select: none;
   border: 1px solid transparent;
+  color: var(--text-color);
   transition: all 0.2s ease;
 }
 
 .pill:hover {
-  background-color: #ddd;
+  background-color: var(--tertiary-color);
 }
 
 .pill.selected {

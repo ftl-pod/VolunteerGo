@@ -168,8 +168,8 @@ const handleSubmit = async (e) => {
   setSubmitting(true);
     console.log("Submitting started");
 
-  const skillsArray = formData.skills.split(",").map(s => s.trim()).filter(Boolean);
-  const trainingArray = formData.training.split(",").map(t => t.trim()).filter(Boolean);
+  const skillsArray = formData.skills;
+  const trainingArray = formData.training;
 
   try {
     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/onboarding`, {

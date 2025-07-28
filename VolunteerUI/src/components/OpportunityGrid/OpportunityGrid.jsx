@@ -130,7 +130,7 @@ useEffect(() => {
     <>
       <div className="opportunities-section">
         {loading ? (
-          <div className="loading-spinner">Loading opportunities...</div>
+          <div className>Loading opportunities...</div>
         ) : (
           <div className="opportunity-grid">
             {currentOpportunities

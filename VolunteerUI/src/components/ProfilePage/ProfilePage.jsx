@@ -82,12 +82,11 @@ function ProfilePage() {
     opps = opportunities.map((o) => o.name);
   }
 
-
   const earnedBadgeIds = new Set(badges.map(b => b.id));
   const earnedBadges = allBadges.filter(badge => earnedBadgeIds.has(badge.id));
   const lockedBadges = allBadges.filter(badge => !earnedBadgeIds.has(badge.id));
+  
   const renderOverview = () => (
-    <>
     <div className="section-grid">
       <div className="section">
         <div className="box">
@@ -99,49 +98,49 @@ function ProfilePage() {
             {interests.length ? (
               interests.map((i, index) => <div key={index}>{i}</div>)
             ) : (
-              <div>No interests listed.</div>
+              <div> No interests listed.</div>
             )}
           </div>
         </div>
 
-      <div className="box">
-        <div className="box-header">
-          <TbTargetArrow className="icon" />
-          <b>Skills</b>
+        <div className="box">
+          <div className="box-header">
+            <TbTargetArrow className="icon" />
+            <b>Skills</b>
+          </div>
+          <div className="box-content">
+            {skills.length ? (
+              skills.map((skill, index) => <div key={index}>{skill}</div>)
+            ) : (
+              <div>No skills listed.</div>
+            )}
+          </div>
         </div>
-        <div className="box-content">
-          {skills.length ? (
-            skills.map((skill, index) => <div key={index}>{skill}</div>)
-          ) : (
-            <div>No skills listed.</div>
-          )}
-        </div>
-      </div>
 
-      <div className="box">
-        <div className="box-header">
-          <PiCertificateFill className="icon" />
-          <b>Certifications</b>
-        </div>
-        <div className="box-content">
-          {training.length ? (
-            training.map((t, index) => <div key={index}>{t}</div>)
-          ) : (
-            <div>No certifications listed.</div>
-          )}
+        <div className="box">
+          <div className="box-header">
+            <PiCertificateFill className="icon" />
+            <b>Certifications</b>
+          </div>
+          <div className="box-content">
+            {training.length ? (
+              training.map((t, index) => <div key={index}>{t}</div>)
+            ) : (
+              <div>No certifications listed.</div>
+            )}
+          </div>
         </div>
       </div>
-
-      </div>
+      
       <div className="section">
         <div className="box">
           <div className="box-header">
             <FaFireFlameCurved className="icon" />
-            <b>Leaderboard status</b>
+            <b>Leaderboard Status</b>
           </div>
           <div className="box-content">
             <div className="rank-label">
-              Leaderboard Rank: #{leaderboardRank || "N/A"}
+              Leaderboard Rank #{leaderboardRank || "N/A"}
             </div>
           </div>
         </div>
@@ -149,15 +148,18 @@ function ProfilePage() {
         <div className="box org-box">
           <div className="box-header">
             <BiSolidDonateHeart className="icon" />
-            <b>You Have Made A Difference With</b>
+            <b>Organizations Supported</b>
           </div>
           <div className="box-content">
-            {opps.map((name, index) => (<div key={index}> {name} </div>))}
+            {opps.length ? (
+              opps.map((name, index) => <div key={index}>{name}</div>)
+            ) : (
+              <div>No organizations supported yet.</div>
+            )}
           </div>
+        </div>
       </div>
-      </div>
-      </div>
-    </>
+    </div>
   );
 
   const renderBadges = () => (
@@ -181,8 +183,8 @@ function ProfilePage() {
         <div className="badges-grid">
           {lockedBadges.map((badge) => (
             <div key={badge.id} className="badge locked">
-              <div className="badge-icon locked-img">
-                <img src={badge.imageUrl} alt={badge.name} className="badge-img" />
+              <div className="badge-icon">
+                <img src={badge.imageUrl} alt={badge.name} className="badge-img locked-img" />
               </div>
               <div className="badge-name">{badge.name}</div>
             </div>
@@ -206,39 +208,42 @@ function ProfilePage() {
                 className="profile-img"
               />
             </div>
+            
+            {/* Grid-based Bio Layout */}
             <div className="bio">
-              <div className="info">
-                <div>
-                  <IoLocationSharp className="icon" />
-                  <b>Location</b>
-                </div>
-                <div>
-                  <MdCake className="icon" />
-                  <b>Age</b>
-                </div>
-                <div>
-                  <GiThreeLeaves className="icon" />
-                  <b>Points</b>
-                </div>
-                <div>
-                  <FaBarsProgress className="icon" />
-                  <b>Level</b>
-                </div>
-                <div>
-                  <IoCalendarSharp className="icon" />
-                  <b>Joined</b>
-                </div>
+              <div className="info-label">
+                <IoLocationSharp className="icon" />
+                <span>Location</span>
               </div>
-              <div className="info">
-                <div>{location || "Not set"}</div>
-                <div>{age || "Unknown"}</div>
-                <div>{points || 0}</div>
-                <div>{level || "1"}</div>
-                <div>
-                  {createdAt ? new Date(createdAt).toLocaleDateString() : "N/A"}
-                </div>
+              <div className="info-value">{location || "Not set"}</div>
+              
+              <div className="info-label">
+                <MdCake className="icon" />
+                <span>Age</span>
+              </div>
+              <div className="info-value">{age || "Unknown"}</div>
+              
+              <div className="info-label">
+                <GiThreeLeaves className="icon" />
+                <span>Points</span>
+              </div>
+              <div className="info-value">{points || 0}</div>
+              
+              <div className="info-label">
+                <FaBarsProgress className="icon" />
+                <span>Level</span>
+              </div>
+              <div className="info-value">{level || "1"}</div>
+              
+              <div className="info-label">
+                <IoCalendarSharp className="icon" />
+                <span>Joined</span>
+              </div>
+              <div className="info-value">
+                {createdAt ? new Date(createdAt).toLocaleDateString() : "N/A"}
               </div>
             </div>
+            
             <button
               className="btn-primary profile-button"
               onClick={() => navigate("/onboarding")}
@@ -248,34 +253,31 @@ function ProfilePage() {
           </div>
         </div>
 
+        {/* Right Content Area */}
         <div className="profile-content">
-          {/* Navigation Tabs */}
-          
-          <div className="profile-nav">
-            <button
-              className={`nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
-              onClick={() => setActiveTab('overview')}
-            >
-              Overview
-            </button>
-            <button
-              className={`nav-tab ${activeTab === 'badges' ? 'active' : ''}`}
-              onClick={() => setActiveTab('badges')}
-            >
-              Badges
-            </button>
+          <div className="profile-header">
+            <div className="profile-nav">
+              <button
+                className={`nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
+                onClick={() => setActiveTab('overview')}
+              >
+                Overview
+              </button>
+              <button
+                className={`nav-tab ${activeTab === 'badges' ? 'active' : ''}`}
+                onClick={() => setActiveTab('badges')}
+              >
+                Badges
+              </button>
+            </div>
+            <ProgressBar points={points} size="normal" />
           </div>
-          <ProgressBar points={points} size="normal" />
+          
           {/* Tab Content */}
           <div className="tab-content">
-            {activeTab === 'overview' && (
-              <div className="section">
-                {renderOverview()}
-              </div>
-            )}
+            {activeTab === 'overview' && renderOverview()}
             {activeTab === 'badges' && renderBadges()}
           </div>
-          
         </div>
       </div>
     </div>

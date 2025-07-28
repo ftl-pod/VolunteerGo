@@ -56,9 +56,6 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity }) {
       });
       if (!oppRes.ok) throw new Error("Failed to update opportunities");
 
-      // Refresh user data
-      await refreshProfile();
-      await refreshLeaderboard();
 
       // Badge checks
       await badgeService.checkFirstApplication(user.uid, userOpportunitiesCount, queueBadge);
@@ -66,6 +63,10 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity }) {
         await badgeService.checkCategoryBadge(user.uid, opportunity.tags, queueBadge);
       }
       await badgeService.checkLeaderboardBadge(user.uid, queueBadge);
+
+      // Refresh user data
+      await refreshProfile();
+      await refreshLeaderboard();
 
       // Confirmation email
       await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/send-confirmation-email`, {

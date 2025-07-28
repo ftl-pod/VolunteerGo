@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { BiSolidDonateHeart } from 'react-icons/bi';
 import { useAuth } from "../../hooks/useAuth";
@@ -13,11 +13,20 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity }) {
   const [name, setName] = useState('');
   const [applyLoading, setApplyLoading] = useState(false);
   const [earnedBadges, setEarnedBadges] = useState([]);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const { profile, refreshProfile } = useProfile();
   const { user, token } = useAuth();
   const { refreshLeaderboard } = useLeaderboard();
   const points = profile?.points || 0;
+
+  // Close modal only after all badge modals are done
+  useEffect(() => {
+    if (hasSubmitted && earnedBadges.length === 0 && !applyLoading) {
+      onClose();
+      setHasSubmitted(false);
+    }
+  }, [earnedBadges, applyLoading, hasSubmitted, onClose]);
 
   const queueBadge = (badge) => {
     if (badge) {
@@ -28,6 +37,7 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setApplyLoading(true);
+    setHasSubmitted(false);
 
     try {
       // Update points
@@ -55,7 +65,6 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity }) {
         body: JSON.stringify({ opportunityId: opportunity.id }),
       });
       if (!oppRes.ok) throw new Error("Failed to update opportunities");
-
 
       // Badge checks
       await badgeService.checkFirstApplication(user.uid, userOpportunitiesCount, queueBadge);
@@ -88,6 +97,8 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity }) {
         }),
       });
 
+      setHasSubmitted(true); 
+
     } catch (error) {
       console.error("Error submitting application:", error);
       alert("Submission failed. Please try again.");
@@ -96,6 +107,7 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity }) {
     }
 
     window.dispatchEvent(new CustomEvent("showPointsGif"));
+
     if (message.trim()) {
       console.log("Application submitted:", {
         applicant: profile.name,
@@ -108,18 +120,11 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity }) {
       setMessage('');
       setName('');
     }
-
   };
 
-const handleBadgeModalClose = () => {
-  setEarnedBadges((prev) => {
-    const [, ...remaining] = prev;
-    if (remaining.length === 0) {
-      onClose();
-    }
-    return remaining;
-  });
-};
+  const handleBadgeModalClose = () => {
+    setEarnedBadges((prev) => prev.slice(1));
+  };
 
   const handleOverlayClick = (e) => {
     if (applyLoading) return;
@@ -188,6 +193,7 @@ const handleBadgeModalClose = () => {
 
       {earnedBadges.length > 0 && (
         <BadgeModal
+          key={earnedBadges[0].id || earnedBadges[0].name}
           badge={earnedBadges[0]}
           onClose={handleBadgeModalClose}
         />

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.35.2",
+    "@lottiefiles/dotlottie-react": "^0.14.4",
     "@vis.gl/react-google-maps": "^1.5.4",
     "axios": "^1.10.0",
     "dotenv": "^17.2.0",

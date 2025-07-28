@@ -143,7 +143,7 @@ async def search(request: Request, body: SearchRequest):
     top_indices = sorted(range(len(final_scores)), key=lambda i: final_scores[i], reverse=True)
 
     recommendations = []
-    for i in top_indices[:10]:
+    for i in top_indices[:75]:
         if opps[i]["id"] not in user_profile.saved_opportunities:
             rec = dict(opps[i]) 
             rec["score"] = final_scores[i]

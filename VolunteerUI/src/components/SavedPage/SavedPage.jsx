@@ -3,6 +3,9 @@ import { useProfile } from '../../contexts/ProfileContext';
 import RemoveModal from '../RemoveModal/RemoveModal';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useOpportunity } from "../../contexts/OpportunityContext"; 
+import { BsBookmarkFill } from "react-icons/bs";
+import { BsBookmark } from "react-icons/bs";
 
 function SavedPage() {
   const { profile, setProfile } = useProfile();
@@ -11,8 +14,14 @@ function SavedPage() {
   const [removing, setRemoving] = useState(false); // loading state
   const [smartSuggestions, setSmartSuggestions] = useState([]);
   const [allSmartSuggestions, setAllSmartSuggestions] = useState([]); // store all the top 15 suggestions for now, might change the value later idk
+  const [savingOppId, setSavingOppId] = useState(null);
+  const { opportunities } = useOpportunity(); 
+  const prismaUserId = profile?.id || null;
 
   const savedOpps = profile?.savedOpportunities || [];
+
+  // Helper function to check if an opportunity is saved
+  const isSaved = (oppId) => savedOpps.some((opp) => opp.id === oppId);
 
   const closeModal = () => {
     if (!removing) {
@@ -75,10 +84,10 @@ function SavedPage() {
         const data = await res.json();
         console.log(data);
         // taking the top 15 recommendations for testing
-        const top15 = data.recommendations.slice(0, 15);
-        setAllSmartSuggestions(top15);
+        const top25 = data.recommendations.slice(0, 25);
+        setAllSmartSuggestions(top25);
         // show first 3 suggestions first, idk
-        setSmartSuggestions(top15.slice(0, 3));
+        setSmartSuggestions(top25.slice(0, 3));
       } catch (error) {
         console.error("Failed to fetch recommendations:", error);
       }
@@ -86,6 +95,84 @@ function SavedPage() {
 
     fetchRecommendations();
   }, [profile]);
+
+  const handleSavedClick = async (e, oppId) => {
+    e.stopPropagation();
+    if (!prismaUserId) {
+      console.error("Profile ID not available");
+      return;
+    }
+
+    setSavingOppId(oppId); // start savinggg
+
+    try {
+      const isSaved = savedOpps.some((opp) => opp.id === oppId);
+      const url = `${
+        import.meta.env.VITE_API_BASE_URL
+      }/users/${prismaUserId}/saved-opportunities/${
+        isSaved ? "remove" : "add"
+      }`;
+      const method = "POST";
+      const body = JSON.stringify({ opportunityId: oppId });
+      const headers = { "Content-Type": "application/json" };
+
+      const res = await fetch(url, { method, headers, body });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      if (data.success) {
+        if (isSaved) {
+          setProfile((prev) => {
+            if (!prev) return prev;
+
+            return {
+              ...prev,
+              savedOpportunities: prev.savedOpportunities.filter(
+                (opp) => opp.id !== oppId
+              ),
+            };
+          });
+        } else {
+          let oppToAdd = opportunities.find((opp) => opp.id === oppId);
+          if (!oppToAdd) {
+            try {
+              const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/opportunities/${oppId}`);
+              if (res.ok) {
+                oppToAdd = await res.json();
+              } else {
+                console.error(`Failed to fetch opportunity ${oppId}: ${res.status}`);
+                setSavingOppId(null);
+                return;
+              }
+            } catch (error) {
+              console.error(`Error fetching opportunity ${oppId}:`, error);
+              setSavingOppId(null);
+              return;
+            }
+          }
+
+          setProfile((prev) => {
+            if (!prev) return prev;
+
+            return {
+              ...prev,
+              savedOpportunities: [oppToAdd, ...prev.savedOpportunities],
+            };
+          });
+        }
+      } else {
+        console.error("Failed to update saved opportunities:", data);
+      }
+    } catch (error) {
+      console.error("Error updating saved opportunities:", error);
+    } finally {
+      setSavingOppId(null); // done saving
+    }
+  };
 
   const confirmRemove = async () => {
     if (!oppToRemove || !profile?.id) return;
@@ -184,11 +271,28 @@ function SavedPage() {
                     className="btn-secondary"
                     onClick={() => handleRemoveSuggestion(opportunity)}
                   >
-                    Remove
+                    Not Interested
                   </button>
                   <Link to={`/opportunity/${opportunity.id}`}>
                     <button className="btn-primary">I Want to Help</button>
                   </Link>
+                <button
+                  className="suggestion-save"
+                  onClick={(e) => handleSavedClick(e, opportunity.id)}
+                  disabled={savingOppId === opportunity.id}
+                >
+                  {savingOppId === opportunity.id ? (
+                    isSaved(opportunity.id) ? (
+                      <BsBookmark className="save-icon" />
+                    ) : (
+                      <BsBookmarkFill className="save-icon" />
+                    )
+                  ) : isSaved(opportunity.id) ? (
+                    <BsBookmarkFill className="save-icon" />
+                  ) : (
+                    <BsBookmark className="save-icon" />
+                  )}
+                </button>
                 </div>
               </div>
             ))

@@ -7,7 +7,7 @@ import { useProfile } from "../../contexts/ProfileContext";
 import { useEffect, useState } from 'react';
 import ProgressBar from '../ProgressBar/ProgressBar';
 
-function Navbar({avatarUrl}) {
+function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
@@ -113,7 +113,7 @@ function Navbar({avatarUrl}) {
           <>
             <NavLink to="/profile" className="profile-icon">
               <img
-                src={avatarUrl}
+                src={profile?.avatarUrl}
                 alt="User avatar"
                 style={{
                   width: 60,

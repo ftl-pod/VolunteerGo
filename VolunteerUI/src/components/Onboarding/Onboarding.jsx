@@ -8,7 +8,7 @@ import badgeService from '../../utils/badgeService';
 import PopupPill from "../PopupPill/PopupPill";
 import BadgeModal from "../BadgeModal/BadgeModal";
 
-export default function Onboarding() {
+export default function Onboarding({avatarUrl, setAvatarUrl}) {
   const { user, token, isLoaded } = useAuth();
   const navigate = useNavigate();  
   const [currentStep, setCurrentStep] = useState(1);
@@ -16,6 +16,7 @@ export default function Onboarding() {
   const { refreshProfile } = useProfile();
   const [showSuccess, setShowSuccess] = useState(false);
   const [earnedBadge, setEarnedBadge] = useState(null);
+  //const [avatarUrl, setAvatarUrl] = useState("https://i.postimg.cc/D0RRVwPw/plant.png")
   const [submitting, setSubmitting] = useState(false);
 
   // Initialize formData from firebase if available
@@ -396,21 +397,55 @@ const handleSubmit = async (e) => {
 
               <div className="form-group">
                  <div className="avatar-preview">
-                <img src={formData.avatarUrl} alt="Avatar preview" />
+                <img src={avatarUrl} alt="Avatar preview" />
               </div>
-            <label>Profile Picture URL</label>
-
-
-                <input
-                  type="url"
-                  name="avatarUrl"
-                  value={formData.avatarUrl}
-                  onChange={handleChange}
-                  placeholder="Enter image URL"
-                />
+              <div className="avatar-container">
+                <div className="avatar-choice"
+                onClick={() => setAvatarUrl("https://i.postimg.cc/D0RRVwPw/plant.png")}
+                >
+                  <img src="https://i.postimg.cc/D0RRVwPw/plant.png" className="avatar-img" alt="plant"/>
+                </div>
+                <div className="avatar-choice"
+                onClick={() => setAvatarUrl("https://i.postimg.cc/vBZmT0F6/growing-plant.png")}
+                >
+                  <img src="https://i.postimg.cc/vBZmT0F6/growing-plant.png" className="avatar-img" alt="flowers"/>
+                </div>
+                <div className="avatar-choice"
+                onClick={() => setAvatarUrl("https://i.postimg.cc/QM4Fp2qq/cactus.png")}>
+                  <img src="https://i.postimg.cc/QM4Fp2qq/cactus.png" className="avatar-img" alt="cactus"/>
+                </div>
+                <div className="avatar-choice"
+                onClick={() => setAvatarUrl("https://i.postimg.cc/tTk2tCMM/Untitled-design-copy.png")}
+                >
+                  <img src="https://i.postimg.cc/tTk2tCMM/Untitled-design-copy.png" className="avatar-img" alt="girl"/>
+                </div>
+                <div className="avatar-choice"
+                onClick={() => setAvatarUrl("https://i.postimg.cc/k4TvRYVr/Untitled-design-copy-4.png")}
+                >
+                  <img src="https://i.postimg.cc/k4TvRYVr/Untitled-design-copy-4.png" className="avatar-img" alt="girl"/>
+                </div>
+                <div className="avatar-choice"
+                onClick={() => setAvatarUrl("https://i.postimg.cc/4ynb6vtY/Untitled-design-copy-3.png")}
+                >
+                  <img src="https://i.postimg.cc/4ynb6vtY/Untitled-design-copy-3.png" className="avatar-img" alt="girl"/>
+                </div>
+                <div className="avatar-choice"
+                onClick={() => setAvatarUrl("https://i.postimg.cc/L5nQbL74/Untitled-design-4.png")}
+                >
+                  <img src="https://i.postimg.cc/L5nQbL74/Untitled-design-4.png" className="avatar-img" alt="boy"/>
+                </div>
+                <div className="avatar-choice"
+                onClick={() => setAvatarUrl("https://i.postimg.cc/kgLz36cT/Untitled-design-1-copy.png")}
+                >
+                  <img src="https://i.postimg.cc/kgLz36cT/Untitled-design-1-copy.png" className="avatar-img" alt="boy"/>
+                </div>
+                <div className="avatar-choice"
+                onClick={() => setAvatarUrl("https://i.postimg.cc/vBsKTJC9/Untitled-design-1-copy-2.png")}
+                >
+                  <img src="https://i.postimg.cc/vBsKTJC9/Untitled-design-1-copy-2.png" className="avatar-img" alt="boy"/>
+                </div>
               </div>
-
-
+              </div>
               <div className="button-group">
                 <button type="button" onClick={prevStep} className="btn-secondary">
                   Back

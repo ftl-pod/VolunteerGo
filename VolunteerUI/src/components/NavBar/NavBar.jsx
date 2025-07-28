@@ -7,7 +7,7 @@ import { useProfile } from "../../contexts/ProfileContext";
 import { useEffect, useState } from 'react';
 import ProgressBar from '../ProgressBar/ProgressBar';
 
-function Navbar() {
+function Navbar({avatarUrl}) {
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
@@ -30,10 +30,9 @@ function Navbar() {
   return () => window.removeEventListener("showPointsGif", handleShowGif);
   }, []);
 
-  const avatarUrl =
-    profile?.avatarUrl ||  // From backend DB (shared context)
-    user?.photoURL ||      // Fallback to Firebase photoURL
-    "https://i.ibb.co/rf6XN61Q/plant.png"; // Final fallback
+  // const avatarlink =
+  //   {avatarUrl} ||  // From backend DB (shared context)
+  //   "https://i.postimg.cc/D0RRVwPw/plant.png"; // Final fallback
 
   // Show a placeholder or spinner avatar while profile is loading
   if (loading) {

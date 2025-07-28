@@ -177,7 +177,7 @@ a:hover {
   background: rgba(241, 3, 3, 0.2);
 }
 
-.save-icon{
+.suggested-card .save-icon{
   color:rgba(225, 225, 225, 0.9);
 }
 .suggested-card .suggestion-save:hover {

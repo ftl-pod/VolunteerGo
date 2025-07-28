@@ -4,24 +4,27 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import requests
 import numpy as np
-import pickle
 import os
-from sentence_transformers import SentenceTransformer, util
 from typing import Optional, List
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
-import torch
-import psutil
 
-model = SentenceTransformer('all-MiniLM-L6-v2')
-embedding_path = "opportunity_vecs.pkl"
+IS_PRODUCTION = os.getenv("ENV") == "production"
 API_BASE_URL = os.getenv("VITE_API_BASE_URL", "http://localhost:3000")
+
+if not IS_PRODUCTION:
+    from sentence_transformers import SentenceTransformer, util
+    import torch
+    import pickle
+    import psutil
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    embedding_path = "opportunity_vecs.pkl"
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
         response = requests.get(f"{API_BASE_URL}/opportunities")
         response.raise_for_status()
-        opps = response.json()[:30]
+        opps = response.json()
         print(f"✅ Loaded {len(opps)} opportunities")
 
         for opp in opps:
@@ -32,44 +35,33 @@ async def lifespan(app: FastAPI):
                 str(opp.get("location") or ""),
                 str(opp.get("organization", {}).get("name") or "")
             ]).strip()
-            
-        if os.path.exists(embedding_path):
-            with open(embedding_path, "rb") as f:
-                # Load embeddings as float16 to save memory
-                opportunity_vecs = pickle.load(f).astype(np.float16)
-        else:
-            texts = [opp["text"] for opp in opps]
-
-            batch_size = 50  # Tune this number lower if memory issues persist
-            vecs = []
-
-            print(f"📦 Encoding {len(texts)} opportunities in batches of {batch_size}")
-            for i in range(0, len(texts), batch_size):
-                batch = texts[i:i+batch_size]
-                batch_vecs = model.encode(batch, convert_to_numpy=True).astype(np.float16)
-                vecs.append(batch_vecs)
-
-                # Print memory usage after each batch
-                process = psutil.Process(os.getpid())
-                mem_mb = process.memory_info().rss / 1024 / 1024
-                print(f"🧠 Batch {i//batch_size + 1}: Memory used = {mem_mb:.2f} MB")
-                
-            opportunity_vecs = np.vstack(vecs)
-            with open(embedding_path, "wb") as f:
-                pickle.dump(opportunity_vecs, f)
 
         app.state.opps = opps
-        
-        # Convert once to torch tensor (float32 for compatibility) and store
-        app.state.opportunity_vecs = torch.tensor(opportunity_vecs, dtype=torch.float32)
-        process = psutil.Process(os.getpid())
-        mem_mb = process.memory_info().rss / 1024 / 1024
-        print(f"🔍 Memory used: {mem_mb:.2f} MB")
+
+        if not IS_PRODUCTION:
+            if os.path.exists(embedding_path):
+                with open(embedding_path, "rb") as f:
+                    opportunity_vecs = pickle.load(f).astype(np.float16)
+            else:
+                texts = [opp["text"] for opp in opps]
+                vecs = []
+                print(f"📦 Encoding {len(texts)} opportunities in batches of 50")
+                for i in range(0, len(texts), 50):
+                    batch = texts[i:i+50]
+                    batch_vecs = model.encode(batch, convert_to_numpy=True).astype(np.float16)
+                    vecs.append(batch_vecs)
+                    mem_mb = psutil.Process(os.getpid()).memory_info().rss / 1024 / 1024
+                    print(f"🧠 Batch {i//50 + 1}: Memory used = {mem_mb:.2f} MB")
+                opportunity_vecs = np.vstack(vecs)
+                with open(embedding_path, "wb") as f:
+                    pickle.dump(opportunity_vecs, f)
+            app.state.opportunity_vecs = torch.tensor(opportunity_vecs, dtype=torch.float32)
 
     except Exception as e:
         print("❌ Startup failed:", e)
         app.state.opps = []
-        app.state.opportunity_vecs = torch.zeros((1, 384), dtype=torch.float32)  # Fallback
+        if not IS_PRODUCTION:
+            app.state.opportunity_vecs = torch.zeros((1, 384), dtype=torch.float32)
 
     yield
 
@@ -93,29 +85,6 @@ class SearchRequest(BaseModel):
     search_prompt: str
     user_profile: Optional[UserProfile] = None
 
-
-def normalize(vec):
-    norm = np.linalg.norm(vec)
-    return vec if norm == 0 else vec / norm
-
-def build_user_vector(search_prompt: str, user_profile: UserProfile, opps):
-    skills_vec = normalize(model.encode(" ".join(user_profile.skills), convert_to_numpy=True)) if user_profile.skills else np.zeros(384)
-    training_vec = normalize(model.encode(" ".join(user_profile.training), convert_to_numpy=True)) if user_profile.training else np.zeros(384)
-    interests_vec = normalize(model.encode(" ".join(user_profile.interests), convert_to_numpy=True)) if user_profile.interests else np.zeros(384)
-
-    user_vec = normalize(0.25 * skills_vec + 0.15 * training_vec + 0.6 * interests_vec)
-
-    saved_texts = [opp["text"] for opp in opps if opp["id"] in user_profile.saved_opportunities]
-    saved_vec = normalize(model.encode(" ".join(saved_texts), convert_to_numpy=True)) if saved_texts else np.zeros(384)
-
-    full_user_vec = normalize(0.9 * user_vec + 0.1 * saved_vec)
-
-    search_prompt = search_prompt.strip().lower()
-    if not search_prompt:
-        return full_user_vec
-    search_vec = normalize(model.encode(search_prompt, convert_to_numpy=True))
-    return normalize(0.1 * full_user_vec + 0.9 * search_vec)
-
 def keyword_match_score(opp, keywords):
     text = (opp["name"] + " " + opp["description"] + " " + " ".join(opp["tags"])).lower()
     return sum(1 for kw in keywords if kw in text)
@@ -127,26 +96,48 @@ def get_opps(request: Request):
 @app.post("/search")
 async def search(request: Request, body: SearchRequest):
     opps = request.app.state.opps
-    opportunity_vecs = request.app.state.opportunity_vecs  # Torch tensor reused here
-
-    user_profile = body.user_profile
-    combined_vec = build_user_vector(body.search_prompt, user_profile, opps)
-    combined_vec_tensor = torch.tensor(combined_vec, dtype=torch.float32)
-    
-    vector_scores = util.pytorch_cos_sim(combined_vec_tensor, opportunity_vecs).squeeze().tolist()
-
+    user_profile = body.user_profile or UserProfile(skills=[], training=[], interests=[], saved_opportunities=[])
     keywords = [word for word in body.search_prompt.lower().split() if word not in ENGLISH_STOP_WORDS]
     keyword_scores = [keyword_match_score(opp, keywords) for opp in opps]
     max_keyword_score = max(keyword_scores) or 1
 
-    final_scores = [vs + 0.4 * (ks / max_keyword_score) for vs, ks in zip(vector_scores, keyword_scores)]
+    if IS_PRODUCTION:
+        final_scores = [ks / max_keyword_score for ks in keyword_scores]
+    else:
+        combined_vec = build_user_vector(body.search_prompt, user_profile, opps)
+        combined_vec_tensor = torch.tensor(combined_vec, dtype=torch.float32)
+        vector_scores = util.pytorch_cos_sim(combined_vec_tensor, request.app.state.opportunity_vecs).squeeze().tolist()
+        final_scores = [vs + 0.4 * (ks / max_keyword_score) for vs, ks in zip(vector_scores, keyword_scores)]
+
     top_indices = sorted(range(len(final_scores)), key=lambda i: final_scores[i], reverse=True)
 
     recommendations = []
     for i in top_indices[:75]:
         if opps[i]["id"] not in user_profile.saved_opportunities:
-            rec = dict(opps[i]) 
+            rec = dict(opps[i])
             rec["score"] = final_scores[i]
             recommendations.append(rec)
 
     return {"recommendations": recommendations}
+
+# Only used in dev
+def normalize(vec):
+    norm = np.linalg.norm(vec)
+    return vec if norm == 0 else vec / norm
+
+# Only used in dev
+def build_user_vector(search_prompt: str, user_profile: UserProfile, opps):
+    skills_vec = normalize(model.encode(" ".join(user_profile.skills), convert_to_numpy=True)) if user_profile.skills else np.zeros(384)
+    training_vec = normalize(model.encode(" ".join(user_profile.training), convert_to_numpy=True)) if user_profile.training else np.zeros(384)
+    interests_vec = normalize(model.encode(" ".join(user_profile.interests), convert_to_numpy=True)) if user_profile.interests else np.zeros(384)
+    user_vec = normalize(0.25 * skills_vec + 0.15 * training_vec + 0.6 * interests_vec)
+
+    saved_texts = [opp["text"] for opp in opps if opp["id"] in user_profile.saved_opportunities]
+    saved_vec = normalize(model.encode(" ".join(saved_texts), convert_to_numpy=True)) if saved_texts else np.zeros(384)
+    full_user_vec = normalize(0.9 * user_vec + 0.1 * saved_vec)
+
+    search_prompt = search_prompt.strip().lower()
+    if not search_prompt:
+        return full_user_vec
+    search_vec = normalize(model.encode(search_prompt, convert_to_numpy=True))
+    return normalize(0.1 * full_user_vec + 0.9 * search_vec)

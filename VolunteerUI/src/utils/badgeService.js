@@ -22,44 +22,36 @@ const badgeService = {
 
 
 async checkFirstApplication(userId, userOpportunitiesCount, setBadgeEarned) {
-  console.log("[BadgeService] checkFirstApplication called with:", { userId, userOpportunitiesCount });
 
   if (userOpportunitiesCount !== 0) {
-    console.log("[BadgeService] Not first application, count =", userOpportunitiesCount);
     return;
   }
 
   try {
     const { data: user } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${userId}`);
-    console.log("[BadgeService] Fetched user data:", user);
-
     const hasBadge = user.badges.some(b => b.name === "First Steps");
-    console.log("[BadgeService] User already has badge?", hasBadge);
 
     if (!hasBadge) {
       const { data: badge } = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/badges/give`, {
         userId: user.id,
         badgeName: "First Steps",
       });
-      console.log("[BadgeService] Badge awarded:", badge);
       if (setBadgeEarned) setBadgeEarned(badge);
     } else {
-      console.log("[BadgeService] Badge not awarded because user already has it");
     }
   } catch (err) {
-    console.error("[BadgeService] Error checking First Steps badge:", err);
   }
 },
 
   async checkCategoryBadge(userId, opportunityTags, setBadgeEarned) {
     const tagToBadgeMap = {
-      animal: "Animal Advocate",
+      animals: "Animal Advocate",
       community: "Heart of the Community",
       environment: "Planet Protector",
     };
 
     try {
-      const { data: user } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/${userId}`);
+      const { data: user } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${userId}`);
       const badgeNames = user.badges.map(b => b.name);
 
       for (const tag of opportunityTags) {
@@ -68,7 +60,7 @@ async checkFirstApplication(userId, userOpportunitiesCount, setBadgeEarned) {
 
         if (badgeName && !badgeNames.includes(badgeName)) {
           const { data: badge } = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/badges/give`, {
-            userId,
+            userId: user.id,
             badgeName,
           });
           if (setBadgeEarned) setBadgeEarned(badge);
@@ -83,12 +75,12 @@ async checkFirstApplication(userId, userOpportunitiesCount, setBadgeEarned) {
     if (!isOnLeaderboard) return;
 
     try {
-      const { data: user } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/${userId}`);
+      const { data: user } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${userId}`);
       const hasBadge = user.badges.some(b => b.name === "Leaderboard");
 
       if (!hasBadge) {
         const { data: badge } = await axios.post(`{import.meta.env.VITE_API_BASE_URL}/badges/give`, {
-          userId,
+          userId: user.id,
           badgeName: "Leaderboard",
         });
         if (setBadgeEarned) setBadgeEarned(badge);

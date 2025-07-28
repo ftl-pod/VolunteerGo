@@ -6,7 +6,7 @@ export default function BadgeModal({ badge, onClose }) {
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="badge-modal" onClick={e => e.stopPropagation()}>
+    <div className="badge-modal badge-modal-enter" onClick={e => e.stopPropagation()}>
         <img src={badge.imageUrl} alt={badge.name} className="badge-image" />
         <h2>Congrats! You earned a new badge:</h2>
         <h3>{badge.name}</h3>

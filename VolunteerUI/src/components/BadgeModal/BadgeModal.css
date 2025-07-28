@@ -21,3 +21,16 @@
   width: 100px;
   height: 100px;
 }
+
+.badge-modal-enter {
+  opacity: 0;
+  transform: translateY(-20%);
+  animation: badgeFadeIn 0.5s ease-out forwards;
+}
+
+@keyframes badgeFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

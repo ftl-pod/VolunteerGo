@@ -10,24 +10,27 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-.home-page{
+.home-page {
   background: linear-gradient(180deg, var(--background-color), rgba(255, 255, 255, 0));
 }
+
 /* Hero Section Improvements */
 .waterfall-media {
   position: relative;
   overflow: hidden;
   margin-bottom: 3rem;
+  padding: 0 1rem;
 }
 
 .waterfall-media img {
   width: 100%;
   max-width: 95%;
-  height: 60vh;
+  height: clamp(40vh, 50vh, 60vh);
   object-fit: cover;
-  border-radius: 24px;
+  border-radius: clamp(16px, 3vw, 24px);
   display: block;
   margin: 2rem auto;
   transition: transform 0.3s ease;
@@ -39,34 +42,40 @@ body {
 
 /* Imprint Section Enhancement */
 .imprint {
-  width: 95%;
+  width: min(95%, 1200px);
   min-height: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto 4rem auto;
-  padding: 2rem;
+  padding: clamp(1rem, 3vw, 2rem);
   border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: clamp(12px, 2vw, 20px);
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .imprint h2 {
   font-family: 'Montserrat', sans-serif;
-  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-size: clamp(1.5rem, 4vw, 3rem);
   font-weight: 700;
   text-align: center;
   color: #2c3e2c;
   margin: 0;
   line-height: 1.3;
+  flex: 1;
+  min-width: 250px;
 }
 
 .imprint-pic {
   display: flex;
   height: 100%;
-  margin-right: 2rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .imprint-pic img {
-  height: 80px;
+  height: clamp(60px, 8vw, 80px);
   width: auto;
   object-fit: contain;
 }
@@ -95,29 +104,32 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
-  padding: 2rem;
+  gap: clamp(1rem, 3vw, 3rem);
+  padding: 2rem 1rem;
+  flex-wrap: wrap;
 }
 
 .info-cat {
   position: relative;
-  font-size: 1.3rem;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
   font-weight: 600;
   transition: all 0.3s ease;
   color: var(--primary-color, #4e665a);
   text-decoration: none;
+  flex: 0 1 auto;
 }
 
 .info-cat a {
   text-decoration: none;
   color: inherit;
-  padding: 1rem 2rem;
+  padding: clamp(0.8rem, 2vw, 1rem) clamp(1.2rem, 3vw, 2rem);
   border-radius: 50px;
   background: linear-gradient(135deg, rgba(78, 102, 90, 0.1), rgba(78, 102, 90, 0.05));
   backdrop-filter: blur(10px);
   border: 1px solid rgba(78, 102, 90, 0.2);
   transition: all 0.3s ease;
   display: block;
+  white-space: nowrap;
 }
 
 .info-cat:hover a {
@@ -130,26 +142,27 @@ body {
 .section-wrapper {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem);
   display: flex;
   flex-direction: column;
- }
+}
 
 .mission-text {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2.2vw, 1.1rem);
   line-height: 1.8;
   color: #333;
   margin: 0 auto;
   text-align: justify;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);
+  max-width: 100%;
 }
 
 /* About Section */
 .about {
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 30px;
-  padding: 3rem;
+  border-radius: clamp(20px, 4vw, 30px);
+  padding: clamp(2rem, 4vw, 3rem);
   margin: 0;
   align-items: center;
   text-align: center;
@@ -157,7 +170,7 @@ body {
 
 .about h1 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 5vw, 2.5rem);
   font-weight: 700;
   margin-bottom: 2rem;
   color: #2c3e2c;
@@ -165,25 +178,29 @@ body {
 }
 
 .about-text {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2.2vw, 1.1rem);
   line-height: 1.8;
   color: #333;
   margin-bottom: 3rem;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);
+  max-width: 100%;
 }
 
 /* Founders Section */
 .pic-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: clamp(2rem, 5vw, 3rem);
   justify-items: center;
   margin-top: 2rem;
+  width: 100%;
 }
 
 .pic-container > div {
   text-align: center;
   transition: transform 0.3s ease;
+  width: 100%;
+  max-width: 300px;
 }
 
 .pic-container > div:hover {
@@ -191,8 +208,8 @@ body {
 }
 
 .about-pic {
-  width: 180px;
-  height: 180px;
+  width: clamp(120px, 20vw, 180px);
+  height: clamp(120px, 20vw, 180px);
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid rgba(255, 255, 255, 0.3);
@@ -207,23 +224,25 @@ body {
 }
 
 .founder-info {
-  padding: 1rem;
+  padding: clamp(0.8rem, 2vw, 1rem);
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 15px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   min-height: auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .founder-info div:first-child {
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
   color: #2c3e2c;
   margin-bottom: 0.5rem;
 }
 
 .founder-info div:not(:first-child) {
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 2vw, 0.9rem);
   color: #666;
   margin-bottom: 0.25rem;
 }
@@ -266,12 +285,11 @@ body {
   .imprint {
     flex-direction: column;
     text-align: center;
-    padding: 1.5rem;
+    gap: 1rem;
   }
   
-  .imprint-pic {
-    margin-right: 0;
-    margin-bottom: 1rem;
+  .imprint h2 {
+    min-width: auto;
   }
   
   .info-section {
@@ -279,50 +297,66 @@ body {
     gap: 1.5rem;
   }
   
-.section-wrapper {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: row;
-  /* background-color: rgba(28, 59, 31, 0.4); */
-  backdrop-filter: blur(5px);         
-  -webkit-backdrop-filter: blur(5px); 
-}
-  
-  .mission,
-  .about {
-    padding: 2rem;
+  .info-cat {
+    width: 100%;
+    max-width: 300px;
   }
   
-  .mission h1,
-  .about h1 {
-    font-size: 2rem;
+  .info-cat a {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
   }
   
   .pic-container {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  
-  .about-pic {
-    width: 150px;
-    height: 150px;
-  }
 }
 
 @media (max-width: 480px) {
-  .waterfall-media img {
-    height: 40vh;
-    border-radius: 16px;
+  .waterfall-media {
+    padding: 0 0.5rem;
   }
   
-  .mission,
+  .waterfall-media img {
+    margin: 1rem auto;
+  }
+  
+  .section-wrapper {
+    padding: 2rem 1rem;
+  }
+  
   .about {
     padding: 1.5rem;
-    border-radius: 20px;
   }
   
-  .mission-text,
-  .about-text {
-    font-size: 1rem;
+  .pic-container {
+    gap: 1.5rem;
+  }
+  
+  .info-section {
+    padding: 1rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .imprint {
+    padding: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .section-wrapper {
+    padding: 1.5rem 0.5rem;
+  }
+  
+  .about {
+    padding: 1rem;
+    border-radius: 15px;
+  }
+  
+  .founder-info {
+    padding: 0.5rem;
   }
 }

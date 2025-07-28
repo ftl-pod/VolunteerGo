@@ -282,11 +282,7 @@ function SavedPage() {
                   disabled={savingOppId === opportunity.id}
                 >
                   {savingOppId === opportunity.id ? (
-                    isSaved(opportunity.id) ? (
-                      <BsBookmark className="save-icon" />
-                    ) : (
-                      <BsBookmarkFill className="save-icon" />
-                    )
+                    <div className="loading-spinner" />
                   ) : isSaved(opportunity.id) ? (
                     <BsBookmarkFill className="save-icon" />
                   ) : (

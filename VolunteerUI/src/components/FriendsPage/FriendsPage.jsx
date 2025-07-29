@@ -29,18 +29,20 @@ function FriendsSection({ user, profile, token }) {
         try {
             const { data: users } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users`);
             const friendsData = await getFriendsAPI(token);
-            const requestsData = await getFriendRequestsAPI(token);
-            
+            const receivedRequests = await getReceivedFriendRequestsAPI(token);
+            const sentRequests = await getSentFriendRequestsAPI(token);
+
             const friendIds = new Set(friendsData.map(f => f.id));
-            const pendingReceiverIds = new Set(requestsData.map(r => r.senderId));
-            
-            // Filter out current user, existing friends, and users with pending requests
-            const filteredUsers = users.filter(u => 
-            u.id !== user?.id && 
-            !friendIds.has(u.id) &&
-            !pendingReceiverIds.has(u.id)
+            const pendingSenderIds = new Set(receivedRequests.map(r => r.senderId));
+            const pendingReceiverIds = new Set(sentRequests.map(r => r.receiverId));
+
+            const filteredUsers = users.filter(u =>
+                u.id !== profile?.id &&
+                !friendIds.has(u.id) &&
+                !pendingSenderIds.has(u.id) &&
+                !pendingReceiverIds.has(u.id)
             );
-            
+
             setAllUsers(filteredUsers);
         } catch (err) {
             console.error("Error fetching users:", err);
@@ -48,25 +50,36 @@ function FriendsSection({ user, profile, token }) {
     };
 
     const fetchFriendsData = async (token) => {
-    try {
-        // Fetch friends list
-        const friendsData = await getFriendsAPI(token);
-        setFriends(friendsData);
-        
-        // Fetch incoming friend requests
-        const requestsData = await getFriendRequestsAPI(token);
-        setReceivedRequests(requestsData.map(req => ({
-        id: req.id,
-        name: req.sender.name,
-        points: req.sender.points,
-        avatar: req.sender.avatarUrl || "https://i.ibb.co/rf6XN61Q/plant.png",
-        receivedDate: req.createdAt,
-        firebaseUid: req.sender.firebaseUid
-        })));
-        
-    } catch (error) {
-        console.error("Error fetching friends data:", error);
-    }
+        try {
+            // Fetch friends list
+            const friendsData = await getFriendsAPI(token);
+            setFriends(friendsData);
+
+            // Fetch received friend requests
+            const receivedData = await getReceivedFriendRequestsAPI(token);
+            setReceivedRequests(receivedData.map(req => ({
+                id: req.id,
+                name: req.sender.name,
+                points: req.sender.points,
+                avatarUrl: req.sender.avatarUrl || "https://i.ibb.co/rf6XN61Q/plant.png",
+                receivedDate: req.createdAt,
+                firebaseUid: req.sender.firebaseUid,
+            })));
+
+            // Fetch sent friend requests
+            const sentData = await getSentFriendRequestsAPI(token);
+            setSentRequests(sentData.map(req => ({
+                id: req.id,
+                name: req.receiver.name,
+                points: req.receiver.points,
+                avatarUrl: req.receiver.avatarUrl || "https://i.ibb.co/rf6XN61Q/plant.png",
+                sentDate: req.createdAt,
+                firebaseUid: req.receiver.firebaseUid,
+            })));
+
+        } catch (error) {
+            console.error("Error fetching friends data:", error);
+        }
     };
 
 
@@ -106,17 +119,28 @@ function FriendsSection({ user, profile, token }) {
         }
     };
 
-    const getFriendRequestsAPI = async (token) => {
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/friends/requests`, {
-            headers: { Authorization: `Bearer ${token}` },
-            });
-            console.log("Friend requests response:", response.data);
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching friend requests:", error);
-            throw error;
-        }
+    const getReceivedFriendRequestsAPI = async (token) => {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/friends/received-requests`, {
+        headers: { Authorization: `Bearer ${token}` },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching received friend requests:", error);
+        throw error;
+    }
+    };
+
+    const getSentFriendRequestsAPI = async (token) => {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/friends/sent-requests`, {
+        headers: { Authorization: `Bearer ${token}` },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching sent friend requests:", error);
+        throw error;
+    }
     };
 
     const acceptFriendRequestAPI = async (requestId, token) => {
@@ -147,6 +171,20 @@ function FriendsSection({ user, profile, token }) {
         }
     };
 
+    const cancelFriendRequestAPI = async (requestId, token) => {
+        try {
+            const response = await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/friends/cancel`,
+            { requestId },
+            { headers: { Authorization: `Bearer ${token}` } }
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Error cancelling sent friend request:", error);
+            throw error;
+        }
+    };
+
     const getFriendsAPI = async (token) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/friends/list`, {
@@ -162,25 +200,35 @@ function FriendsSection({ user, profile, token }) {
     // Handlers for friend operations
 
     const handleSendFriendRequest = async (userId, token) => {
-        const userToAdd = allUsers.find(u => u.id === userId);
-        if (userToAdd) {
-            await sendFriendRequestAPI(userToAdd.id, token);
-            const newRequest = {
-                ...userToAdd,
-                sentDate: new Date().toISOString().split("T")[0],
-            };
-            setSentRequests(prev => [...prev, newRequest]);
-            setSearchResults(prev => prev.filter(u => u.id !== userId));
-            setAllUsers(prev => prev.filter(u => u.id !== userId));
-            }
+    const userToAdd = allUsers.find(u => u.id === userId);
+    if (userToAdd) {
+        // API returns the created friend request with its ID
+        const newRequestData = await sendFriendRequestAPI(userToAdd.id, token);
+
+        // Construct newRequest with correct id and user info
+        const newRequest = {
+        id: newRequestData.id,  // <-- friend request ID from backend
+        name: userToAdd.name,
+        points: userToAdd.points || 0,
+        avatarUrl: userToAdd.avatarUrl || "https://i.ibb.co/rf6XN61Q/plant.png",
+        sentDate: new Date().toISOString(),
+        firebaseUid: userToAdd.firebaseUid,
+        };
+
+        setSentRequests(prev => [...prev, newRequest]);
+        setSearchResults(prev => prev.filter(u => u.id !== userId));
+        setAllUsers(prev => prev.filter(u => u.id !== userId));
+        setFriendsView('sent');
+    }
     };
 
-    const handleAcceptRequest = async (id, token) => {
-        const req = receivedRequests.find(r => r.id === id);
+
+    const handleAcceptRequest = async (requestId, token) => {
+        const req = receivedRequests.find(r => r.id === requestId);
         if (req) {
             await acceptFriendRequestAPI(requestId, token);
             setFriends(prev => [...prev, req]);
-            setReceivedRequests(prev => prev.filter(r => r.id !== id));
+            setReceivedRequests(prev => prev.filter(r => r.id !== requestId));
         }
     };
 
@@ -194,8 +242,15 @@ function FriendsSection({ user, profile, token }) {
         }
     }; 
 
-    const handleCancelSentRequest = (id) => setSentRequests(prev => prev.filter(r => r.id !== id));
-
+    const handleCancelSentRequest = async (requestId, token) => {
+        console.log("Cancel request clicked for request ID:", requestId);  
+        try {
+            await cancelFriendRequestAPI(requestId, token);
+            setSentRequests((prev) => prev.filter((r) => r.id !== requestId));
+        } catch (error) {
+            console.error("Failed to cancel sent friend request:", error);
+        }
+    };
     return (
         <div className="friends-container">
         <div className="friends-toggle">
@@ -303,38 +358,38 @@ function FriendsSection({ user, profile, token }) {
                 <FaUserClock className="icon" />
                 Sent Requests
             </h3>
-            <div className="friends-list">
+                <div className="friends-list">
                 {sentRequests.length > 0 ? (
-                sentRequests.map((request) => (
+                    sentRequests.map((request) => (
                     <div key={request.id} className="friend-item">
-                    <img src={request.avatarUrl} alt={request.name} className="friend-avatar" />
-                    <div className="friend-info">
+                        <img src={request.avatarUrl} alt={request.name} className="friend-avatar" />
+                        <div className="friend-info">
                         <div className="friend-name">{request.name}</div>
                         <div className="friend-points">
-                        <GiThreeLeaves className="icon" />
-                        {request.points} points
+                            <GiThreeLeaves className="icon" />
+                            {request.points} points
                         </div>
                         <div className="request-meta">
-                        Sent {new Date(request.sentDate).toLocaleDateString()}
+                            Sent {new Date(request.sentDate).toLocaleDateString()}
+                        </div>
+                        </div>
+                        <div className="friend-actions">
+                        <button
+                            className="action-btn deny-btn"
+                            onClick={() => handleCancelSentRequest(request.id, token)}
+                            title="Cancel Request"
+                        >
+                            <FaX />
+                        </button>
                         </div>
                     </div>
-                    <div className="friend-actions">
-                        <button
-                        className="action-btn deny-btn"
-                        onClick={() => handleCancelSentRequest(request.id)}
-                        title="Cancel Request"
-                        >
-                        <FaX />
-                        </button>
-                    </div>
-                    </div>
-                ))
+                    ))
                 ) : (
-                <div className="empty-state">
+                    <div className="empty-state">
                     No sent friend requests.
-                </div>
+                    </div>
                 )}
-            </div>
+                </div>
             </div>
         )}
 

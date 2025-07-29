@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const friendController = require("../controllers/friendController");
-
-//const authenticate = require("../middleware/auth");
-//router.use(authenticate);
+const { verifyFirebaseToken } = require("../middleware/auth"); 
+router.use(verifyFirebaseToken);
 
 router.post("/request", friendController.sendFriendRequest);
 router.get("/requests", friendController.getFriendRequests);

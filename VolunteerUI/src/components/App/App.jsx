@@ -20,7 +20,6 @@ import './App.css'
 
 function App() {
   const { user, loading } = useAuth();
-  console.log(user)
   return (
     <OpportunityProvider>
       <ProfileProvider>

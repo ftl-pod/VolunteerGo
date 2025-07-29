@@ -44,13 +44,13 @@ function PublicProfile() {
   const {
     username,
     avatarUrl,
-    location,
     points,
     level,
     interests = [],
-    organizations = [],
+    opportunities = [],
     badges = [],
   } = profile;
+
 
   return (
     <div className="page-container public-profile">
@@ -92,9 +92,9 @@ function PublicProfile() {
         <div className="section">
           <h3>Organizations Supported</h3>
           <div className="section-content">
-            {organizations.length ? (
-              organizations.map((org, index) => (
-                <div key={index} className="organization-item">{org}</div>
+            {opportunities.length ? (
+              opportunities.map((org, index) => (
+                <div key={index} className="organization-item">{org.name || org}</div>
               ))
             ) : (
               <div>No organizations supported yet.</div>

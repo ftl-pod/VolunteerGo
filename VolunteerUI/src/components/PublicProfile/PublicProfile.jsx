@@ -2,12 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./PublicProfile.css";
-import { IoLocationSharp, IoCalendarSharp } from "react-icons/io5";
-import { MdCake } from "react-icons/md";
 import { GiThreeLeaves } from "react-icons/gi";
 import { FaBarsProgress } from "react-icons/fa6";
-import { BiSolidDonateHeart } from "react-icons/bi";
-import ProgressBar from "../ProgressBar/ProgressBar";
 
 function PublicProfile() {
   const { userId } = useParams();

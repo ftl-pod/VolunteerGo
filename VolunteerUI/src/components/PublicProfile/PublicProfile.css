@@ -55,7 +55,7 @@
 }
 
 .basic-info-item .icon {
-  color: #3498db;
+  color: var(--primary-color);
   font-size: 1.2rem;
 }
 
@@ -76,7 +76,7 @@
 }
 
 .stat-item .icon {
-  color: #27ae60;
+  color:var(--primary-color);
   font-size: 1.4rem;
 }
 
@@ -99,8 +99,8 @@
   margin-top: 0;
   margin-bottom: 12px;
   font-size: 1.3rem;
-  color: #2c3e50;
-  border-bottom: 2px solid #3498db;
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--tertiary-color);
   padding-bottom: 6px;
 }
 
@@ -111,7 +111,7 @@
 
 .interest-item,
 .organization-item {
-  background-color: #eaf2f8;
+  background-color:var(--tertiary-color);
   margin-bottom: 6px;
   padding: 6px 10px;
   border-radius: 4px;
@@ -129,18 +129,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80px;
+  width: 250px;
+  height:150px;
   text-align: center;
 }
 
 .badge-img {
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   object-fit: contain;
   margin-bottom: 6px;
 }
 
 .badge-name {
   font-size: 0.85rem;
-  color: #34495e;
+  color:var(--primary-color)
 }

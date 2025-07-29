@@ -49,12 +49,12 @@ model User {
   name                   String?
   interests              String[]        @default([])
   firebaseUid            String?         @unique
+  friends                User[]   @relation("UserFriends")
+  friendOf               User[]   @relation("UserFriends")
   receivedFriendRequests FriendRequest[] @relation("ReceivedFriendRequests")
   sentFriendRequests     FriendRequest[] @relation("SentFriendRequests")
   savedOpportunities     Opportunity[]   @relation("SavedOpportunities")
   badges                 Badge[]         @relation("UserBadges")
-  User_A                 User[]          @relation("UserFriends")
-  User_B                 User[]          @relation("UserFriends")
   opportunities          Opportunity[]   @relation("UserOpportunities")
 }
 

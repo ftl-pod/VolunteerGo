@@ -74,19 +74,27 @@ async checkFirstApplication(userId, userOpportunitiesCount, setBadgeEarned) {
     }
   },
 
-  async checkLeaderboardBadge(userId, isOnLeaderboard, setBadgeEarned) {
-    if (!isOnLeaderboard) return;
-
+  async checkLeaderboardBadge(userUid, setBadgeEarned) {
     try {
-      const { data: user } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${userId}`);
-      const hasBadge = user.badges.some(b => b.name === "Leaderboard");
+      // Get all users ordered by points
+      const { data: users } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users`);
+      if (!users.length) return;
 
-      if (!hasBadge) {
-        const { data: badge } = await axios.post(`{import.meta.env.VITE_API_BASE_URL}/badges/give`, {
-          userId: user.id,
-          badgeName: "Leaderboard",
-        });
-        if (setBadgeEarned) setBadgeEarned(badge);
+      // Get backend user record by uid to find backend id
+      const { data: user } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${userUid}`);
+
+      if (users[0].id === user.id) {
+        console.log("#1")
+        const hasBadge = user.badges.some(b => b.name === "Impact Leader");
+
+        if (!hasBadge) {
+          const { data: badge } = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/badges/give`, {
+            userId: user.id,
+            badgeName: "Impact Leader",
+          });
+
+          if (setBadgeEarned) setBadgeEarned(badge);
+        }
       }
     } catch (err) {
       console.error("Error checking leaderboard badge:", err);

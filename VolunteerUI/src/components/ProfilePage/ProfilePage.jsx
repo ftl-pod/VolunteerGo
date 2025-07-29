@@ -2,7 +2,7 @@ import "./ProfilePage.css";
 import { IoLocationSharp, IoCalendarSharp } from "react-icons/io5";
 import { MdCake, MdEmojiEvents } from "react-icons/md";
 import { GiThreeLeaves } from "react-icons/gi";
-import { FaBarsProgress, FaFireFlameCurved, FaMedal, FaTrophy, FaStar, FaCheck, FaX, FaUserPlus, FaUserClock, FaAddressBook } from "react-icons/fa6";
+import { FaBarsProgress, FaFireFlameCurved, FaMedal, FaTrophy, FaStar, FaCheck, FaX, FaUserPlus, FaUserClock, FaAddressBook, FaSistrix } from "react-icons/fa6";
 import { BsBookmarkHeartFill, BsAwardFill } from "react-icons/bs";
 import { TbTargetArrow } from "react-icons/tb";
 import { PiCertificateFill } from "react-icons/pi";
@@ -14,11 +14,17 @@ import { useLeaderboard } from "../../contexts/LeaderboardContext";
 import { useEffect, useState } from "react";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import axios from "axios";
+import FriendsSection from "../FriendsPage/FriendsPage";
 
 function ProfilePage() {
   const [activeTab, setActiveTab] = useState('overview');
-  const [friendsView, setFriendsView] = useState('friends'); // 'friends', 'sent', 'received'
-  const { user, isLoaded } = useAuth();
+  const [friendsView, setFriendsView] = useState('friends'); // 'friends', 'sent', 'received', 'search'
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [allUsers, setAllUsers] = useState([]);
+  
+  const { user, isLoaded, token } = useAuth();
   const { profile, loading, error } = useProfile();
   const navigate = useNavigate();
   const { users = [] } = useLeaderboard();
@@ -28,26 +34,93 @@ function ProfilePage() {
   
   // Mock friends data - replace with actual API calls
   const [friends, setFriends] = useState([
-    { id: 1, name: "Alice Johnson", points: 1250, avatar: "https://i.ibb.co/rf6XN61Q/plant.png" },
-    { id: 2, name: "Bob Smith", points: 980, avatar: "https://i.ibb.co/rf6XN61Q/plant.png" },
-    { id: 3, name: "Carol Davis", points: 1500, avatar: "https://i.ibb.co/rf6XN61Q/plant.png" },
+    { id: 1, name: "Alice Johnson", points: 1250, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png" },
+    { id: 2, name: "Bob Smith", points: 980, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png" },
+    { id: 3, name: "Carol Davis", points: 1500, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png" },
   ]);
   
   const [sentRequests, setSentRequests] = useState([
-    { id: 4, name: "David Wilson", points: 750, avatar: "https://i.ibb.co/rf6XN61Q/plant.png", sentDate: "2025-01-15" },
-    { id: 5, name: "Emma Brown", points: 1100, avatar: "https://i.ibb.co/rf6XN61Q/plant.png", sentDate: "2025-01-14" },
+    { id: 4, name: "David Wilson", points: 750, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png", sentDate: "2025-01-15" },
+    { id: 5, name: "Emma Brown", points: 1100, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png", sentDate: "2025-01-14" },
   ]);
   
   const [receivedRequests, setReceivedRequests] = useState([
-    { id: 6, name: "Frank Miller", points: 890, avatar: "https://i.ibb.co/rf6XN61Q/plant.png", receivedDate: "2025-01-16" },
-    { id: 7, name: "Grace Lee", points: 1350, avatar: "https://i.ibb.co/rf6XN61Q/plant.png", receivedDate: "2025-01-15" },
+    { id: 6, name: "Frank Miller", points: 890, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png", receivedDate: "2025-01-16" },
+    { id: 7, name: "Grace Lee", points: 1350, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png", receivedDate: "2025-01-15" },
   ]);
   
   useEffect(() => {
+    // Fetch all badges
     axios.get(`${import.meta.env.VITE_API_BASE_URL}/badges`)
       .then(res => setAllBadges(res.data))
       .catch(err => console.error("Error fetching all badges:", err));
+    
+    // Fetch all users for search functionality
+    fetchAllUsers();
   }, []);
+
+  const fetchAllUsers = async () => {
+    try {
+      const { data: users } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users`);
+      // Filter out current user and existing friends
+      const filteredUsers = users.filter(u => 
+        u.firebaseUid !== user?.uid && 
+        !friends.some(friend => friend.firebaseUid === u.firebaseUid) &&
+        !sentRequests.some(req => req.firebaseUid === u.firebaseUid) &&
+        !receivedRequests.some(req => req.firebaseUid === u.firebaseUid)
+      );
+      setAllUsers(filteredUsers);
+    } catch (err) {
+      console.error("Error fetching users:", err);
+    }
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setIsSearching(true);
+    
+    if (!query.trim()) {
+      setSearchResults([]);
+      setIsSearching(false);
+      return;
+    }
+
+    // Filter users based on search query
+    const filtered = allUsers.filter(user => 
+      user.name?.toLowerCase().includes(query.toLowerCase()) ||
+      user.location?.toLowerCase().includes(query.toLowerCase()) ||
+      user.interests?.some(interest => 
+        interest.toLowerCase().includes(query.toLowerCase())
+      ) ||
+      user.skills?.some(skill => 
+        skill.toLowerCase().includes(query.toLowerCase())
+      )
+    );
+    
+    setSearchResults(filtered);
+    setIsSearching(false);
+  };
+
+  const handleSendFriendRequest = (userId) => {
+    // Find the user in search results or all users
+    const userToAdd = searchResults.find(u => u.id === userId) || allUsers.find(u => u.id === userId);
+    
+    if (userToAdd) {
+      // Add to sent requests
+      const newRequest = {
+        ...userToAdd,
+        sentDate: new Date().toISOString().split('T')[0]
+      };
+      setSentRequests(prev => [...prev, newRequest]);
+      
+      // Remove from search results and all users
+      setSearchResults(prev => prev.filter(u => u.id !== userId));
+      setAllUsers(prev => prev.filter(u => u.id !== userId));
+      
+      // Here you would also make an API call to send the friend request
+      // await axios.post(`${import.meta.env.VITE_API_BASE_URL}/friend-requests`, { recipientId: userId });
+    }
+  };
 
   // Friend request handlers
   const handleAcceptRequest = (requestId) => {
@@ -152,7 +225,7 @@ function ProfilePage() {
             {friends.length > 0 ? (
               friends.map((friend) => (
                 <div key={friend.id} className="friend-item">
-                  <img src={friend.avatar} alt={friend.name} className="friend-avatar" />
+                  <img src={friend.avatarUrl} alt={friend.name} className="friend-avatar" />
                   <div className="friend-info">
                     <div className="friend-name">{friend.name}</div>
                     <div className="friend-points">
@@ -182,7 +255,7 @@ function ProfilePage() {
             {receivedRequests.length > 0 ? (
               receivedRequests.map((request) => (
                 <div key={request.id} className="friend-item">
-                  <img src={request.avatar} alt={request.name} className="friend-avatar" />
+                  <img src={request.avatarUrl} alt={request.name} className="friend-avatar" />
                   <div className="friend-info">
                     <div className="friend-name">{request.name}</div>
                     <div className="friend-points">
@@ -230,7 +303,7 @@ function ProfilePage() {
             {sentRequests.length > 0 ? (
               sentRequests.map((request) => (
                 <div key={request.id} className="friend-item">
-                  <img src={request.avatar} alt={request.name} className="friend-avatar" />
+                  <img src={request.avatarUrl} alt={request.name} className="friend-avatar" />
                   <div className="friend-info">
                     <div className="friend-name">{request.name}</div>
                     <div className="friend-points">
@@ -260,6 +333,79 @@ function ProfilePage() {
           </div>
         </div>
       )}
+
+    <div className="friends-section">
+      <h3>
+        <FaSistrix className="icon" />
+        Find Friends
+      </h3>
+      
+      <div className="search-container">
+        <div className="search-input-wrapper">
+          <input
+            type="text"
+            placeholder="Search by name, location, interests, or skills..."
+            value={searchQuery}
+            onChange={(e) => handleSearch(e.target.value)}
+            className="search-input"
+          />
+        </div>
+      </div>
+      {/* Friend Search */}
+        <div className="friends-list">
+          {isSearching ? (
+            <div className="loading-state">Searching...</div>
+          ) : searchQuery && searchResults.length === 0 ? (
+            <div className="empty-state">
+              No users found matching "{searchQuery}"
+            </div>
+          ) : searchQuery === '' ? (
+            <div className="empty-state">
+              Start typing to search for friends...
+            </div>
+          ) : (
+            searchResults.map((user) => (
+              <div key={user.id} className="friend-item search-result">
+                <img 
+                  src={user.avatarUrl || "https://i.ibb.co/rf6XN61Q/plant.png"} 
+                  alt={user.name} 
+                  className="friend-avatar" 
+                />
+                <div className="friend-info">
+                  <div className="friend-name">{user.name}</div>
+                  <div className="friend-points">
+                    <GiThreeLeaves className="icon" />
+                    {user.points || 0} points
+                  </div>
+                  {user.location && (
+                    <div className="friend-location">
+                      <IoLocationSharp className="icon" />
+                      {user.location}
+                    </div>
+                  )}
+                  {user.interests && user.interests.length > 0 && (
+                    <div className="friend-interests">
+                      Interests: {user.interests.slice(0, 3).join(", ")}
+                      {user.interests.length > 3 && "..."}
+                    </div>
+                  )}
+                </div>
+                <div className="friend-actions">
+                  <button
+                    className="action-btn send-request-btn"
+                    onClick={() => handleSendFriendRequest(user.id)}
+                    title="Send Friend Request"
+                  >
+                    <FaUserPlus />
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+
     </div>
   );
   
@@ -463,7 +609,7 @@ function ProfilePage() {
           {/* Tab Content */}
           <div className="tab-content">
             {activeTab === 'overview' && renderOverview()}
-            {activeTab === 'friends' && renderFriends()}
+            {activeTab === 'friends' && <FriendsSection user={user} profile={profile} token={token} />}
             {activeTab === 'badges' && renderBadges()}
           </div>
         </div>

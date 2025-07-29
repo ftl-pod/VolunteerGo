@@ -45,32 +45,42 @@ function SearchHeader({onSearch, onSmartSearch, tags = [], selectedTag = '', onT
     };
 
     const handleSmartSearch = async () => {
+        const userProfile = profile
+            ? {
+                  skills: profile.skills || [],
+                  training: profile.training || [],
+                  interests: profile.interests || [],
+                  saved_opportunities:
+                      profile.savedOpportunities?.map((opp) => opp.id) || [],
+              }
+            : {
+                  skills: [],
+                  training: [],
+                  interests: [],
+                  saved_opportunities: [],
+              };
+
         try {
             console.log("Smart Search triggered");
             const res = await fetch(`${import.meta.env.VITE_SEARCH_URL}/search`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     search_prompt: searchTerm,
                     filters: getFilters(),
-                    user_profile: {
-                        skills: profile.skills || [],
-                        training: profile.training || [],
-                        interests: profile.interests || [],
-                        saved_opportunities:
-                            profile.savedOpportunities?.map((opp) => opp.id) || [],
-                    },
-                })
+                    user_profile: userProfile,
+                }),
             });
 
             const data = await res.json();
             onSmartSearch(data.recommendations, city);
-        } catch (err) {
-            console.error("Smart search failed:", err);
+        } catch (error) {
+            console.error("Error during smart search:", error);
         }
     };
+
 
     
     const handleTagChange = (e) => {

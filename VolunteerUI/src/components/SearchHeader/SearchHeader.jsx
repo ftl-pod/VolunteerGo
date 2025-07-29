@@ -103,8 +103,8 @@ function SearchHeader({
                   <CitySearch
                     value={city}
                     onSelect={(val) => {
-                      setCity(val);
-                      updateFilter("city", val);
+                      setCity(val);                 
+                      updateFilter("city", val);  
                     }}
                   />
                 </div>

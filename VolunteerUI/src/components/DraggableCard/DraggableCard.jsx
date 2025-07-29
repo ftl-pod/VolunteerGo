@@ -7,6 +7,9 @@ import ApplyModal from '../ApplyModal/ApplyModal';
 import { useProfile } from "../../contexts/ProfileContext";
 import { ArrowLeft } from "lucide-react";
 import { getPexelsImage } from "../../utils/getImage";
+import PopupPill from '../PopupPill/PopupPill';
+import { BsBookmarkFill } from "react-icons/bs";
+import { BsBookmark } from "react-icons/bs";
 
 const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -17,7 +20,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   const [dragDistanceX, setDragDistanceX] = useState(0);
   const [dragDistanceY, setDragDistanceY] = useState(0);
   const cardRef = useRef(null);
-  const { user } = useAuth();
+  const { user, isSignedIn } = useAuth();
   const [direct, setDirect] = useState("search") // update for application functionality
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const { profile, setProfile } = useProfile();
@@ -26,6 +29,8 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
   const [savingOppId, setSavingOppId] = useState(null);
   const [loadingSave, setLoadingSave] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSave, setShowSave] = useState(false);
 
 
 
@@ -289,19 +294,23 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
         </p>
 
         <div className="actions">
-            <button className="btn-primary" onClick={() => handleApplyClick(opportunity)}>I Want to Help</button>
+            <button className="btn-primary" onClick={() => 
+              { isSignedIn?  handleApplyClick(opportunity) : setShowLogin(true)
+              }}
+              >I Want to Help</button>
             <button
-              className="btn-secondary"
-              onClick={(e) => handleSavedClick(e, opportunity.id)}
+              className="save-btn"
+              onClick={(e) => 
+                {isSignedIn? handleSavedClick(e, opportunity.id) : setShowSave(true)}}
               disabled={!!loadingSave[opportunity.id]}
             >
-              {loadingSave[opportunity.id]
-                ? savedOpps.includes(opportunity.id)
-                  ? "Unsaving..."
-                  : "Saving..."
-                : savedOpps.includes(opportunity.id)
-                ? "Saved"
-                : "Save"}
+              {savingOppId === opportunity.id ? (
+                <div className="loading-spinner"></div>
+                  ) : savedOpps.includes(opportunity.id) ? (
+                  <BsBookmarkFill className="save-icon" />
+                  ) : (
+                  <BsBookmark className="save-icon" />
+                )}
             </button>
         </div>
       </div>
@@ -311,6 +320,26 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
         onClose={handleCloseModal}
         opportunity={opportunity}
     />
+    {!isSignedIn ? (
+        <PopupPill
+          message="Please Login To Apply"
+          type="warning"
+          duration={3000}
+          isVisible={showLogin}
+          onClose={() => setShowLogin(false)}
+          position="bottom-center"
+        />
+      ) : null}
+      {!isSignedIn? (
+        <PopupPill
+          message="Please Login To Save"
+          type="warning"
+          duration={3000}
+          isVisible={showSave}
+          onClose={() => setShowSave(false)}
+          position="bottom-center"
+        />
+      ) : null}
     </>
   );
 };

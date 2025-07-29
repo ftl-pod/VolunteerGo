@@ -45,10 +45,6 @@ function SearchHeader({onSearch, onSmartSearch, tags = [], selectedTag = '', onT
     };
 
     const handleSmartSearch = async () => {
-        if (!profile) {
-            console.error("Profile not loaded yet");
-            return;
-        }
         try {
             console.log("Smart Search triggered");
             const res = await fetch(`${import.meta.env.VITE_SEARCH_URL}/search`, {
@@ -60,9 +56,9 @@ function SearchHeader({onSearch, onSmartSearch, tags = [], selectedTag = '', onT
                     search_prompt: searchTerm,
                     filters: getFilters(),
                     user_profile: {
-                        skills: profile.skills || ["guitar", "singing"],
-                        training: profile.training || ["music therapy"],
-                        interests: profile.interests || ["seniors", "health", "education"],
+                        skills: profile.skills || [],
+                        training: profile.training || [],
+                        interests: profile.interests || [],
                         saved_opportunities:
                             profile.savedOpportunities?.map((opp) => opp.id) || [],
                     },

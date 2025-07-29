@@ -13,6 +13,7 @@ import OpportunityPage from '../OpportunityPage/OpportunityPage'
 import LocationPage from '../LocationPage/LocationPage'
 import SavedPage from '../SavedPage/SavedPage'
 import Onboarding from '../Onboarding/Onboarding'
+import PublicProfile from '../PublicProfile/PublicProfile'
 import { OpportunityProvider } from '../../contexts/OpportunityContext';
 
 import { useAuth } from "../../hooks/useAuth";
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/opportunity/:id" element={<OpportunityPage />} />
                 <Route path="/map" element={<LocationPage/>} />
                 <Route path="/onboarding" element={<Onboarding />} />
+                <Route path="/public-profile/:userId" element={<PublicProfile />} />
               </Routes>
             </div>
           </Router>

@@ -1,6 +1,7 @@
 import "./Leaderboard.css";
 import { useLeaderboard } from "../../contexts/LeaderboardContext";
 import { useAuth } from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 function Leaderboard() {
   const { users, loading } = useLeaderboard();
@@ -36,12 +37,14 @@ function Leaderboard() {
                 <div className="circle">{index + 1}</div>
               </div>
               <div className="user-name">
-                <div className="pfp">
-                  <div className="circle">
-                    <img className="pfp-img" src={u.avatarUrl} alt="Profile" />
+                <Link to={`/public-profile/${u.firebaseUid}`} className="user-link">
+                  <div className="pfp">
+                    <div className="circle">
+                      <img className="pfp-img" src={u.avatarUrl} alt="Profile" />
+                    </div>
                   </div>
-                </div>
-                {u.username}
+                  {u.username}
+                </Link>
               </div>
               <div className="points">{u.points}</div>
             </div>

@@ -1,4 +1,4 @@
-/* .public-profile {
+.public-profile {
   max-width: 900px;
   margin: 20px auto;
   padding: 20px;
@@ -144,4 +144,4 @@
 .badge-name {
   font-size: 0.85rem;
   color:var(--primary-color)
-} */
+}

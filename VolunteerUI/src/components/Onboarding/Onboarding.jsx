@@ -411,7 +411,7 @@ const handleSubmit = async (e) => {
 
             <div className="form-group">
               <div className="avatar-preview">
-                <img src={avatarUrl} alt="Avatar preview" />
+                <img src={avatarUrl || "https://i.postimg.cc/D0RRVwPw/plant.png"} alt="Avatar preview" />
               </div>
               
               <div className="avatar-container">

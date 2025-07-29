@@ -247,7 +247,6 @@ function SavedPage() {
                         : "Flexible schedule"}
                     </span>
                   </div>
-                </Link>
 
                 <p
                   className="suggested-card-description"
@@ -265,6 +264,7 @@ function SavedPage() {
                     </span>
                   ))}
                 </div>
+                </Link>
 
                 <div className="suggested-card-actions">
                   <button
@@ -273,21 +273,14 @@ function SavedPage() {
                   >
                     Not Interested
                   </button>
-                  <Link to={`/opportunity/${opportunity.id}`}>
-                    <button className="btn-primary">I Want to Help</button>
-                  </Link>
                 <button
-                  className="suggestion-save"
+                  className="btn-primary"
                   onClick={(e) => handleSavedClick(e, opportunity.id)}
                   disabled={savingOppId === opportunity.id}
                 >
                   {savingOppId === opportunity.id ? (
                     <div className="loading-spinner" />
-                  ) : isSaved(opportunity.id) ? (
-                    <BsBookmarkFill className="save-icon" />
-                  ) : (
-                    <BsBookmark className="save-icon" />
-                  )}
+                  ) : isSaved(opportunity.id) ? "Saved" : "Save"}
                 </button>
                 </div>
               </div>
@@ -322,7 +315,6 @@ function SavedPage() {
                         : "Flexible schedule"}
                     </span>
                   </div>
-                </Link>
 
                 <p
                   className="saved-card-description"
@@ -340,6 +332,7 @@ function SavedPage() {
                     </span>
                   ))}
                 </div>
+                </Link>
 
                 <div className="saved-card-actions">
                   <button

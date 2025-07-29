@@ -14,6 +14,7 @@ import { useLeaderboard } from "../../contexts/LeaderboardContext";
 import { useEffect, useState } from "react";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import axios from "axios";
+import FriendsSection from "../FriendsPage/FriendsPage";
 
 function ProfilePage() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -23,7 +24,7 @@ function ProfilePage() {
   const [isSearching, setIsSearching] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
   
-  const { user, isLoaded } = useAuth();
+  const { user, isLoaded, token } = useAuth();
   const { profile, loading, error } = useProfile();
   const navigate = useNavigate();
   const { users = [] } = useLeaderboard();
@@ -33,19 +34,19 @@ function ProfilePage() {
   
   // Mock friends data - replace with actual API calls
   const [friends, setFriends] = useState([
-    { id: 1, name: "Alice Johnson", points: 1250, avatar: "https://i.ibb.co/rf6XN61Q/plant.png" },
-    { id: 2, name: "Bob Smith", points: 980, avatar: "https://i.ibb.co/rf6XN61Q/plant.png" },
-    { id: 3, name: "Carol Davis", points: 1500, avatar: "https://i.ibb.co/rf6XN61Q/plant.png" },
+    { id: 1, name: "Alice Johnson", points: 1250, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png" },
+    { id: 2, name: "Bob Smith", points: 980, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png" },
+    { id: 3, name: "Carol Davis", points: 1500, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png" },
   ]);
   
   const [sentRequests, setSentRequests] = useState([
-    { id: 4, name: "David Wilson", points: 750, avatar: "https://i.ibb.co/rf6XN61Q/plant.png", sentDate: "2025-01-15" },
-    { id: 5, name: "Emma Brown", points: 1100, avatar: "https://i.ibb.co/rf6XN61Q/plant.png", sentDate: "2025-01-14" },
+    { id: 4, name: "David Wilson", points: 750, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png", sentDate: "2025-01-15" },
+    { id: 5, name: "Emma Brown", points: 1100, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png", sentDate: "2025-01-14" },
   ]);
   
   const [receivedRequests, setReceivedRequests] = useState([
-    { id: 6, name: "Frank Miller", points: 890, avatar: "https://i.ibb.co/rf6XN61Q/plant.png", receivedDate: "2025-01-16" },
-    { id: 7, name: "Grace Lee", points: 1350, avatar: "https://i.ibb.co/rf6XN61Q/plant.png", receivedDate: "2025-01-15" },
+    { id: 6, name: "Frank Miller", points: 890, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png", receivedDate: "2025-01-16" },
+    { id: 7, name: "Grace Lee", points: 1350, avatarUrl: "https://i.ibb.co/rf6XN61Q/plant.png", receivedDate: "2025-01-15" },
   ]);
   
   useEffect(() => {
@@ -224,7 +225,7 @@ function ProfilePage() {
             {friends.length > 0 ? (
               friends.map((friend) => (
                 <div key={friend.id} className="friend-item">
-                  <img src={friend.avatar} alt={friend.name} className="friend-avatar" />
+                  <img src={friend.avatarUrl} alt={friend.name} className="friend-avatar" />
                   <div className="friend-info">
                     <div className="friend-name">{friend.name}</div>
                     <div className="friend-points">
@@ -254,7 +255,7 @@ function ProfilePage() {
             {receivedRequests.length > 0 ? (
               receivedRequests.map((request) => (
                 <div key={request.id} className="friend-item">
-                  <img src={request.avatar} alt={request.name} className="friend-avatar" />
+                  <img src={request.avatarUrl} alt={request.name} className="friend-avatar" />
                   <div className="friend-info">
                     <div className="friend-name">{request.name}</div>
                     <div className="friend-points">
@@ -302,7 +303,7 @@ function ProfilePage() {
             {sentRequests.length > 0 ? (
               sentRequests.map((request) => (
                 <div key={request.id} className="friend-item">
-                  <img src={request.avatar} alt={request.name} className="friend-avatar" />
+                  <img src={request.avatarUrl} alt={request.name} className="friend-avatar" />
                   <div className="friend-info">
                     <div className="friend-name">{request.name}</div>
                     <div className="friend-points">
@@ -608,7 +609,7 @@ function ProfilePage() {
           {/* Tab Content */}
           <div className="tab-content">
             {activeTab === 'overview' && renderOverview()}
-            {activeTab === 'friends' && renderFriends()}
+            {activeTab === 'friends' && <FriendsSection user={user} profile={profile} token={token} />}
             {activeTab === 'badges' && renderBadges()}
           </div>
         </div>

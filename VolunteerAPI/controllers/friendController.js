@@ -1,8 +1,20 @@
 const prisma = require("../db/db"); 
 
+const getUserFromFirebase= async (firebaseUid) => {
+  const user = await prisma.user.findUnique({
+    where: { firebaseUid },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user.id;
+};
+
 exports.sendFriendRequest = async (req, res) => {
   const { receiverId } = req.body;
-  const senderId = req.user.id;
+  const senderId = await getUserFromFirebase(req.user.uid);
 
   if (senderId === receiverId) {
     return res
@@ -31,7 +43,6 @@ exports.sendFriendRequest = async (req, res) => {
         status: "pending",
       },
     });
-
     res.status(201).json(request);
   } catch (err) {
     console.error(err);
@@ -41,7 +52,7 @@ exports.sendFriendRequest = async (req, res) => {
 
 // View incoming requests
 exports.getFriendRequests = async (req, res) => {
-  const userId = req.user.id;
+  const userId = await getUserFromFirebase(req.user.uid);
 
   try {
     const requests = await prisma.friendRequest.findMany({
@@ -53,6 +64,7 @@ exports.getFriendRequests = async (req, res) => {
         sender: true,
       },
     });
+    console.log("Friend requests found:", requests);
 
     res.json(requests);
   } catch (err) {
@@ -64,7 +76,7 @@ exports.getFriendRequests = async (req, res) => {
 // Accept a request
 exports.acceptFriendRequest = async (req, res) => {
   const { requestId } = req.body;
-  const userId = req.user.id;
+  const userId = await getUserFromFirebase(req.user.uid);
 
   try {
     const request = await prisma.friendRequest.findUnique({
@@ -110,7 +122,7 @@ exports.acceptFriendRequest = async (req, res) => {
 // Reject a request
 exports.rejectFriendRequest = async (req, res) => {
   const { requestId } = req.body;
-  const userId = req.user.id;
+  const userId = await getUserFromFirebase(req.user.uid);
 
   try {
     const request = await prisma.friendRequest.findUnique({
@@ -140,7 +152,7 @@ exports.rejectFriendRequest = async (req, res) => {
 // Unfriend
 exports.unfriend = async (req, res) => {
   const { friendId } = req.body;
-  const userId = req.user.id;
+  const userId = await getUserFromFirebase(req.user.uid);
 
   try {
     await prisma.user.update({
@@ -166,7 +178,8 @@ exports.unfriend = async (req, res) => {
 
 // Get friends list
 exports.getFriends = async (req, res) => {
-  const userId = req.user.id;
+  const userId = await getUserFromFirebase(req.user.uid);
+  console.log("req.user in getFriends:", req.user);
 
   try {
     const user = await prisma.user.findUnique({

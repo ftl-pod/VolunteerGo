@@ -127,6 +127,7 @@ function SearchPage({ apiLoaded }) {
           tags={uniqueTags}
           skills={uniqueSkills}
           apiLoaded={apiLoaded}
+         
         />
         <OpportunityGrid
           searchResults={searchFilters}

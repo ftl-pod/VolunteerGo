@@ -529,7 +529,7 @@ function ProfilePage() {
             <div className="name">{name}</div>
             <div className="img-container">
               <img
-                src={avatarUrl}
+                src={avatarUrl || "https://i.ibb.co/rf6XN61Q/plant.png"}
                 alt="Profile"
                 className="profile-img"
               />

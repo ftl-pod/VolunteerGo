@@ -31,21 +31,20 @@ function Navbar() {
       setTimeout(() => setShowGif(false), 3000); 
     };
 
-    // New: Key press handler to trigger level up on "L"
-    const handleKeyPress = (event) => {
-      if (event.key.toLowerCase() === 'l') {
-        window.dispatchEvent(new CustomEvent("levelUp"));
-      }
-    };
+    // const handleKeyPress = (event) => {
+    //   if (event.key.toLowerCase() === 'l') {
+    //     window.dispatchEvent(new CustomEvent("levelUp"));
+    //   }
+    // };
 
     window.addEventListener("levelUp", handleLevelUp);
     window.addEventListener("showPointsGif", handleShowGif);
-    window.addEventListener("keydown", handleKeyPress); 
+    // window.addEventListener("keydown", handleKeyPress); 
 
     return () => {
       window.removeEventListener("levelUp", handleLevelUp);
       window.removeEventListener("showPointsGif", handleShowGif);
-      window.removeEventListener("keydown", handleKeyPress);
+      // window.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
 
@@ -210,7 +209,7 @@ function Navbar() {
           <>
             <NavLink to="/profile" className="profile-icon">
               <img
-                src={profile?.avatarUrl}
+                src={profile?.avatarUrl || "https://i.ibb.co/rf6XN61Q/plant.png"}
                 alt="User avatar"
                 style={{
                   width: 60,

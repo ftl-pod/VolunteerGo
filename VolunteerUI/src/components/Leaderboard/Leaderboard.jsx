@@ -1,6 +1,7 @@
 import "./Leaderboard.css";
 import { useLeaderboard } from "../../contexts/LeaderboardContext";
 import { useAuth } from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { FaRubleSign } from "react-icons/fa6";
@@ -55,12 +56,26 @@ function Leaderboard() {
             <div className="circle">{index + 1}</div>
           </div>
           <div className="user-name">
-            <div className="pfp">
-              <div className="circle">
-                <img className="pfp-img" src={u.avatarUrl} alt="Profile" />
-              </div>
-            </div>
-            {u.username}
+            <Link
+                  to={`/public-profile/${u.firebaseUid}`}
+                  className="user-link"
+                >
+                  <div className="pfp">
+                    <div className="circle">
+                      <img
+                        className="pfp-img"
+                        src={u.avatarUrl}
+                        alt="Profile"
+                      />
+                    </div>
+                  </div>
+                </Link>
+                <Link
+                  to={`/public-profile/${u.firebaseUid}`}
+                  className="user-link"
+                >
+                  <div className="leaderboard-username">{u.username}</div>
+                </Link>
           </div>
           <div className="points">{u.points}</div>
         </div>
@@ -79,12 +94,26 @@ function Leaderboard() {
           <div className="circle">{index + 1}</div>
         </div>
         <div className="user-name">
-          <div className="pfp">
-            <div className="circle">
-              <img className="pfp-img" src={u.avatarUrl} alt="Profile" />
-            </div>
-          </div>
-          {u.username}
+          <Link
+                  to={`/public-profile/${u.firebaseUid}`}
+                  className="user-link"
+                >
+                  <div className="pfp">
+                    <div className="circle">
+                      <img
+                        className="pfp-img"
+                        src={u.avatarUrl}
+                        alt="Profile"
+                      />
+                    </div>
+                  </div>
+                </Link>
+                <Link
+                  to={`/public-profile/${u.firebaseUid}`}
+                  className="user-link"
+                >
+                  <div className="leaderboard-username">{u.username}</div>
+                </Link>
         </div>
         <div className="points">{u.points}</div>
       </div>

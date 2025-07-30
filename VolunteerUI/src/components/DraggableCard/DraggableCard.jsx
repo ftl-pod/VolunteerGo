@@ -266,9 +266,7 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
           </div>
       </div>
       <div className="opportunity-info">
-        <button className="back-button" onClick={() => window.history.back()}>
-            <ArrowLeft size={16} />  Back
-        </button>
+
         <h1>{opportunity?.name || "Sample Opportunity"}</h1>
         <p className="organization">
           By: {opportunity?.organization.name || "Sample Organization"}
@@ -294,6 +292,9 @@ const DraggableCard = ({ opportunity, onSwipeLeft, onSwipeRight, formatDate }) =
         </p>
 
         <div className="actions">
+                  <button className="back-button" onClick={() => window.history.back()}>
+            <ArrowLeft size={16} />  Back
+        </button>
             <button className="btn-primary" onClick={() => 
               { isSignedIn?  handleApplyClick(opportunity) : setShowLogin(true)
               }}

@@ -7,6 +7,7 @@ import { useLeaderboard } from "../../contexts/LeaderboardContext";
 import badgeService from '../../utils/badgeService';
 import BadgeModal from "../BadgeModal/BadgeModal";
 import './ApplyModal.css';
+import { getLevelData } from "../ProgressBar/ProgressBar";
 
 function ApplyModal({ isOpen, onClose, applicant, opportunity }) {
   const [message, setMessage] = useState('');
@@ -39,7 +40,11 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity }) {
     setApplyLoading(true);
     setHasSubmitted(false);
 
+
     try {
+      const oldPoints = profile?.points || 0;
+      const oldLevel = getLevelData(oldPoints).level;
+
       // Update points
       const pointsUrl = `${import.meta.env.VITE_API_BASE_URL}/users/points`;
       const updatedPoints = points + 10;
@@ -77,6 +82,11 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity }) {
       await refreshProfile();
       await refreshLeaderboard();
 
+      const newLevel = getLevelData(updatedPoints).level;
+
+      if (newLevel > oldLevel) {
+        window.dispatchEvent(new CustomEvent("levelUp"));
+      }
       // Confirmation email
       await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/send-confirmation-email`, {
         method: 'POST',

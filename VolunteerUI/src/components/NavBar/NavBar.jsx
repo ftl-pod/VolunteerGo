@@ -20,21 +20,118 @@ function Navbar() {
     await signOut(auth);
     navigate('/login');
   };
+  
   useEffect(() => {
-  const handleShowGif = () => {
-    setShowGif(true);
-    setTimeout(() => setShowGif(false), 3000); 
-  };
+    const handleLevelUp = () => {
+      triggerLevelUpAnimation();
+    };
 
-  window.addEventListener("showPointsGif", handleShowGif);
-  return () => window.removeEventListener("showPointsGif", handleShowGif);
+    const handleShowGif = () => {
+      setShowGif(true);
+      setTimeout(() => setShowGif(false), 3000); 
+    };
+
+    // New: Key press handler to trigger level up on "L"
+    const handleKeyPress = (event) => {
+      if (event.key.toLowerCase() === 'l') {
+        window.dispatchEvent(new CustomEvent("levelUp"));
+      }
+    };
+
+    window.addEventListener("levelUp", handleLevelUp);
+    window.addEventListener("showPointsGif", handleShowGif);
+    window.addEventListener("keydown", handleKeyPress); 
+
+    return () => {
+      window.removeEventListener("levelUp", handleLevelUp);
+      window.removeEventListener("showPointsGif", handleShowGif);
+      window.removeEventListener("keydown", handleKeyPress);
+    };
   }, []);
 
-  // const avatarlink =
-  //   {avatarUrl} ||  // From backend DB (shared context)
-  //   "https://i.postimg.cc/D0RRVwPw/plant.png"; // Final fallback
 
-  // Show a placeholder or spinner avatar while profile is loading
+  const triggerLevelUpAnimation = () => {
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) return;
+
+    // Add level up class to navbar
+    navbar.classList.add('level-up-active');
+
+    // Create overlay element
+    const overlay = document.createElement('div');
+    overlay.className = 'level-up-overlay';
+    
+    // Create level up text
+    const levelUpText = document.createElement('div');
+    levelUpText.className = 'level-up-text';
+    levelUpText.textContent = 'LEVEL UP!';
+    overlay.appendChild(levelUpText);
+    
+    navbar.appendChild(overlay);
+
+    // Create sparkles
+    const createSparkles = () => {
+      const sparkleCount = 15;
+      for (let i = 0; i < sparkleCount; i++) {
+        setTimeout(() => {
+          const sparkle = document.createElement('div');
+          sparkle.className = 'level-up-sparkle';
+          sparkle.style.left = Math.random() * 100 + '%';
+          sparkle.style.top = Math.random() * 100 + '%';
+          sparkle.style.animationDelay = Math.random() * 0.5 + 's';
+          overlay.appendChild(sparkle);
+          
+          // Remove sparkle after animation
+          setTimeout(() => {
+            if (sparkle.parentNode) {
+              sparkle.parentNode.removeChild(sparkle);
+            }
+          }, 2000);
+        }, i * 100);
+      }
+    };
+
+  // Create floating leaves
+  const createLeaves = () => {
+    const leafCount = 8;
+    const leafColors = ['leaf-color-1', 'leaf-color-2', 'leaf-color-3'];
+    
+    for (let i = 0; i < leafCount; i++) {
+      setTimeout(() => {
+        const leaf = document.createElement('div');
+        leaf.className = `level-up-leaf ${leafColors[Math.floor(Math.random() * leafColors.length)]}`;
+        leaf.style.left = Math.random() * 100 + '%';
+        leaf.style.top = '100%';
+        leaf.style.animationDelay = Math.random() * 0.3 + 's';
+        overlay.appendChild(leaf);
+        
+        // Remove leaf after animation
+        setTimeout(() => {
+          if (leaf.parentNode) {
+            leaf.parentNode.removeChild(leaf);
+          }
+        }, 3000);
+      }, i * 150);
+    }
+  };
+
+  // Start effects with slight delays
+  setTimeout(createSparkles, 200);
+  setTimeout(createLeaves, 400);
+
+  // Clean up after animation completes
+  setTimeout(() => {
+    navbar.classList.remove('level-up-active');
+    if (overlay.parentNode) {
+      overlay.parentNode.removeChild(overlay);
+    }
+  }, 3000);
+};
+
+
+
+// To trigger the animation from anywhere in your app:
+// window.dispatchEvent(new CustomEvent("levelUp"));
   if (loading) {
     return (
       <nav className="navbar">

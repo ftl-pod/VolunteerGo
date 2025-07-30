@@ -23,19 +23,28 @@ exports.sendFriendRequest = async (req, res) => {
   }
 
   try {
-    // Check for existing request
     const existing = await prisma.friendRequest.findFirst({
       where: {
         senderId,
         receiverId,
-        status: "pending",
       },
     });
 
     if (existing) {
-      return res.status(400).json({ error: "Friend request already sent." });
+      if (existing.status === "pending") {
+        return res.status(400).json({ error: "Friend request already sent." });
+      }
+
+      // Update existing to pending
+      const updated = await prisma.friendRequest.update({
+        where: { id: existing.id },
+        data: { status: "pending", createdAt: new Date() },
+      });
+
+      return res.status(200).json(updated);
     }
 
+    // No existing request, create a new one
     const request = await prisma.friendRequest.create({
       data: {
         senderId,
@@ -43,19 +52,21 @@ exports.sendFriendRequest = async (req, res) => {
         status: "pending",
       },
     });
+
     res.status(201).json(request);
   } catch (err) {
-    console.error(err);
+    console.error("Failed to send friend request:", err);
     res.status(500).json({ error: "Failed to send friend request." });
   }
 };
 
-// View incoming requests
-exports.getFriendRequests = async (req, res) => {
-  const userId = await getUserFromFirebase(req.user.uid);
 
+// View recieved requests
+exports.getReceivedFriendRequests = async (req, res) => {
   try {
-    const requests = await prisma.friendRequest.findMany({
+    const userId = await getUserFromFirebase(req.user.uid);
+
+    const receivedRequests = await prisma.friendRequest.findMany({
       where: {
         receiverId: userId,
         status: "pending",
@@ -63,13 +74,40 @@ exports.getFriendRequests = async (req, res) => {
       include: {
         sender: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
-    console.log("Friend requests found:", requests);
 
-    res.json(requests);
+    res.json(receivedRequests);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch friend requests." });
+    console.error("Error fetching received friend requests:", err);
+    res.status(500).json({ error: "Failed to fetch received friend requests." });
+  }
+};
+
+// View sent requests
+exports.getSentFriendRequests = async (req, res) => {
+  try {
+    const userId = await getUserFromFirebase(req.user.uid);
+
+    const sentRequests = await prisma.friendRequest.findMany({
+      where: {
+        senderId: userId,
+        status: "pending",
+      },
+      include: {
+        receiver: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    res.json(sentRequests);
+  } catch (err) {
+    console.error("Error fetching sent friend requests:", err);
+    res.status(500).json({ error: "Failed to fetch sent friend requests." });
   }
 };
 
@@ -77,7 +115,6 @@ exports.getFriendRequests = async (req, res) => {
 exports.acceptFriendRequest = async (req, res) => {
   const { requestId } = req.body;
   const userId = await getUserFromFirebase(req.user.uid);
-
   try {
     const request = await prisma.friendRequest.findUnique({
       where: { id: requestId },
@@ -146,6 +183,39 @@ exports.rejectFriendRequest = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to reject request." });
+  }
+};
+
+exports.cancelFriendRequest = async (req, res) => {
+  const { requestId } = req.body;
+  const userId = await getUserFromFirebase(req.user.uid);
+
+  try {
+    const request = await prisma.friendRequest.findUnique({
+      where: { id: requestId },
+    });
+
+    if (!request) {
+      return res.status(404).json({ error: "Friend request not found." });
+    }
+
+    if (request.senderId !== userId) {
+      return res.status(403).json({ error: "Unauthorized to cancel this request." });
+    }
+
+    if (request.status !== "pending") {
+      return res.status(400).json({ error: "Only pending requests can be cancelled." });
+    }
+
+    await prisma.friendRequest.update({
+      where: { id: requestId },
+      data: { status: "cancelled" },
+    });
+
+    res.json({ message: "Friend request cancelled." });
+  } catch (err) {
+    console.error("Error cancelling friend request:", err);
+    res.status(500).json({ error: "Failed to cancel friend request." });
   }
 };
 

@@ -97,12 +97,23 @@
 .public-profile-interest-item,
 .public-profile-organization-item {
   background: rgba(99, 128, 111, 0.1);
-  margin-bottom: 6px;
+  margin-bottom: 12px;
   padding: 6px 10px;
   border-radius: 4px;
   font-size: 0.95rem;
   color: #1a2901;
-  font-weight: 600;
+  font-weight: 500;
+  font-family: 'Poppins';
+}
+
+.public-profile-organization-item:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.public-profile-interest-item:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .public-profile-badges-grid {
@@ -130,7 +141,10 @@
 
 .public-profile-badge-name {
   font-size: 0.85rem;
-  color:var(--primary-color)
+  color:var(--primary-color);
+  font-family: 'Poppins';
+  font-weight: 590;
+
 }
 
 

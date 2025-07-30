@@ -28,13 +28,18 @@ async def lifespan(app: FastAPI):
         print(f"✅ Loaded {len(opps)} opportunities")
 
         for opp in opps:
-            opp["text"] = " ".join([
-                str(opp.get("name") or ""),
-                str(opp.get("description") or ""),
-                " ".join(opp.get("tags") or []),
-                str(opp.get("location") or ""),
-                str(opp.get("organization", {}).get("name") or "")
-            ]).strip()
+            opp["text"] = " | ".join(filter(None, [
+                f"Name: {opp.get('name')}",
+                f"Description: {opp.get('description')}",
+                f"Tags: {'; '.join(opp.get('tags', []))}",
+                f"Skills: {'; '.join(opp.get('skills', []))}",
+                f"Requirements: {'; '.join(opp.get('requirements', []))}",
+                f"Location: {opp.get('location') or 'Remote'}",
+                f"Date: {opp.get('date')}",
+                f"Points: {opp.get('points')} points" if opp.get('points') else None,
+                f"Volunteers Needed: {opp.get('volunteersNeeded')}" if opp.get('volunteersNeeded') else None,
+                f"Organization: {opp.get('organization', {}).get('name')}",
+            ])).strip()
 
         app.state.opps = opps
 
@@ -87,17 +92,29 @@ class SearchRequest(BaseModel):
 
 def keyword_match_score(opp, keywords):
     name_text = opp["name"].lower()
-    desc_text = opp["description"].lower()
-    tags_text = " ".join(opp["tags"]).lower()
+    desc_text = (opp.get("description") or "").lower()
+    tags_text = " ".join(opp.get("tags", [])).lower()
+    skills_text = " ".join(opp.get("skills", [])).lower()
+    requirements_text = " ".join(opp.get("requirements", [])).lower()
+    location_text = (opp.get("location") or "").lower()
+    org_name_text = (opp.get("organization", {}).get("name") or "").lower()
 
     score = 0
     for kw in keywords:
         if kw in name_text:
-            score += 3  
+            score += 3
         if kw in desc_text:
             score += 1
         if kw in tags_text:
             score += 2
+        if kw in skills_text:
+            score += 2
+        if kw in requirements_text:
+            score += 1
+        if kw in location_text:
+            score += 3
+        if kw in org_name_text:
+            score += 1.5
     return score
 
 @app.get("/opps")
@@ -118,7 +135,7 @@ async def search(request: Request, body: SearchRequest):
         combined_vec = build_user_vector(body.search_prompt, user_profile, opps)
         combined_vec_tensor = torch.tensor(combined_vec, dtype=torch.float32)
         vector_scores = util.pytorch_cos_sim(combined_vec_tensor, request.app.state.opportunity_vecs).squeeze().tolist()
-        final_scores = [vs + 0.8 * (ks / max_keyword_score) for vs, ks in zip(vector_scores, keyword_scores)]
+        final_scores = [vs + 0.4 * (ks / max_keyword_score) for vs, ks in zip(vector_scores, keyword_scores)]
 
     top_indices = sorted(range(len(final_scores)), key=lambda i: final_scores[i], reverse=True)
 

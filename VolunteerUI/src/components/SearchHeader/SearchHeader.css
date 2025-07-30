@@ -358,6 +358,15 @@
   color: white;
 }
 
+.mic-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-left: 0.5rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .search-header {

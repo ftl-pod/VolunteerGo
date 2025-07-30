@@ -1,7 +1,8 @@
 import "./SearchHeader.css";
 import { useState, useEffect } from "react";
 import CitySearch from "../CitySearch/CitySearch";
-
+import { FaMicrophone } from "react-icons/fa";
+import PopupPill from "../PopupPill/PopupPill";
 function SearchHeader({
   filters,
   onFilterChange,
@@ -18,6 +19,7 @@ function SearchHeader({
   const [format, setFormat] = useState(filters.format || "");
   const [skill, setSkill] = useState(filters.skill || "");
   const [showFilters, setShowFilters] = useState(false);
+  const [isListening, setIsListening] = useState(false);
 
   // Sync local state with filter
   useEffect(() => {
@@ -49,7 +51,51 @@ function SearchHeader({
       skill.trim()
     );
 
+  const handleVoiceSearch = () => {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "en-US";
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+
+    setIsListening(true);
+
+    let finalTranscript = "";
+
+    recognition.onresult = (event) => {
+      let interimTranscript = "";
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+
+      const liveTranscript = finalTranscript + interimTranscript;
+      setSearchTerm(liveTranscript);
+      updateFilter("searchTerm", liveTranscript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+      const finalInput = finalTranscript.trim();
+      if (finalInput) {
+        onSmartSearch(finalInput);
+      }
+    };
+
+    recognition.start();
+  };
+
+
   return (
+    <>
     <div className="search-header">
       <div className="search-container">
         <h1 className="search-title">Find Your Next Opportunity</h1>
@@ -60,6 +106,7 @@ function SearchHeader({
 
         {/* Search Input and Button */}
         <div className="search-form">
+
           <input
             type="text"
             placeholder="I want to volunteer for..."
@@ -71,6 +118,11 @@ function SearchHeader({
             }}
             onKeyDown={handleKeyDown}
           />
+            <button className="mic-button" onClick={handleVoiceSearch} title="Speak your search">
+            <FaMicrophone />
+          </button>
+
+
           <button className="smart-search-button" onClick={() => onSmartSearch(searchTerm)}>
             Smart Search
           </button>
@@ -172,6 +224,7 @@ function SearchHeader({
         )}
       </div>
     </div>
+    </>
   );
 }
 

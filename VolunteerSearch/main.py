@@ -86,8 +86,19 @@ class SearchRequest(BaseModel):
     user_profile: Optional[UserProfile] = None
 
 def keyword_match_score(opp, keywords):
-    text = (opp["name"] + " " + opp["description"] + " " + " ".join(opp["tags"])).lower()
-    return sum(1 for kw in keywords if kw in text)
+    name_text = opp["name"].lower()
+    desc_text = opp["description"].lower()
+    tags_text = " ".join(opp["tags"]).lower()
+
+    score = 0
+    for kw in keywords:
+        if kw in name_text:
+            score += 3  
+        if kw in desc_text:
+            score += 1
+        if kw in tags_text:
+            score += 2
+    return score
 
 @app.get("/opps")
 def get_opps(request: Request):
@@ -107,7 +118,7 @@ async def search(request: Request, body: SearchRequest):
         combined_vec = build_user_vector(body.search_prompt, user_profile, opps)
         combined_vec_tensor = torch.tensor(combined_vec, dtype=torch.float32)
         vector_scores = util.pytorch_cos_sim(combined_vec_tensor, request.app.state.opportunity_vecs).squeeze().tolist()
-        final_scores = [vs + 0.4 * (ks / max_keyword_score) for vs, ks in zip(vector_scores, keyword_scores)]
+        final_scores = [vs + 0.8 * (ks / max_keyword_score) for vs, ks in zip(vector_scores, keyword_scores)]
 
     top_indices = sorted(range(len(final_scores)), key=lambda i: final_scores[i], reverse=True)
 
@@ -134,7 +145,7 @@ def build_user_vector(search_prompt: str, user_profile: UserProfile, opps):
 
     saved_texts = [opp["text"] for opp in opps if opp["id"] in user_profile.saved_opportunities]
     saved_vec = normalize(model.encode(" ".join(saved_texts), convert_to_numpy=True)) if saved_texts else np.zeros(384)
-    full_user_vec = normalize(0.9 * user_vec + 0.1 * saved_vec)
+    full_user_vec = normalize(0.7 * user_vec + 0.3 * saved_vec)
 
     search_prompt = search_prompt.strip().lower()
     if not search_prompt:

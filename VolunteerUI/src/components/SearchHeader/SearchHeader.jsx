@@ -1,6 +1,7 @@
 import "./SearchHeader.css";
 import { useState, useEffect } from "react";
 import CitySearch from "../CitySearch/CitySearch";
+import { FaMicrophone } from "react-icons/fa";
 
 function SearchHeader({
   filters,
@@ -11,13 +12,14 @@ function SearchHeader({
   skills = [],
   apiLoaded,
 }) {
-
   const [searchTerm, setSearchTerm] = useState(filters.searchTerm || "");
   const [city, setCity] = useState(filters.city || "");
   const [tag, setTag] = useState(filters.tag || "");
   const [format, setFormat] = useState(filters.format || "");
   const [skill, setSkill] = useState(filters.skill || "");
   const [showFilters, setShowFilters] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Sync local state with filter
   useEffect(() => {
@@ -36,7 +38,19 @@ function SearchHeader({
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      onSmartSearch(searchTerm);
+      handleSmartSearch(searchTerm);
+    }
+  };
+
+  const handleSmartSearch = async (term) => {
+    setIsProcessing(true);
+    try {
+      await onSmartSearch(term);
+    } finally {
+      // Keep animation for at least 1.5 seconds for visual feedback
+      setTimeout(() => {
+        setIsProcessing(false);
+      }, 1500);
     }
   };
 
@@ -49,6 +63,48 @@ function SearchHeader({
       skill.trim()
     );
 
+  const handleVoiceSearch = () => {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "en-US";
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+
+    setIsListening(true);
+
+    let finalTranscript = "";
+
+    recognition.onresult = (event) => {
+      let interimTranscript = "";
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+
+      const liveTranscript = finalTranscript + interimTranscript;
+      setSearchTerm(liveTranscript);
+      updateFilter("searchTerm", liveTranscript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+      const finalInput = finalTranscript.trim();
+      if (finalInput) {
+        handleSmartSearch(finalInput);
+      }
+    };
+
+    recognition.start();
+  };
+
   return (
     <div className="search-header">
       <div className="search-container">
@@ -60,20 +116,32 @@ function SearchHeader({
 
         {/* Search Input and Button */}
         <div className="search-form">
-          <input
-            type="text"
-            placeholder="I want to volunteer for..."
-            className="search-input main-input"
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              updateFilter("searchTerm", e.target.value);
-            }}
-            onKeyDown={handleKeyDown}
-          />
-          <button className="smart-search-button" onClick={() => onSmartSearch(searchTerm)}>
-            Smart Search
-          </button>
+          <div className={`search-input-container ${isProcessing ? 'ai-processing' : ''}`}>
+            <input
+              type="text"
+              placeholder="I want to volunteer for..."
+              className="search-input main-input"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                updateFilter("searchTerm", e.target.value);
+              }}
+              onKeyDown={handleKeyDown}
+            />
+            <button 
+              className={`mic-button ${isListening ? 'listening' : ''}`}
+              onClick={handleVoiceSearch} 
+              title="Speak your search"
+            >
+              <FaMicrophone />
+            </button>
+            <button 
+              className="smart-search-button" 
+              onClick={() => handleSmartSearch(searchTerm)}
+            >
+              Smart Search
+            </button>
+          </div>
         </div>
 
         {/* Filter Toggle */}

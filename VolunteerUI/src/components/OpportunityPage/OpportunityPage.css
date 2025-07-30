@@ -1,23 +1,32 @@
-
 .opportunity-page {
   font-family: 'Poppins', sans-serif;
   color: #333;
   display: grid;
-  grid-template-columns: 1fr 1.2fr; 
-  gap: 3rem;
-  width: 80%;
-  max-width: 1400px;
-  margin: 1rem auto;
-  align-items: start;
+  grid-template-columns: 500px 1fr;
+  grid-template-rows: auto;
+  gap: 2rem;
+  width: 90%;
+  max-width: 1200px;
+  margin: 2rem auto;
   background: #fff;
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  padding: 3rem;
+  padding: 4rem 2rem;
+  height: auto; 
+  min-height: 100%;
+}
+
+/* Left Side Container */
+.left-side {
+  display: grid;
+  grid-template-rows: 300px 1fr;
+  gap: 1.5rem;
+  height: fit-content;
 }
 
 .opportunity-image {
   width: 100%;
-  height: 600px;
+  height: 300px;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
@@ -28,83 +37,200 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 0;
 }
 
+/* Requirements and Skills Section */
+.needed {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  height: auto;
+}
+
+.requirements::after, .skills::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--background-color, #9f8477c9));
+  pointer-events: none;
+  z-index: 2;
+}
+
+.requirements,
+.skills {
+  background: var(--background-color);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+    position: relative;
+
+}
+
+.requirements h2,
+.skills h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  color: var(--header-color, #333);
+  text-align: left;
+}
+
+.requirements-list,
+.skills-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 120px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color, #007bff) var(--tertiary-color, #f8f9fa);
+}
+
+.requirements-list::-webkit-scrollbar,
+.skills-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.requirements-list::-webkit-scrollbar-track,
+.skills-list::-webkit-scrollbar-track {
+  background: var(--tertiary-color, #f8f9fa);
+  border-radius: 3px;
+}
+
+.requirements-list::-webkit-scrollbar-thumb,
+.skills-list::-webkit-scrollbar-thumb {
+  background: var(--primary-color, #007bff);
+  border-radius: 3px;
+}
+
+.requirements-list li,
+.skills-list li {
+  padding: 0.4rem 0.75rem;
+  margin-bottom: 0.3rem;
+  background: white;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text-color, #333);
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+}
+
+.requirements-list li:hover,
+.skills-list li:hover {
+  background: #f1f3f4;
+  transform: translateX(2px);
+}
+
+.requirements-list li:last-child,
+.skills-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* Right Side - Opportunity Info */
 .opportunity-info {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
   height: 100%;
-  padding: 1rem 0;
+  padding: 0;
 }
 
 .back-button {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
+  background-color: transparent;
+  color: var(--secondary-color, #6c757d);
+  border: 1px solid var(--secondary-color, #6c757d);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
   cursor: pointer;
-  color: var(--primary);
-  margin-bottom: 2rem;
-  padding: 0.5rem 0;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0rem !important;
 }
 
 .back-button:hover {
-  transform: translateX(-5px);
+  background-color: var(--tertiary-color, #f8f9fa);
+  transform: translateY(-1px);
 }
 
-h1 {
-  font-size: 2.5rem;
+.opportunity-info h1 {
+  font-size: 2.2rem;
   font-weight: 700;
   line-height: 1.2;
-  margin-bottom: 1rem;
-  color: #222;
+  margin: 0 0 0.75rem 0;
+  color: var(--header-color, #222);
 }
 
 .organization {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  margin: 1rem 0;
-  color: #555;
+  margin: 0 0 0.5rem 0;
+  color: var(--secondary-color, #555);
 }
 
 .location-date {
-  font-size: 1.1rem;
-  color: #666;
-  margin-bottom: 2rem;
+  font-size: 1rem;
+  color: var(--subtitle-color, #666);
+  margin-bottom: 1.5rem;
   font-weight: 500;
 }
 
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.8rem;
-  margin-bottom: 2rem;
-  align-items: center;
-  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
 }
 
-.tag{
-    background-color: var(--tertiary-color);
-  color: var(--secondary-color);;
-  padding: 0.3rem 0.7rem;
-  border-radius: 1rem;
+.tag {
+  background-color: var(--tertiary-color, #f8f9fa);
+  color: var(--secondary-color, #6c757d);
+  padding: 0.4rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid #e0e0e0;
+}
+
+.full-description {
+  flex: 1;
+  max-height: 400px;
   font-size: 1rem;
-
+  line-height: 1.6;
+  color: var(--text-color, #555);
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  margin-bottom: 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color, #007bff) var(--tertiary-color, #f8f9fa);
 }
-.description {
-  font-size: 1.1rem;
-  line-height: 1.7;
-  margin-bottom: 3rem;
-  color: #555;
+
+.full-description::-webkit-scrollbar {
+  width: 6px;
+}
+
+.full-description::-webkit-scrollbar-track {
+  background: var(--tertiary-color, #f8f9fa);
+  border-radius: 3px;
+}
+
+.full-description::-webkit-scrollbar-thumb {
+  background: var(--primary-color, #007bff);
+  border-radius: 3px;
 }
 
 .actions {
   display: flex;
-  gap: 1.5rem;
-  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+  margin-top: auto;
 }
 
 .opportunity-info button{
@@ -112,31 +238,132 @@ h1 {
   padding: 0.8rem 1.4rem;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
+.back-button {
+    background-color: transparent;
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.back-button:hover {
+    background-color: var(--tertiary-color);
+    transform: translateY(-2px);
+}
+.save-btn {
+    background-color: transparent;
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Poppins';
+    border-color: var(--primary-color);
+}
+
+.save-btn:hover {
+    background-color: rgba(211, 226, 217, 0.5); 
+}
+
+.save-icon {
+    font-size: 16px;
+    display: flex;
+    justify-self: center;
+    align-self: center;
+    color: var(--primary-color);
+}
+
+.loading-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #e0e0e0;
+  border-top: 2px solid var(--primary-color, #007bff);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
   .opportunity-page {
     grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 2rem;
-    margin: 0.5rem;
-    width: 80%;
+    grid-template-rows: auto auto;
+    padding: 1.5rem;
+    width: 100%;
+    height: auto;
+    overflow-x: hidden;
   }
-  
-  .opportunity-title {
-    font-size: 2rem;
+
+  .left-side {
+    grid-template-rows: auto auto;
+    height: auto;
   }
-  
-  .organization {
-    font-size: 1.2rem;
+
+  .opportunity-image {
+    height: 220px;
   }
-  
-  .actions {
-    flex-direction: column;
+
+  .needed {
+    grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
-  .btn-primary,
-  .btn-secondary {
+
+  .requirements-list,
+  .skills-list {
+    max-height: 150px;
+  }
+}
+
+@media (max-width: 576px) {
+  .opportunity-page {
+    padding: 1rem;
+    margin: 0;
+    gap: 1rem;
+  }
+
+  .opportunity-info h1 {
+    font-size: 1.6rem;
+  }
+
+  .organization {
+    font-size: 1rem;
+  }
+
+  .tags {
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .actions {
+    flex-direction: column;
     width: 100%;
+  }
+
+  .opportunity-info button {
+    width: 100%;
+  }
+
+  .full-description {
+    max-height: 200px;
+    overflow-y: auto;
   }
 }

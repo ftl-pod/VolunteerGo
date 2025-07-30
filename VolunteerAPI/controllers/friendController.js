@@ -249,7 +249,6 @@ exports.unfriend = async (req, res) => {
 // Get friends list
 exports.getFriends = async (req, res) => {
   const userId = await getUserFromFirebase(req.user.uid);
-  console.log("req.user in getFriends:", req.user);
 
   try {
     const user = await prisma.user.findUnique({

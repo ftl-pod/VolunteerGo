@@ -1,20 +1,18 @@
 import './ProgressBar.css';
 
-function getLevelData(points) {
+export function getLevelData(points) {
   if (points < 0) return { level: 1, progress: 0, currentLevelPoints: 0, nextLevelPoints: 10 };
   
   let level = 1;
   let totalPointsForPreviousLevels = 0;
   let pointsNeededForCurrentLevel = 15;
 
-  // Calculate which level the user is currently in
   while (points >= totalPointsForPreviousLevels + pointsNeededForCurrentLevel) {
     totalPointsForPreviousLevels += pointsNeededForCurrentLevel;
     level++;
-    pointsNeededForCurrentLevel += 5; // Each level requires 10 more points than the previous
+    pointsNeededForCurrentLevel += 5;
   }
 
-  // Calculate progress within the current level
   const currentLevelPoints = points - totalPointsForPreviousLevels;
   const progress = Math.min((currentLevelPoints / pointsNeededForCurrentLevel) * 100, 100);
 
@@ -25,6 +23,7 @@ function getLevelData(points) {
     nextLevelPoints: pointsNeededForCurrentLevel 
   };
 }
+
 
 function ProgressBar({ points = 0, size = 'normal' }) {
   const { level, progress, nextLevelPoints, currentLevelPoints } = getLevelData(points);

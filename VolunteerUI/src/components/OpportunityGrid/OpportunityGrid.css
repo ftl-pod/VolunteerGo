@@ -139,38 +139,6 @@ a{
     text-decoration: none;
 }
 
-.needed{
-    display: flex;
-    gap: 3rem;
-}
-.needed h2 {
-    text-align: left;
-}
-
-ul{
-    text-align: left;
-    padding-left: 0rem;
-    max-height: 90px;
-    overflow-y: scroll;
-    max-width: 200px;
-    scrollbar-color: var(--tertiary-color) var(--primary-color);
-  scrollbar-width: thin;
-}
-
-.full-description {
-    overflow-y: scroll;
-    max-height: 250px;
-}
-.opportunity-info {
-    padding:1.5rem;
-    height: 90%;
-}
-
-.opportunity-info p {
-    overflow-y: auto;
-    scrollbar-color: var(--primary-color) var(--tertiary-color);
-    scrollbar-width: thin;
-}
 
 .save-btn {
     background-color: transparent;

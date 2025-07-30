@@ -17,7 +17,7 @@
 
 .opportunity-image {
   width: 100%;
-  height: 600px;
+  height: 400px;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
@@ -110,6 +110,86 @@ h1 {
 .opportunity-info button{
   font-size: 1.2rem;
   padding: 0.8rem 1.4rem;
+}
+
+.back-button {
+    background-color: transparent;
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.back-button:hover {
+    background-color: var(--tertiary-color);
+    transform: translateY(-2px);
+}
+.save-btn {
+    background-color: transparent;
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Poppins';
+    border-color: var(--primary-color);
+}
+
+.save-btn:hover {
+    background-color: rgba(211, 226, 217, 0.5); 
+}
+
+
+.save-icon {
+    font-size: 16px;
+    display: flex;
+    justify-self: center;
+    align-self: center;
+    color: var(--primary-color);
+}
+
+.needed{
+    display: flex;
+    gap: 3rem;
+}
+.needed h2 {
+    text-align: left;
+}
+
+.needed ul{
+    text-align: left;
+    padding-left: 0rem;
+    max-height: 200px;
+    overflow-y: scroll;
+    max-width: 200px;
+    scrollbar-color: var(--tertiary-color) var(--primary-color);
+    scrollbar-width: thin;
+}
+
+.full-description {
+    overflow-y: scroll;
+    max-height: 250px;
+}
+.opportunity-info {
+    padding:1.5rem;
+    height: 90%;
+}
+
+.opportunity-info p {
+    overflow-y: auto;
+    scrollbar-color: var(--primary-color) var(--tertiary-color);
+    scrollbar-width: thin;
 }
 
 /* Responsive design */

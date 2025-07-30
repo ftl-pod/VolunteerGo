@@ -11,7 +11,7 @@
   background: #fff;
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
+  padding: 4rem 2rem;
   height: auto; 
   min-height: 100%;
 }
@@ -201,6 +201,7 @@
 
 .full-description {
   flex: 1;
+  max-height: 400px;
   font-size: 1rem;
   line-height: 1.6;
   color: var(--text-color, #555);
@@ -300,59 +301,69 @@
 /* Responsive Design */
 @media (max-width: 992px) {
   .opportunity-page {
-    grid-template-columns: 350px 1fr;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
     padding: 1.5rem;
     width: 100%;
+    height: auto;
+    overflow-x: hidden;
   }
-  
+
   .left-side {
-    grid-template-rows: 250px 1fr;
+    grid-template-rows: auto auto;
+    height: auto;
   }
-  
+
   .opportunity-image {
-    height: 250px;
+    height: 220px;
   }
-  
+
   .needed {
-    height: 240px;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .requirements-list,
+  .skills-list {
+    max-height: 150px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 576px) {
   .opportunity-page {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 1.5rem;
-    margin: 1rem;
-        width: 100%;
+    padding: 1rem;
+    margin: 0;
+    gap: 1rem;
+  }
 
-  }
-  
-  .left-side {
-    grid-template-rows: auto auto;
-    gap: 1rem;
-  }
-  
-  .opportunity-image {
-    height: 200px;
-  }
-  
-  .needed {
-    grid-template-columns: 1fr 1fr;
-    height: auto;
-    gap: 1rem;
-  }
-  
   .opportunity-info h1 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
-  
+
   .organization {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
-  
+
+  .tags {
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+
   .actions {
-    flex-direction: row;
-    gap: 1rem;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .opportunity-info button {
+    width: 100%;
+  }
+
+  .full-description {
+    max-height: 200px;
+    overflow-y: auto;
   }
 }

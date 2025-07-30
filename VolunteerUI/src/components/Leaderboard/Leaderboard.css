@@ -7,7 +7,6 @@
     flex-direction: column;
 }
 
-
 .title {
     display: flex;
     height: auto;
@@ -174,13 +173,40 @@
     box-shadow: 0 4px 12px rgba(99, 128, 111, 0.15) !important;
 }
 
-.title-wrapper {
+.mode-toggle {
   display: flex;
   max-width: 500px;
-  width: 100%;
-  margin: 0 auto;
-  justify-content: center;
-  gap:20px;
+  gap: 10px;
+  background: white;
+  padding: 6px;
+  border-radius: 2rem;
+  width: fit-content;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+  align-self: center;
+}
+
+.mode-btn {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  background: transparent;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--subtitle-color);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  width:200px;
+}
+
+.mode-btn:hover {
+  background: rgba(222, 234, 227, 0.5); 
+}
+
+.mode-btn.active {
+  background: rgba(211, 226, 217, 0.5); 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .LBsquiggly-bg {
   position: fixed;

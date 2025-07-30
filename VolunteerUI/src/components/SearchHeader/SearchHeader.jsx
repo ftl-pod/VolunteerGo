@@ -2,7 +2,7 @@ import "./SearchHeader.css";
 import { useState, useEffect } from "react";
 import CitySearch from "../CitySearch/CitySearch";
 import { FaMicrophone } from "react-icons/fa";
-import PopupPill from "../PopupPill/PopupPill";
+
 function SearchHeader({
   filters,
   onFilterChange,
@@ -12,7 +12,6 @@ function SearchHeader({
   skills = [],
   apiLoaded,
 }) {
-
   const [searchTerm, setSearchTerm] = useState(filters.searchTerm || "");
   const [city, setCity] = useState(filters.city || "");
   const [tag, setTag] = useState(filters.tag || "");
@@ -20,6 +19,7 @@ function SearchHeader({
   const [skill, setSkill] = useState(filters.skill || "");
   const [showFilters, setShowFilters] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Sync local state with filter
   useEffect(() => {
@@ -38,7 +38,19 @@ function SearchHeader({
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      onSmartSearch(searchTerm);
+      handleSmartSearch(searchTerm);
+    }
+  };
+
+  const handleSmartSearch = async (term) => {
+    setIsProcessing(true);
+    try {
+      await onSmartSearch(term);
+    } finally {
+      // Keep animation for at least 1.5 seconds for visual feedback
+      setTimeout(() => {
+        setIsProcessing(false);
+      }, 1500);
     }
   };
 
@@ -86,16 +98,14 @@ function SearchHeader({
       setIsListening(false);
       const finalInput = finalTranscript.trim();
       if (finalInput) {
-        onSmartSearch(finalInput);
+        handleSmartSearch(finalInput);
       }
     };
 
     recognition.start();
   };
 
-
   return (
-    <>
     <div className="search-header">
       <div className="search-container">
         <h1 className="search-title">Find Your Next Opportunity</h1>
@@ -106,26 +116,32 @@ function SearchHeader({
 
         {/* Search Input and Button */}
         <div className="search-form">
-
-          <input
-            type="text"
-            placeholder="I want to volunteer for..."
-            className="search-input main-input"
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              updateFilter("searchTerm", e.target.value);
-            }}
-            onKeyDown={handleKeyDown}
-          />
-            <button className="mic-button" onClick={handleVoiceSearch} title="Speak your search">
-            <FaMicrophone />
-          </button>
-
-
-          <button className="smart-search-button" onClick={() => onSmartSearch(searchTerm)}>
-            Smart Search
-          </button>
+          <div className={`search-input-container ${isProcessing ? 'ai-processing' : ''}`}>
+            <input
+              type="text"
+              placeholder="I want to volunteer for..."
+              className="search-input main-input"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                updateFilter("searchTerm", e.target.value);
+              }}
+              onKeyDown={handleKeyDown}
+            />
+            <button 
+              className={`mic-button ${isListening ? 'listening' : ''}`}
+              onClick={handleVoiceSearch} 
+              title="Speak your search"
+            >
+              <FaMicrophone />
+            </button>
+            <button 
+              className="smart-search-button" 
+              onClick={() => handleSmartSearch(searchTerm)}
+            >
+              Smart Search
+            </button>
+          </div>
         </div>
 
         {/* Filter Toggle */}
@@ -224,7 +240,6 @@ function SearchHeader({
         )}
       </div>
     </div>
-    </>
   );
 }
 

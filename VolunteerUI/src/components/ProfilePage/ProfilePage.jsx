@@ -177,7 +177,6 @@ function ProfilePage() {
     name = user?.displayName || "Unnamed User",
     age,
     points = 0,
-    level = "1",
     skills = [],
     training = [],
     interests = [],
@@ -555,12 +554,6 @@ function ProfilePage() {
                 <span>Points</span>
               </div>
               <div className="info-value">{points || 0}</div>
-              
-              <div className="info-label">
-                <FaBarsProgress className="icon" />
-                <span>Level</span>
-              </div>
-              <div className="info-value">{level || "1"}</div>
               
               <div className="info-label">
                 <IoCalendarSharp className="icon" />

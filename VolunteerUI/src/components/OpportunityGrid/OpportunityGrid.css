@@ -139,6 +139,64 @@ a{
     text-decoration: none;
 }
 
+.needed{
+    display: flex;
+    gap: 3rem;
+
+}
+.needed h3 {
+    text-align: left;
+    margin-bottom: 0rem;
+}
+
+.skills-list, .req-list {
+    text-align: left;
+    padding-left: 0rem;
+    max-height: 150px;
+    overflow-y: scroll;
+    max-width: 265px;
+    scrollbar-color: var(--tertiary-color) var(--primary-color);
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
+}
+
+.skills-list::-webkit-scrollbar,
+.req-list::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 12px;
+    background: #b07373;
+    display: block;
+}
+
+.skills-list::-webkit-scrollbar-thumb,
+.req-list::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 2px solid green;
+    background-color: rgba(0, 0, 0, .7);
+}
+
+.skills-list::-webkit-scrollbar-track,
+.req-list::-webkit-scrollbar-track {
+    background: #b07373;
+}
+
+
+
+
+.full-description {
+    overflow-y: scroll;
+    max-height: 250px;
+}
+.opportunity-info {
+    padding:1.5rem;
+    height: 90%;
+}
+
+.opportunity-info p {
+    overflow-y: auto;
+    scrollbar-color: var(--primary-color) var(--tertiary-color);
+    scrollbar-width: thin;
+}
 
 .save-btn {
     background-color: transparent;

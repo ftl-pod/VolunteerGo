@@ -377,7 +377,11 @@
   transform: scale(0.98);
 }
 
-
+.city-input{
+  border-radius: 12px;
+  width: 100%;
+  padding: 10px 16px;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
   .search-header {

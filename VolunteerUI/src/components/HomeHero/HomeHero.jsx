@@ -140,7 +140,7 @@ export default function HomeHero() {
 
       {/* Main Content */}
       <div className="hero-content">
-        <h1 className="hero-title">Volunteer Go</h1>
+        <h1 className="hero-title">VolunteerGo</h1>
         <p className="hero-subtitle">
           Do good, level up
           {/* <img

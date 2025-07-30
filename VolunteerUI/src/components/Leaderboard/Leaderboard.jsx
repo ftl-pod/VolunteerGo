@@ -1,6 +1,7 @@
 import "./Leaderboard.css";
 import { useLeaderboard } from "../../contexts/LeaderboardContext";
 import { useAuth } from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 function Leaderboard() {
   const { users, loading } = useLeaderboard();
@@ -21,31 +22,46 @@ function Leaderboard() {
   return (
     <div className="page">
       <div className="title">Community Leaderboard</div>
-      
+
       <div className="list">
-        
         {users.length === 0 ? (
           <div>No users yet. Be the first to sign up!</div>
         ) : (
-            sortedUsers.map((u, index) => (
-            <div 
-              className={`list-item ${u.firebaseUid === user?.uid ? 'current-user-highlight' : ''}`} 
+          sortedUsers.map((u, index) => (
+            <div
+              className={`list-item ${
+                u.firebaseUid === user?.uid ? "current-user-highlight" : ""
+              }`}
               key={u.firebaseUid || u.id || index}
             >
               <div className="rank">
                 <div className="circle">{index + 1}</div>
               </div>
               <div className="user-name">
-                <div className="pfp">
-                  <div className="circle">
-                    <img className="pfp-img" src={u.avatarUrl} alt="Profile" />
+                <Link
+                  to={`/public-profile/${u.firebaseUid}`}
+                  className="user-link"
+                >
+                  <div className="pfp">
+                    <div className="circle">
+                      <img
+                        className="pfp-img"
+                        src={u.avatarUrl}
+                        alt="Profile"
+                      />
+                    </div>
                   </div>
-                </div>
-                {u.username}
+                </Link>
+                <Link
+                  to={`/public-profile/${u.firebaseUid}`}
+                  className="user-link"
+                >
+                  <div className="leaderboard-username">{u.username}</div>
+                </Link>
               </div>
               <div className="points">{u.points}</div>
             </div>
-            ))
+          ))
         )}
       </div>
     </div>

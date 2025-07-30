@@ -30,15 +30,17 @@ function PublicProfile() {
   }, [userId]);
 
   if (loading) {
-    return <div className="page-container">Loading profile...</div>;
+    return (
+      <div className="public-profile-page-container">Loading profile...</div>
+    );
   }
 
   if (error) {
-    return <div className="page-container">Error: {error}</div>;
+    return <div className="public-profile-page-container">Error: {error}</div>;
   }
 
   if (!profile) {
-    return <div className="page-container">User not found.</div>;
+    return <div className="public-profile-page-container">User not found.</div>;
   }
 
   const {
@@ -51,37 +53,37 @@ function PublicProfile() {
     badges = [],
   } = profile;
 
-
   return (
-    <div className="page-container public-profile">
-      <div className="public-profile-header">
-        <div className="profile-img-container">
-          <img src={avatarUrl} alt="Profile" className="profile-img" />
+    <div className="public-profile-page-container">
+      <div className="public-profile-header-section">
+        <div className="public-profile-img-container">
+          <img src={avatarUrl} alt="Profile" className="public-profile-img" />
         </div>
-        <div className="profile-basic-info">
-          <h2 className="username">{username}</h2>
-          
+        <div className="public-profile-basic-info">
+          <h2 className="public-profile-username">{username}</h2>
         </div>
       </div>
 
-      <div className="profile-stats">
-        <div className="stat-item">
-          <GiThreeLeaves className="icon" />
+      <div className="public-profile-stats">
+        <div className="public-profile-stat-item">
+          <GiThreeLeaves className="public-profile-icon" />
           <span>Points: {points || 0}</span>
         </div>
-        <div className="stat-item">
-          <FaBarsProgress className="icon" />
+        <div className="public-profile-stat-item">
+          <FaBarsProgress className="public-profile-icon" />
           <span>Level: {level || "1"}</span>
         </div>
       </div>
 
-      <div className="profile-details">
-        <div className="section">
+      <div className="public-profile-details">
+        <div className="public-profile-section">
           <h3>Interests</h3>
-          <div className="section-content">
+          <div className="public-profile-section-content">
             {interests.length ? (
               interests.map((interest, index) => (
-                <div key={index} className="interest-item">{interest}</div>
+                <div key={index} className="public-profile-interest-item">
+                  {interest}
+                </div>
               ))
             ) : (
               <div>No interests listed.</div>
@@ -89,12 +91,14 @@ function PublicProfile() {
           </div>
         </div>
 
-        <div className="section">
+        <div className="public-profile-section">
           <h3>Organizations Supported</h3>
-          <div className="section-content">
+          <div className="public-profile-section-content">
             {opportunities.length ? (
               opportunities.map((org, index) => (
-                <div key={index} className="organization-item">{org.name || org}</div>
+                <div key={index} className="public-profile-organization-item">
+                  {org.name || org}
+                </div>
               ))
             ) : (
               <div>No organizations supported yet.</div>
@@ -102,18 +106,18 @@ function PublicProfile() {
           </div>
         </div>
 
-        <div className="section">
+        <div className="public-profile-section">
           <h3>Badges Earned</h3>
-          <div className="badges-grid">
+          <div className="public-profile-badges-grid">
             {badges.length ? (
               badges.map((badge) => (
-                <div key={badge.id} className="badge earned">
+                <div key={badge.id} className="public-profile-badge earned">
                   <img
                     src={badge.imageUrl}
                     alt={badge.name}
-                    className="badge-img"
+                    className="public-profile-badge-img"
                   />
-                  <div className="badge-name">{badge.name}</div>
+                  <div className="public-profile-badge-name">{badge.name}</div>
                 </div>
               ))
             ) : (

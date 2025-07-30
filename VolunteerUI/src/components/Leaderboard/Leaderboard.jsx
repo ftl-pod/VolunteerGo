@@ -56,7 +56,7 @@ function Leaderboard() {
                   to={`/public-profile/${u.firebaseUid}`}
                   className="user-link"
                 >
-                  {u.username}
+                  <div className="leaderboard-username">{u.username}</div>
                 </Link>
               </div>
               <div className="points">{u.points}</div>

@@ -84,7 +84,6 @@ async checkFirstApplication(userId, userOpportunitiesCount, setBadgeEarned) {
       const { data: user } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${userUid}`);
 
       if (users[0].id === user.id) {
-        console.log("#1")
         const hasBadge = user.badges.some(b => b.name === "Impact Leader");
 
         if (!hasBadge) {

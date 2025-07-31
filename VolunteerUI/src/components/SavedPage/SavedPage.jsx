@@ -82,7 +82,6 @@ function SavedPage() {
         });
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         const data = await res.json();
-        console.log(data);
         // taking the top 15 recommendations for testing
         const top25 = data.recommendations.slice(0, 25);
         setAllSmartSuggestions(top25);

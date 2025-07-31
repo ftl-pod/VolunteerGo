@@ -109,10 +109,12 @@ function HomePage() {
         </div>   
         <div id="about-us" className="about">
           <h1>Meet Our Founders</h1>
-          <div className="about-text">
-            Our founders are former FTL Salesforce interns passionate about community service and giving back. They created 
-            this platform to amplify those values by adding gamified incentives, making volunteering more engaging and 
-            rewarding for everyone.
+          <div >
+            <div className="mission-text">
+               Our founders are former FTL Salesforce interns passionate about community service and giving back. They created 
+              this platform to amplify those values by adding gamified incentives, making volunteering more engaging and 
+              rewarding for everyone.
+            </div>
             <div className="pic-container">
               <div>
               <div className="founder-info">

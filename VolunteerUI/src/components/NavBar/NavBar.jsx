@@ -140,7 +140,9 @@ function Navbar() {
           {isLoaded && isSignedIn && (
             <NavLink to="/saved" className="nav-link">Saved</NavLink>
           )}
-          <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
+          {isLoaded && isSignedIn && (
+            <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
+          )}
           {/* <NavLink to="/map" className="nav-link">Map</NavLink> */}
         </div>
         <div className="profile-menu">
@@ -184,7 +186,9 @@ function Navbar() {
         {isLoaded && isSignedIn && (
           <NavLink to="/saved" className="nav-link">Saved</NavLink>
         )}
-        <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
+        {isLoaded && isSignedIn && (
+          <NavLink to="/leaderboard" className="nav-link">Leaderboard</NavLink>
+        )}
         {/* <NavLink to="/map" className="nav-link">Map</NavLink> */}
       </div>
       <div className="navbar-right">

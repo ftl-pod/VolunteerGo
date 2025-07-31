@@ -1,21 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+
 /* Main container for the entire auth page */
 .auth-page-container {
   display: flex;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  background: var(--background-color, #1a1a1a); /* Ensure background covers */
 }
 
 /* Left side with image */
 .auth-left {
   flex: 1;
-  display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.05);
@@ -50,6 +53,8 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-sizing: border-box;
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height */
 }
 
 /* Form styling */
@@ -57,7 +62,7 @@
   width: 100%;
   max-width: 500px;
   padding: 2rem;
-  margin: 0 auto; /* centers the form */
+  margin: 0 auto;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
@@ -121,6 +126,7 @@
   padding: 0.75rem 1rem;
   transition: all 0.3s ease;
   width: 100%;
+  min-height: 44px; /* Better touch target for mobile */
 }
 
 .auth-right .form-field input:focus {
@@ -150,6 +156,7 @@
   width: 100%;
   margin-top: 1rem;
   cursor: pointer;
+  min-height: 44px; /* Better touch target for mobile */
 }
 
 .auth-right button[type="submit"]:hover {
@@ -173,6 +180,10 @@
   font-weight: 500;
   text-decoration: none;
   transition: all 0.3s ease;
+  cursor: pointer;
+  min-height: 44px; /* Better touch target */
+  display: inline-block;
+  padding: 0.25rem 0;
 }
 
 .auth-right p:last-child span:hover {
@@ -180,33 +191,150 @@
   text-decoration: underline;
 }
 
-/* Responsive design */
+/* Tablet breakpoint */
+@media (max-width: 1024px) {
+  .auth-right {
+    padding: 1.5rem;
+  }
+  
+  .auth-right form {
+    padding: 1.75rem;
+  }
+}
+
+/* Mobile breakpoint */
 @media (max-width: 768px) {
+
+
   .auth-page-container {
     flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height for mobile */
+    background: var(--background-color, #1a1a1a); /* Ensure background extends */
   }
   
   .auth-left {
-    flex: 0 0 40vh;
+    flex: 0 0 30vh;
+    min-height: 30vh;
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
   
   .left-pic {
-    height: 40vh;
+    height: 30vh;
   }
   
   .auth-right {
     flex: 1;
     padding: 1rem;
+    min-height: 70vh;
+    min-height: 70dvh; /* Dynamic viewport height */
+    justify-content: flex-start;
+    padding-top: 2rem;
+    background: rgba(255, 255, 255, 0.05); /* Ensure background continues */
   }
   
   .auth-right form {
     padding: 1.5rem;
     max-width: none;
+    margin: 0;
+    width: 100%;
   }
   
   .auth-right h2 {
     font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-field {
+    margin-bottom: 1.25rem;
+  }
+  
+  .form-field label {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .auth-right .form-field input {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 1rem;
+  }
+  
+  .auth-right button[type="submit"] {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .auth-right p:last-child {
+    margin-top: 2rem;
+    font-size: 0.95rem;
+  }
+    .auth-left, .left-pic, .logo-placeholder{
+    display: none;
+    padding: 0px;
+    margin: 0px
+  }
+}
+
+/* Small mobile breakpoint */
+@media (max-width: 480px) {
+  .auth-right {
+    padding: 0.75rem;
+    padding-top: 1.5rem;
+  }
+  
+  .auth-right form {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+  
+  .auth-right h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .form-field label {
+    font-size: 0.9rem;
+  }
+  
+  .auth-right .form-field input {
+    padding: 0.875rem;
+    font-size: 16px;
+  }
+  
+  .auth-right button[type="submit"] {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .auth-right p:last-child {
+    font-size: 0.9rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .auth-left {
+    flex: 0 0 25vh;
+    min-height: 25vh;
+  }
+  
+  .left-pic {
+    height: 25vh;
+  }
+  
+  .auth-right {
+    min-height: 75vh;
+    padding: 0.5rem;
+    padding-top: 1rem;
+  }
+  
+  .auth-right form {
+    padding: 1rem;
+  }
+  
+  .auth-right h2 {
+    font-size: 1.5rem;
   }
 }

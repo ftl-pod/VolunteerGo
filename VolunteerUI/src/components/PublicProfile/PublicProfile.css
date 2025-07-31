@@ -19,12 +19,67 @@
   margin-bottom: 20px;
 }
 
+.public-profile-avatar-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+
 .public-profile-img-container {
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  overflow: hidden;
+  overflow: hidden; 
   box-shadow: 0 0 8px rgba(0,0,0,0.15);
+  position: relative;
+  border: 2px solid #ddd; 
+}
+
+.public-profile-friend-request-button-container {
+  position: absolute;
+  bottom: -15px; 
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border-radius: 50%;
+  padding: 4px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+  z-index: 1000;
+}
+
+.public-profile-friend-request-button-container:hover {
+  box-shadow: 0 0 10px rgba(0,0,0,0.35);
+  border-color: 2px solid var(--primary-color);
+}
+
+.public-profile-friend-request-icon {
+  color: var(--primary-color);
+  font-size: 20px;
+  z-index: 30;
+}
+
+.public-profile-friend-request-icon.sent {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.public-profile-friend-request-icon.pending {
+  color: gray;
+  cursor: default;
+}
+
+.public-profile-friend-request-icon.friends {
+  color: green;
+  cursor: default;
 }
 
 .public-profile-img {

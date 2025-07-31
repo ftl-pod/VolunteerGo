@@ -67,15 +67,19 @@
   flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 15px;
-    align-items: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .saved-card-tag, .suggested-card-tag {
+  display: flex;
   background: var(--tertiary-color);
   padding: 4px 8px;
   border-radius: 40px;
   font-size: 0.8em;
   color: var(--secondary-color);
+  align-items: center;
+  justify-content: center;
 }
 
 .saved-card-actions, .suggested-card-actions {

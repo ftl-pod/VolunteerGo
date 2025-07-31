@@ -23,6 +23,8 @@ function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
   const [showUnsaved, setShowUnsaved] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showSave, setShowSave] = useState(false);
+  const [showApplied, setShowApplied] = useState(false);
+  const [showAnimation, setShowAnimation] = useState(false);
 
   // use profile ID and saved opportunities from context
   const prismaUserId = profile?.id || null;
@@ -186,6 +188,73 @@ function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
   const endIndex = startIndex + opportunitiesPerPage;
   const currentOpportunities = filteredResults.slice(startIndex, endIndex);
 
+
+  const triggerLevelUpAnimation = () => {
+  // Create overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'applied-overlay';
+
+  // Add overlay directly to the body
+  document.body.appendChild(overlay);
+
+  // Create sparkles
+  const createSparkles = () => {
+    const sparkleCount = 15;
+    for (let i = 0; i < sparkleCount; i++) {
+      setTimeout(() => {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'applied-sparkle';
+        sparkle.style.left = Math.random() * 100 + '%';
+        sparkle.style.top = Math.random() * 100 + '%';
+        sparkle.style.animationDelay = Math.random() * 0.5 + 's';
+        overlay.appendChild(sparkle);
+
+        // Clean up sparkles
+        setTimeout(() => {
+          sparkle.remove();
+        }, 2000);
+      }, i * 100);
+    }
+  };
+
+  // Create leaves
+  const createLeaves = () => {
+    const leafCount = 8;
+    const leafColors = ['leaf-color-1', 'leaf-color-2', 'leaf-color-3'];
+
+    for (let i = 0; i < leafCount; i++) {
+      setTimeout(() => {
+        const leaf = document.createElement('div');
+        leaf.className = `applied-leaf ${leafColors[Math.floor(Math.random() * leafColors.length)]}`;
+        leaf.style.left = `${Math.random() * 100}vw`;
+        leaf.style.top = `${Math.random() * 100}vh`;
+        leaf.style.animationDelay = Math.random() * 0.3 + 's';
+        overlay.appendChild(leaf);
+        setTimeout(() => {
+          leaf.remove();
+        }, 3000);
+      }, i * 150);
+    }
+  };
+
+  // Start animation
+  setTimeout(createSparkles, 200);
+  setTimeout(createLeaves, 400);
+
+  // Remove overlay after animation
+  setTimeout(() => {
+    overlay.remove();
+  }, 3000);
+};
+
+useEffect(() => {
+  if (showAnimation && !isApplyModalOpen) {
+    triggerLevelUpAnimation();
+    setShowAnimation(false); // reset so it only triggers once
+  }
+}, [showAnimation, isApplyModalOpen]);
+
+
   return (
     <>
       <div className="opportunities-section">
@@ -303,6 +372,8 @@ function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
           onClose={handleCloseModal}
           applicant={user?.firstName || user?.fullName || "Anonymous"}
           opportunity={selectedOpportunity}
+          setShowApplied={setShowApplied}
+          setShowAnimation={setShowAnimation}
         />
       ) : null}
 
@@ -344,6 +415,16 @@ function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
           onClose={() => setShowSave(false)}
           position="bottom-center"
         />
+      ) : null}
+      {isSignedIn ? (
+       <PopupPill
+             message="Thank you for applying"
+             type= "applied"
+             duration={3000}
+             isVisible={showApplied && !isApplyModalOpen}
+             onClose={() => setShowApplied(false)}
+             position='bottom-center'
+             /> 
       ) : null}
     </>
   );

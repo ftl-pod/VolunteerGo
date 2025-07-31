@@ -146,13 +146,17 @@ function Leaderboard() {
         </svg>
       ))}
       </div>
-      <div className="title-wrapper">
-        <div className="title"
-        onClick={() => setMode("community")}
-        >Community</div>
-        <div className="title"
+      <div className="mode-toggle">
+        
+        <button className={`mode-btn ${mode === "community" ? "active" : ""}`}
+        onClick={() => setMode("community")}>
+        Community
+        </button>
+
+        <button className={`mode-btn ${mode === "friends" ? "active" : ""}`}
         onClick={() => setMode("friends")}
-        >Friends</div>
+        >Friends</button>
+
       </div>
       <div className="list">
         {mode === "community" && renderCommunity()}

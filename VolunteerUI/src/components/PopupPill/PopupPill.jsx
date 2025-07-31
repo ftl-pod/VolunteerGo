@@ -31,6 +31,8 @@ const PopupPill = ({
         return '✕';
       case 'warning':
         return '⚠';
+      case 'applied':
+        return '✦';
       case 'info':
       default:
         return 'ℹ';

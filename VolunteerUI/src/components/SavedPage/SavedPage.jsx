@@ -56,8 +56,9 @@ function SavedPage() {
   };
 
   const handleRemoveClick = (opportunity) => {
-    setOppToRemove(opportunity);
-    setShowModal(true);
+    // setOppToRemove(opportunity);
+    confirmRemove(opportunity);
+    //setShowModal(true);
   };
 
   useEffect(() => {
@@ -174,50 +175,45 @@ function SavedPage() {
     }
   };
 
-  const confirmRemove = async () => {
-    if (!oppToRemove || !profile?.id) return;
-
-    setRemoving(true); // begin loading
-
-    try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/users/${profile.id}/saved-opportunities/remove`;
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ opportunityId: oppToRemove.id }),
-      });
-
-      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-
-      const data = await res.json();
-
-      if (data.success) {
-        setProfile((prev) => ({
-          ...prev,
-          savedOpportunities: prev.savedOpportunities.filter(
-            (opp) => opp.id !== oppToRemove.id
-          ),
-        }));
-        closeModal();
-      } else {
-        console.error("Failed to remove saved opportunity:", data);
-      }
-    } catch (error) {
-      console.error("Error removing saved opportunity:", error);
-    } finally {
-      setRemoving(false); // end loading
+  const confirmRemove = async (opportunity) => {
+  if (!opportunity || !profile?.id) return;
+  setRemoving(true);
+  setOppToRemove(opportunity);
+  try {
+    const url = `${import.meta.env.VITE_API_BASE_URL}/users/${profile.id}/saved-opportunities/remove`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ opportunityId: opportunity.id }),
+    });
+    if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+    const data = await res.json();
+    if (data.success) {
+      setProfile((prev) => ({
+        ...prev,
+        savedOpportunities: prev.savedOpportunities.filter(
+          (opp) => opp.id !== opportunity.id
+        ),
+      }));
+      closeModal(); // even if you’re not showing a modal, this clears oppToRemove
+    } else {
+      console.error("Failed to remove saved opportunity:", data);
     }
+  } catch (error) {
+    console.error("Error removing saved opportunity:", error);
+  } finally {
+    setRemoving(false);
+  }
   };
 
   return (
     <div className="saved-section">
-      <RemoveModal
+      {/* <RemoveModal
         show={showModal}
         closeModal={closeModal}
         onConfirm={confirmRemove}
         loading={removing} // ← pass loading state
-      />
-
+      /> */}
       <div className="suggested-section">
         <h2>Suggested For You</h2>
         <div className="suggested-grid">
@@ -257,7 +253,7 @@ function SavedPage() {
                     : opportunity.description}
                 </p>
 
-                <div className="tags">
+                <div className="saved-card-tags">
                   {opportunity.tags.map((tag) => (
                     <span key={tag} className="suggested-card-tag">
                       {tag}
@@ -325,7 +321,7 @@ function SavedPage() {
                     : opportunity.description}
                 </p>
 
-                <div className="tags">
+                <div className="saved-card-tags">
                   {opportunity.tags.map((tag) => (
                     <span key={tag} className="saved-card-tag">
                       {tag}

@@ -115,24 +115,24 @@ function HomePage() {
             rewarding for everyone.
             <div className="pic-container">
               <div>
-              <img src="https://i.postimg.cc/Vv9MYPPR/img-5175-720.jpg" className="about-pic" alt="Jasmine Andresol"/>
               <div className="founder-info">
+                <img src="https://i.postimg.cc/Vv9MYPPR/img-5175-720.jpg" className="about-pic" alt="Jasmine Andresol"/>
                 <div>Jasmine Andresol</div>
                 <div>jandresol@salesforce.com</div>
                 <div>Harvard University</div>
               </div>
             </div>
             <div>
-               <img src="https://i.postimg.cc/xTcnDyGk/futureforce-day-30908-720.jpg" className="about-pic" alt="Ayomide Isinkaye"/>
                <div className="founder-info">
+                <img src="https://i.postimg.cc/xTcnDyGk/futureforce-day-30908-720.jpg" className="about-pic" alt="Ayomide Isinkaye"/>
                 <div>Ayomide Isinkaye</div>
                 <div>aisinkaye@salesforce.com</div>
                 <div>Huston-Tillotson University</div>
                </div>
             </div>
             <div>
-               <img src="https://i.postimg.cc/PxCnsdZg/headshot.jpg" className="about-pic" alt="Jada Finesilver"/>
                <div className="founder-info">
+                <img src="https://i.postimg.cc/PxCnsdZg/headshot.jpg" className="about-pic" alt="Jada Finesilver"/>
                 <div>Jada Finesilver</div>
                 <div>jfinesilver@salesforce.com</div>
                 <div>Stanford University</div>

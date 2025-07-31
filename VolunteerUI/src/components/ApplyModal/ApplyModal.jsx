@@ -92,29 +92,29 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity, setShowApplied, s
         window.dispatchEvent(new CustomEvent("levelUp"));
       }
       // Confirmation email
-      // await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/send-confirmation-email`, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      //   body: JSON.stringify({
-      //     to: user.email,
-      //     subject: 'VolunteerGo Application Confirmation!',
-      //     text: `Thank you for serving the community and making your mark!
-      //     We have sent this over to ${opportunity.organization?.name}, they will reach out to you via the email associated with your account.
-      //     Here is a copy of your VolunteerGo application:
-      //     ${message}
-      //     Thank you from VolunteerGo -- the platform where you do good and level up!`,
-      //      html: `
-      //     <p>Thank you for serving the community and making your mark!</p>
-      //     <p>We have sent this over to <strong>${opportunity.organization?.name}</strong>, they will reach out to you via the email associated with your account.</p>
-      //     <p>Here is a copy of your VolunteerGo application:</p>
-      //     <p>${message}</p>
-      //     <p>Thank you from <strong>VolunteerGo</strong> — the platform where you do good and level up!</p>
-      //   `,
-      //   }),
-      // });
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/send-confirmation-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          to: user.email,
+          subject: 'VolunteerGo Application Confirmation!',
+          text: `Thank you for serving the community and making your mark!
+          We have sent this over to ${opportunity.organization?.name}, they will reach out to you via the email associated with your account.
+          Here is a copy of your VolunteerGo application:
+          ${message}
+          Thank you from VolunteerGo -- the platform where you do good and level up!`,
+           html: `
+          <p>Thank you for serving the community and making your mark!</p>
+          <p>We have sent this over to <strong>${opportunity.organization?.name}</strong>, they will reach out to you via the email associated with your account.</p>
+          <p>Here is a copy of your VolunteerGo application:</p>
+          <p>${message}</p>
+          <p>Thank you from <strong>VolunteerGo</strong> — the platform where you do good and level up!</p>
+        `,
+        }),
+      });
 
       setHasSubmitted(true); 
 

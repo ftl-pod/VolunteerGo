@@ -81,12 +81,14 @@ useEffect(() => {
 
 
   const sendFriendRequest = async (receiverId, token) => {
+    setFriendActionLoading(true);
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/friends/request`,
         { receiverId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      setFriendStatus("request_sent");
       return response.data;
     } catch (error) {
       console.error("Error sending friend request:", error);

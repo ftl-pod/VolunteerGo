@@ -64,7 +64,6 @@ export default function Onboarding() {
           }
 
           setLoading(false);
-          console.log("Fetched avatarUrl from backend:", data.avatarUrl);
         } catch (err) {
           console.error(err);
           setLoading(false);
@@ -205,14 +204,11 @@ const handleSubmit = async (e) => {
     });
 
     const result = await response.json();
-    console.log("Submitted data:", result);
-    console.log("!!!", profile)
     if (!response.ok) throw new Error(result.error || "Failed to save user");
 
     // Call badge check and show modal if badge earned
     await badgeService.checkNewcomerBadge(user.uid, (badge) => {
       if (badge) {
-        console.log("Newcomer badge earned!", badge);
         setEarnedBadge(badge);
       } else {
         // No badge earned, navigate immediately

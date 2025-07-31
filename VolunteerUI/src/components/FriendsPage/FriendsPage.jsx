@@ -164,7 +164,6 @@ function FriendsSection({ user, profile, token }) {
             { requestId },
             { headers: { Authorization: `Bearer ${token}` } }
         );
-        console.log("badgeeeee")
         await badgeService.checkConnectorBadge(user.uid, setBadgeEarned);
         return response.data;
 
@@ -264,7 +263,6 @@ function FriendsSection({ user, profile, token }) {
     }; 
 
     const handleCancelSentRequest = async (requestId, token) => {
-        console.log("Cancel request clicked for request ID:", requestId);  
         try {
             await cancelFriendRequestAPI(requestId, token);
             setSentRequests((prev) => prev.filter((r) => r.id !== requestId));

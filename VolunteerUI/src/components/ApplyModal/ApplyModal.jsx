@@ -128,14 +128,6 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity, setShowApplied, s
     window.dispatchEvent(new CustomEvent("showPointsGif"));
 
     if (message.trim()) {
-      console.log("Application submitted:", {
-        applicant: profile.name,
-        opportunityId: opportunity.id,
-        opportunityName: opportunity.name,
-        organization: opportunity.organization?.name,
-        message,
-        name,
-      });
       setMessage('');
       setName('');
     }

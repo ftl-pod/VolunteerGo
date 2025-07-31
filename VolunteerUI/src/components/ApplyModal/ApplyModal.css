@@ -76,7 +76,7 @@
 .form-group label {
   margin-bottom: 6px;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
 }
 
 .form-input {
@@ -109,9 +109,7 @@
   min-height: 100px;
   transition: border-color 0.2s ease;
 }
-.modal-form .form-group input{
-    width: 90%;
-}
+
 .modal-actions {
   display: flex;
   gap: 12px;

@@ -31,7 +31,6 @@ function Leaderboard() {
           try {
             const friendsData = await getFriendsAPI(token);
             setFriends([...friendsData, fullCurrentUser]);
-            console.log("my friends", friendsData);
           } catch (error) {
             console.error("error fetching friends", error);
           }

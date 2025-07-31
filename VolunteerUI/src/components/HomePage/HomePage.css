@@ -234,14 +234,14 @@ body {
   box-sizing: border-box;
 }
 
-.founder-info div:first-child {
+.founder-info div:nth-child(2) {
   font-weight: 700;
   font-size: clamp(1rem, 2.5vw, 1.1rem);
   color: #2c3e2c;
   margin-bottom: 0.5rem;
 }
 
-.founder-info div:not(:first-child) {
+.founder-info div:not(:nth-child(2)) {
   font-size: clamp(0.85rem, 2vw, 0.9rem);
   color: #666;
   margin-bottom: 0.25rem;
@@ -280,6 +280,12 @@ body {
   100% { transform: translate(100px, 100px) rotate(-1deg); }
 }
 
+.section-wrapper{
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+
+}
 /* Responsive Design */
 @media (max-width: 768px) {
   .imprint {

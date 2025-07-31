@@ -69,6 +69,11 @@
 
 }
 
+li{
+  list-style-type: none;
+
+}
+
 .requirements h2,
 .skills h2 {
   font-size: 1.1rem;
@@ -78,7 +83,7 @@
   text-align: left;
 }
 
-.requirements-list,
+.req-list,
 .skills-list {
   list-style: none;
   padding: 0;
@@ -89,24 +94,24 @@
   scrollbar-color: var(--primary-color, #007bff) var(--tertiary-color, #f8f9fa);
 }
 
-.requirements-list::-webkit-scrollbar,
+.req-list::-webkit-scrollbar,
 .skills-list::-webkit-scrollbar {
   width: 6px;
 }
 
-.requirements-list::-webkit-scrollbar-track,
+.req-list::-webkit-scrollbar-track,
 .skills-list::-webkit-scrollbar-track {
   background: var(--tertiary-color, #f8f9fa);
   border-radius: 3px;
 }
 
-.requirements-list::-webkit-scrollbar-thumb,
+.req-list::-webkit-scrollbar-thumb,
 .skills-list::-webkit-scrollbar-thumb {
   background: var(--primary-color, #007bff);
   border-radius: 3px;
 }
 
-.requirements-list li,
+.req-list li,
 .skills-list li {
   padding: 0.4rem 0.75rem;
   margin-bottom: 0.3rem;
@@ -118,13 +123,13 @@
   transition: all 0.2s ease;
 }
 
-.requirements-list li:hover,
+.req-list li:hover,
 .skills-list li:hover {
   background: #f1f3f4;
   transform: translateX(2px);
 }
 
-.requirements-list li:last-child,
+.req-list li:last-child,
 .skills-list li:last-child {
   margin-bottom: 0;
 }
@@ -323,7 +328,7 @@
     gap: 1rem;
   }
 
-  .requirements-list,
+  .req-list,
   .skills-list {
     max-height: 150px;
   }

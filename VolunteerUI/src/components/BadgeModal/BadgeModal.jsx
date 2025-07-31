@@ -3,7 +3,7 @@ import './BadgeModal.css';
 
 export default function BadgeModal({ badge, onClose }) {
   if (!badge) return null;
-
+  console.log("badge!", badge)
   return (
     <div className="modal-backdrop" onClick={onClose}>
     <div className="badge-modal badge-modal-enter" onClick={e => e.stopPropagation()}>

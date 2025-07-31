@@ -100,6 +100,29 @@ async checkFirstApplication(userId, userOpportunitiesCount, setBadgeEarned) {
       console.error("Error checking leaderboard badge:", err);
     }
   },
+
+  async checkConnectorBadge(firebaseUid, setBadgeEarned) {
+    try {
+      // Get full user with database ID
+      const { data: user } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/by-uid/${firebaseUid}`);
+
+      const hasBadge = user.badges.some(b => b.name === "Volunteer Connector");
+      if (!hasBadge) {
+        const { data: badge } = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/badges/give`, {
+          userId: user.id,
+          badgeName: "Volunteer Connector",
+        });
+        if (setBadgeEarned) setBadgeEarned(badge);
+      }
+      else{
+        if (setBadgeEarned) setBadgeEarned(null);
+      }
+    } catch (err) {
+      console.error("Error checking Volunteer Connector badge:", err);
+    }
+  },
+
+
 };
 
 export default badgeService;

@@ -14,6 +14,8 @@ import { GiThreeLeaves } from "react-icons/gi";
 import { IoLocationSharp } from "react-icons/io5";
 import axios from "axios";
 import PublicProfile from "../PublicProfile/PublicProfile";
+import badgeService from "../../utils/badgeService";
+import BadgeModal from "../BadgeModal/BadgeModal";
 
 function FriendsSection({ user, profile, token }) {
   const [friendsView, setFriendsView] = useState("friends");
@@ -26,6 +28,7 @@ function FriendsSection({ user, profile, token }) {
   const [friends, setFriends] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
   const [receivedRequests, setReceivedRequests] = useState([]);
+  const [badgeEarned, setBadgeEarned] = useState(null);
 
   useEffect(() => {
     fetchAllUsers();
@@ -155,17 +158,20 @@ function FriendsSection({ user, profile, token }) {
     };
 
   const acceptFriendRequestAPI = async (requestId, token) => {
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/friends/accept`,
-        { requestId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error accepting friend request:", error);
-      throw error;
-    }
+        try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/friends/accept`,
+            { requestId },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        console.log("badgeeeee")
+        await badgeService.checkConnectorBadge(user.uid, setBadgeEarned);
+        return response.data;
+
+        } catch (error) {
+        console.error("Error accepting friend request:", error);
+        throw error;
+        }
   };
 
     const rejectFriendRequestAPI = async (requestId, token) => {
@@ -245,6 +251,7 @@ function FriendsSection({ user, profile, token }) {
             setReceivedRequests(prev => prev.filter(r => r.id !== requestId));
         }
     };
+    
 
     const handleDenyRequest = async (requestId, token) => {
         try {
@@ -266,233 +273,239 @@ function FriendsSection({ user, profile, token }) {
         }
     };
     return (
-        <div className="friends-container">
-        <div className="friends-toggle">
-            <button
-            className={`toggle-btn ${friendsView === 'friends' ? 'active' : ''}`}
-            onClick={() => setFriendsView('friends')}
-            >
-            Friends ({friends.length})
-            </button>
-            <button
-            className={`toggle-btn ${friendsView === 'received' ? 'active' : ''}`}
-            onClick={() => setFriendsView('received')}
-            >
-            Received ({receivedRequests.length})
-            </button>
-            <button
-            className={`toggle-btn ${friendsView === 'sent' ? 'active' : ''}`}
-            onClick={() => setFriendsView('sent')}
-            >
-            Sent ({sentRequests.length})
-            </button>
-        </div>
+        <>
+            <div className="friends-container">
+            <div className="friends-toggle">
+                <button
+                className={`toggle-btn ${friendsView === 'friends' ? 'active' : ''}`}
+                onClick={() => setFriendsView('friends')}
+                >
+                Friends ({friends.length})
+                </button>
+                <button
+                className={`toggle-btn ${friendsView === 'received' ? 'active' : ''}`}
+                onClick={() => setFriendsView('received')}
+                >
+                Received ({receivedRequests.length})
+                </button>
+                <button
+                className={`toggle-btn ${friendsView === 'sent' ? 'active' : ''}`}
+                onClick={() => setFriendsView('sent')}
+                >
+                Sent ({sentRequests.length})
+                </button>
+            </div>
 
-      {friendsView === "friends" && (
-        <div className="friends-section">
-          <h3>
-            <FaAddressBook className="icon" />
-            Your Friends
-          </h3>
-          <div className="friends-list">
-            {friends.length > 0 ? (
-              friends.map((friend) => (
-                <div key={friend.id} className="friend-item">
-              <Link to={`/public-profile/${friend.firebaseUid}`} className="user-link">
-                <img
-                  src={friend.avatarUrl}
-                  alt={friend.name}
-                  className="friend-avatar"
-                />
-              </Link>
-                  <div className="friend-info">
-                    <div className="friend-name">{friend.name}</div>
-                    <div className="friend-points">
-                      <GiThreeLeaves className="icon" />
-                      {friend.points} points
-                    </div>
-                  </div>
-                  <div className="friend-status">Friends</div>
-                </div>
-              ))
-            ) : (
-              <div className="empty-state">
-                No friends yet. Send some friend requests to get started!
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {friendsView === "received" && (
-        <div className="friends-section">
-          <h3>
-            <FaUserPlus className="icon" />
-            Received Requests
-          </h3>
-          <div className="friends-list">
-            {receivedRequests.length > 0 ? (
-              receivedRequests.map((request) => (
-                <div key={request.id} className="friend-item">
-                  <Link to={`/public-profile/${request.firebaseUid}`} className="user-link">
-                    <img
-                      src={request.avatarUrl}
-                      alt={request.name}
-                      className="friend-avatar"
-                    />
-                  </Link>
-                  <div className="friend-info">
-                    <div className="friend-name">{request.name}</div>
-                    <div className="friend-points">
-                      <GiThreeLeaves className="icon" />
-                      {request.points} points
-                    </div>
-                    <div className="request-meta">
-                      Received{" "}
-                      {new Date(request.receivedDate).toLocaleDateString()}
-                    </div>
-                  </div>
-                  <div className="friend-actions">
-                    <button
-                      className="action-btn accept-btn"
-                      onClick={() => handleAcceptRequest(request.id, token)}
-                      title="Accept Request"
-                    >
-                      <FaCheck />
-                    </button>
-                    <button
-                      className="action-btn deny-btn"
-                      onClick={() => handleDenyRequest(request.id, token)}
-                      title="Deny Request"
-                    >
-                      <FaX />
-                    </button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="empty-state">No pending friend requests.</div>
-            )}
-          </div>
-        </div>
-      )}
-
-        {friendsView === 'sent' && (
+        {friendsView === "friends" && (
             <div className="friends-section">
             <h3>
-                <FaUserClock className="icon" />
-                Sent Requests
+                <FaAddressBook className="icon" />
+                Your Friends
             </h3>
-                <div className="friends-list">
-                {sentRequests.length > 0 ? (
-                    sentRequests.map((request) => (
-                    <div key={request.id} className="friend-item">
-                    <Link to={`/public-profile/${request.firebaseUid}`} className="user-link">
-                      <img src={request.avatarUrl} alt={request.name} className="friend-avatar" />
-                    </Link>
-                        <div className="friend-info">
-                        <div className="friend-name">{request.name}</div>
+            <div className="friends-list">
+                {friends.length > 0 ? (
+                friends.map((friend) => (
+                    <div key={friend.id} className="friend-item">
+                <Link to={`/public-profile/${friend.firebaseUid}`} className="user-link">
+                    <img
+                    src={friend.avatarUrl}
+                    alt={friend.name}
+                    className="friend-avatar"
+                    />
+                </Link>
+                    <div className="friend-info">
+                        <div className="friend-name">{friend.name}</div>
                         <div className="friend-points">
-                            <GiThreeLeaves className="icon" />
-                            {request.points} points
-                        </div>
-                        <div className="request-meta">
-                            Sent {new Date(request.sentDate).toLocaleDateString()}
-                        </div>
-                        </div>
-                        <div className="friend-actions">
-                        <button
-                            className="action-btn deny-btn"
-                            onClick={() => handleCancelSentRequest(request.id, token)}
-                            title="Cancel Request"
-                        >
-                            <FaX />
-                        </button>
+                        <GiThreeLeaves className="icon" />
+                        {friend.points} points
                         </div>
                     </div>
-                    ))
+                    <div className="friend-status">Friends</div>
+                    </div>
+                ))
                 ) : (
-                    <div className="empty-state">
-                    No sent friend requests.
-                    </div>
-                )}
+                <div className="empty-state">
+                    No friends yet. Send some friend requests to get started!
                 </div>
+                )}
+            </div>
             </div>
         )}
 
-      <div className="friends-section">
-        <h3>
-          <FaSistrix className="icon" />
-          Find Friends
-        </h3>
+        {friendsView === "received" && (
+            <div className="friends-section">
+            <h3>
+                <FaUserPlus className="icon" />
+                Received Requests
+            </h3>
+            <div className="friends-list">
+                {receivedRequests.length > 0 ? (
+                receivedRequests.map((request) => (
+                    <div key={request.id} className="friend-item">
+                    <Link to={`/public-profile/${request.firebaseUid}`} className="user-link">
+                        <img
+                        src={request.avatarUrl}
+                        alt={request.name}
+                        className="friend-avatar"
+                        />
+                    </Link>
+                    <div className="friend-info">
+                        <div className="friend-name">{request.name}</div>
+                        <div className="friend-points">
+                        <GiThreeLeaves className="icon" />
+                        {request.points} points
+                        </div>
+                        <div className="request-meta">
+                        Received{" "}
+                        {new Date(request.receivedDate).toLocaleDateString()}
+                        </div>
+                    </div>
+                    <div className="friend-actions">
+                        <button
+                        className="action-btn accept-btn"
+                        onClick={() => handleAcceptRequest(request.id, token)}
+                        title="Accept Request"
+                        >
+                        <FaCheck />
+                        </button>
+                        <button
+                        className="action-btn deny-btn"
+                        onClick={() => handleDenyRequest(request.id, token)}
+                        title="Deny Request"
+                        >
+                        <FaX />
+                        </button>
+                    </div>
+                    </div>
+                ))
+                ) : (
+                <div className="empty-state">No pending friend requests.</div>
+                )}
+            </div>
+            </div>
+        )}
 
-        <div className="search-container">
-          <div className="search-input-wrapper">
-            <input
-              type="text"
-              placeholder="Search by name, location, interests, or skills..."
-              value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-              className="search-input"
-            />
-          </div>
-        </div>
-        {/* Friend Search */}
-        <div className="friends-list">
-          {isSearching ? (
-            <div className="loading-state">Searching...</div>
-          ) : searchQuery && searchResults.length === 0 ? (
-            <div className="empty-state">
-              No users found matching "{searchQuery}"
-            </div>
-          ) : searchQuery === "" ? (
-            <div className="empty-state">
-              Start typing to search for friends...
-            </div>
-          ) : (
-            searchResults.map((user) => (
-              <div key={user.id} className="friend-item search-result">
-                <Link to={`/public-profile/${user.firebaseUid}`} className="user-link">
-                  <img
-                    src={user.avatarUrl || "https://i.ibb.co/rf6XN61Q/plant.png"}
-                    alt={user.name}
-                    className="friend-avatar"
-                  />
-                </Link>
-                <div className="friend-info">
-                  <div className="friend-name">{user.name}</div>
-                  <div className="friend-points">
-                    <GiThreeLeaves className="icon" />
-                    {user.points || 0} points
-                  </div>
-                  {user.location && (
-                    <div className="friend-location">
-                      <IoLocationSharp className="icon" />
-                      {user.location}
+            {friendsView === 'sent' && (
+                <div className="friends-section">
+                <h3>
+                    <FaUserClock className="icon" />
+                    Sent Requests
+                </h3>
+                    <div className="friends-list">
+                    {sentRequests.length > 0 ? (
+                        sentRequests.map((request) => (
+                        <div key={request.id} className="friend-item">
+                        <Link to={`/public-profile/${request.firebaseUid}`} className="user-link">
+                        <img src={request.avatarUrl} alt={request.name} className="friend-avatar" />
+                        </Link>
+                            <div className="friend-info">
+                            <div className="friend-name">{request.name}</div>
+                            <div className="friend-points">
+                                <GiThreeLeaves className="icon" />
+                                {request.points} points
+                            </div>
+                            <div className="request-meta">
+                                Sent {new Date(request.sentDate).toLocaleDateString()}
+                            </div>
+                            </div>
+                            <div className="friend-actions">
+                            <button
+                                className="action-btn deny-btn"
+                                onClick={() => handleCancelSentRequest(request.id, token)}
+                                title="Cancel Request"
+                            >
+                                <FaX />
+                            </button>
+                            </div>
+                        </div>
+                        ))
+                    ) : (
+                        <div className="empty-state">
+                        No sent friend requests.
+                        </div>
+                    )}
                     </div>
-                  )}
-                  {user.interests && user.interests.length > 0 && (
-                    <div className="friend-interests">
-                      Interests: {user.interests.slice(0, 3).join(", ")}
-                      {user.interests.length > 3 && "..."}
+                </div>
+            )}
+
+        <div className="friends-section">
+            <h3>
+            <FaSistrix className="icon" />
+            Find Friends
+            </h3>
+
+            <div className="search-container">
+            <div className="search-input-wrapper">
+                <input
+                type="text"
+                placeholder="Search by name, location, interests, or skills..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="search-input"
+                />
+            </div>
+            </div>
+            {/* Friend Search */}
+            <div className="friends-list">
+            {isSearching ? (
+                <div className="loading-state">Searching...</div>
+            ) : searchQuery && searchResults.length === 0 ? (
+                <div className="empty-state">
+                No users found matching "{searchQuery}"
+                </div>
+            ) : searchQuery === "" ? (
+                <div className="empty-state">
+                Start typing to search for friends...
+                </div>
+            ) : (
+                searchResults.map((user) => (
+                <div key={user.id} className="friend-item search-result">
+                    <Link to={`/public-profile/${user.firebaseUid}`} className="user-link">
+                    <img
+                        src={user.avatarUrl || "https://i.ibb.co/rf6XN61Q/plant.png"}
+                        alt={user.name}
+                        className="friend-avatar"
+                    />
+                    </Link>
+                    <div className="friend-info">
+                    <div className="friend-name">{user.name}</div>
+                    <div className="friend-points">
+                        <GiThreeLeaves className="icon" />
+                        {user.points || 0} points
                     </div>
-                  )}
+                    {user.location && (
+                        <div className="friend-location">
+                        <IoLocationSharp className="icon" />
+                        {user.location}
+                        </div>
+                    )}
+                    {user.interests && user.interests.length > 0 && (
+                        <div className="friend-interests">
+                        Interests: {user.interests.slice(0, 3).join(", ")}
+                        {user.interests.length > 3 && "..."}
+                        </div>
+                    )}
+                    </div>
+                    <div className="friend-actions">
+                    <button
+                        className="action-btn send-request-btn"
+                        onClick={() => handleSendFriendRequest(user.id, token)}
+                        title="Send Friend Request"
+                    >
+                        <FaUserPlus />
+                    </button>
+                    </div>
                 </div>
-                <div className="friend-actions">
-                  <button
-                    className="action-btn send-request-btn"
-                    onClick={() => handleSendFriendRequest(user.id, token)}
-                    title="Send Friend Request"
-                  >
-                    <FaUserPlus />
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
+                ))
+            )}
+            </div>
         </div>
-      </div>
-    </div>
+            </div>
+            {badgeEarned && (
+                <BadgeModal badge={badgeEarned} onClose={() => setBadgeEarned(null)} />
+            )}
+
+        </>
   );
 }
 

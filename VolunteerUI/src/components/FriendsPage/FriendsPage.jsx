@@ -13,7 +13,6 @@ import {
 import { GiThreeLeaves } from "react-icons/gi";
 import { IoLocationSharp } from "react-icons/io5";
 import axios from "axios";
-import PublicProfile from "../PublicProfile/PublicProfile";
 
 function FriendsSection({ user, profile, token }) {
   const [friendsView, setFriendsView] = useState("friends");

@@ -4,12 +4,20 @@ import axios from "axios";
 import "./PublicProfile.css";
 import { GiThreeLeaves } from "react-icons/gi";
 import { FaBarsProgress } from "react-icons/fa6";
+import { FaUserPlus, FaCheck, FaHourglassHalf } from "react-icons/fa";
+import { useAuth } from "../../hooks/useAuth";
 
 function PublicProfile() {
   const { userId } = useParams();
+  const { user, token, isSignedIn } = useAuth();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [friendStatus, setFriendStatus] = useState("not_friends"); // "not_friends", "request_sent", "request_received", "friends"
+  const [loadingFriendStatus] = useState(false);
+  const [friendActionLoading, setFriendActionLoading] = useState(false);
+  const [receivedRequests, setReceivedRequests] = useState([]);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -28,6 +36,88 @@ function PublicProfile() {
 
     fetchProfile();
   }, [userId]);
+
+useEffect(() => {
+  const fetchFriendStatus = async () => {
+    if (!isSignedIn || !user || !token) return;
+    try {
+      const friendsRes = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/friends/list`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (friendsRes.data.some((f) => f.firebaseUid === userId)) {
+        setFriendStatus("friends");
+        return;
+      }
+
+      const sentRes = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/friends/sent-requests`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (sentRes.data.some((r) => r.receiver?.firebaseUid === userId)) {
+        setFriendStatus("request_sent");
+        return;
+      }
+      const receivedRes = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/friends/received-requests`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setReceivedRequests(receivedRes.data);
+      if (receivedRes.data.some((r) => r.sender?.firebaseUid === userId)) {
+        setFriendStatus("request_received");
+        return;
+      }
+
+      setFriendStatus("not_friends");
+    } catch (err) {
+      setFriendStatus("not_friends", err);
+    }
+  };
+
+  fetchFriendStatus();
+}, [userId, isSignedIn, user, token]);
+
+  const showFriendButton = isSignedIn && user?.uid !== userId;
+
+
+  const sendFriendRequest = async (receiverId, token) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/friends/request`,
+        { receiverId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error sending friend request:", error);
+    } finally {
+      setFriendActionLoading(false);
+    }
+  };
+
+  const acceptFriendRequest = async () => {
+    if (friendActionLoading) return;
+    setFriendActionLoading(true);
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const request = receivedRequests.find(r => r.sender?.firebaseUid === userId);
+      if (!request) {
+        throw new Error("Friend request not found");
+      }
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/friends/accept`,
+        { requestId: request.id },
+        config
+      );
+      setFriendStatus("friends");
+    } catch (err) {
+      console.error("Failed to accept friend request", err);
+    } finally {
+      setFriendActionLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -56,9 +146,51 @@ function PublicProfile() {
   return (
     <div className="public-profile-page-container">
       <div className="public-profile-header-section">
-        <div className="public-profile-img-container">
-          <img src={avatarUrl} alt="Profile" className="public-profile-img" />
+        <div className="public-profile-avatar-stack">
+          <div className="public-profile-img-container">
+            <img src={avatarUrl} alt="Profile" className="public-profile-img" />
+          </div>
+          {showFriendButton && (
+            <div className="public-profile-friend-request-button-container">
+              {loadingFriendStatus ? (
+                <FaHourglassHalf
+                  className="public-profile-friend-request-icon pending"
+                  title="Loading friend status..."
+                />
+                ) : friendStatus === "not_friends" ? (
+                <FaUserPlus
+                  className="public-profile-friend-request-icon add"
+                  title="Add Friend"
+                  onClick={() => sendFriendRequest(profile.id, token)}
+                  style={{
+                    cursor: friendActionLoading ? "not-allowed" : "pointer",
+                  }}
+                />
+              ) : friendStatus === "request_sent" ? (
+                <FaUserPlus
+                  className="public-profile-friend-request-icon sent"
+                  title="Friend Request Sent"
+                  style={{ cursor: "default", opacity: 0.5 }}
+                />
+              ) : friendStatus === "request_received" ? (
+                <FaUserPlus
+                  className="public-profile-friend-request-icon received"
+                  title="Accept Friend Request"
+                  onClick={acceptFriendRequest}
+                  style={{
+                    cursor: friendActionLoading ? "not-allowed" : "pointer",
+                  }}
+                />
+              ) : friendStatus === "friends" ? (
+                <FaCheck
+                  className="public-profile-friend-request-icon friends"
+                  title="Friends"
+                />
+              ) : null}
+            </div>
+          )}
         </div>
+
         <div className="public-profile-basic-info">
           <h2 className="public-profile-username">{username}</h2>
         </div>

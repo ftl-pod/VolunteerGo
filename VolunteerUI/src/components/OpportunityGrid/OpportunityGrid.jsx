@@ -251,7 +251,7 @@ function OpportunityGrid({ searchResults, overrideOpportunities = null }) {
                           handleApplyClick(opportunity), setShowLogin(true);
                         }}
                       >
-                        I want to Help{" "}
+                        I Want to Help{" "}
                       </button>
                     )}
                     <button

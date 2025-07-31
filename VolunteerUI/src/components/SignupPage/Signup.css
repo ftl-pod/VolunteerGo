@@ -62,7 +62,7 @@ mask-image: linear-gradient(to right, black 40%, rgba(0,0,0,0.7) 60%, rgba(0,0,0
     color: #e9ecef;
   }
 
-  .form-group label {
+  .auth-right .form-group label {
     font-family: 'Poppins', sans-serif;
     font-size: 1.9rem;
     margin-bottom: 0.65rem;
@@ -71,7 +71,7 @@ mask-image: linear-gradient(to right, black 40%, rgba(0,0,0,0.7) 60%, rgba(0,0,0
   }
 
 
-.form-group input {
+  .auth-right .form-group input {
     width: 100%;
     padding: 0.9rem 1rem;
     border-radius: 8px;

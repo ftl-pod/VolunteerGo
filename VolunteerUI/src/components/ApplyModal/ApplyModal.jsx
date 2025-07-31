@@ -42,7 +42,7 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity, setShowApplied, s
     setApplyLoading(true);
     setHasSubmitted(false);
     setShowApplied(true);
-    setShowAnimation(true);
+    setShowAnimation(true)
 
 
     try {

@@ -138,6 +138,7 @@ useEffect(() => {
 
   const {
     username,
+    name,
     avatarUrl,
     points,
     level,
@@ -228,7 +229,7 @@ useEffect(() => {
         </div>
 
         <div className="public-profile-basic-info">
-          <h2 className="public-profile-username">{username}</h2>
+          <h2 className="public-profile-username">{name}</h2>
         </div>
       </div>
 

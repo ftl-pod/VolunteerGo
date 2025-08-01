@@ -65,7 +65,7 @@ function Leaderboard() {
                       />
                     </div>
                   </div>
-                  <div className="leaderboard-username">{u.username}</div>
+                  <div className="leaderboard-username">{u.name}</div>
           </div>
           <div className="points">{u.points}</div>
         </Link>
@@ -94,7 +94,7 @@ function Leaderboard() {
                       />
                     </div>
                   </div>
-                  <div className="leaderboard-username">{u.username}</div>
+                  <div className="leaderboard-username">{u.name}</div>
         </div>
         <div className="points">{u.points}</div>
       

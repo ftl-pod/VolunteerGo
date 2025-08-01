@@ -147,6 +147,32 @@ useEffect(() => {
   } = profile;
 
   return (
+    <>
+    <div className="pubpage">
+    <div className="LBsquiggly-bg">
+      {[...Array(5)].map((_, i) => (
+        <svg
+          key={i}
+          className={`LBsquiggly-line line-${i}`}
+          viewBox="0 0 1440 200"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="
+              M0,50 
+              C80,0 160,100 240,50 
+              S400,0 480,50 
+              S640,100 720,50 
+              S880,0 960,50 
+              S1120,100 1200,50 
+              S1360,0 1440,50"
+            fill="none"
+            stroke="#374f37"
+            strokeWidth="3"
+          />
+        </svg>
+      ))}
+      </div>
     <div className="public-profile-page-container">
       <div className="public-profile-header-section">
         <button
@@ -269,6 +295,8 @@ useEffect(() => {
         </div>
       </div>
     </div>
+    </div>
+    </>
   );
 }
 

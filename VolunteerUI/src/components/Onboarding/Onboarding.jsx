@@ -264,7 +264,7 @@ const handleSubmit = async (e) => {
               <p className="step-subtitle">Tell us a bit about yourself to personalize your experience</p>
 
               <div className="form-group">
-                <label>Full Name *</label>
+                <label className="onb-info">Full Name *</label>
                 <input
                   type="text"
                   name="name"
@@ -276,7 +276,7 @@ const handleSubmit = async (e) => {
               </div>
 
               <div className="form-group">
-                <label>Location *</label>
+                <label className="onb-info">Location *</label>
                 <input
                   type="text"
                   name="location"
@@ -288,7 +288,7 @@ const handleSubmit = async (e) => {
               </div>
 
               <div className="form-group">
-                <label>Age</label>
+                <label className="onb-info">Age</label>
                 <input
                   type="number"
                   name="age"

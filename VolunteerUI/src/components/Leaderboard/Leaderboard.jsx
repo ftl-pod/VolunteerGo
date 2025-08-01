@@ -47,7 +47,8 @@ function Leaderboard() {
       <div>No users yet. Be the first to sign up!</div>
     ) : 
       sortedUsers.map((u, index) => (
-        <div
+        <Link 
+          to={`/public-profile/${u.firebaseUid}`}
           className={`list-item ${u.firebaseUid === user?.uid ? 'current-user-highlight' : ''}`}
           key={u.firebaseUid || u.id || index}
         >
@@ -55,10 +56,6 @@ function Leaderboard() {
             <div className="circle">{index + 1}</div>
           </div>
           <div className="user-name">
-            <Link
-                  to={`/public-profile/${u.firebaseUid}`}
-                  className="user-link"
-                >
                   <div className="pfp">
                     <div className="circle">
                       <img
@@ -68,16 +65,10 @@ function Leaderboard() {
                       />
                     </div>
                   </div>
-                </Link>
-                <Link
-                  to={`/public-profile/${u.firebaseUid}`}
-                  className="user-link"
-                >
                   <div className="leaderboard-username">{u.username}</div>
-                </Link>
           </div>
           <div className="points">{u.points}</div>
-        </div>
+        </Link>
     ))
   );
 
@@ -85,7 +76,8 @@ function Leaderboard() {
   sortedFriends
     .filter((u) => u && u.firebaseUid) // filter out invalid users
     .map((u, index) => (
-      <div
+      <Link 
+       to={`/public-profile/${u.firebaseUid}`}
         className={`list-item ${u.firebaseUid === user?.uid ? 'current-user-highlight' : ''}`}
         key={u.firebaseUid || u.id || index}
       >
@@ -93,10 +85,6 @@ function Leaderboard() {
           <div className="circle">{index + 1}</div>
         </div>
         <div className="user-name">
-          <Link
-                  to={`/public-profile/${u.firebaseUid}`}
-                  className="user-link"
-                >
                   <div className="pfp">
                     <div className="circle">
                       <img
@@ -106,16 +94,11 @@ function Leaderboard() {
                       />
                     </div>
                   </div>
-                </Link>
-                <Link
-                  to={`/public-profile/${u.firebaseUid}`}
-                  className="user-link"
-                >
                   <div className="leaderboard-username">{u.username}</div>
-                </Link>
         </div>
         <div className="points">{u.points}</div>
-      </div>
+      
+       </Link>
     ))
 );
  

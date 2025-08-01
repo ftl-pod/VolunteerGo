@@ -1,12 +1,17 @@
+.pubpage {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
 .public-profile-page-container {
   max-width: 900px;
   margin: 20px auto;
   padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border-radius: 16px;
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
+  backdrop-filter: blur(10px);
 }
 
 .public-profile-header-section {
@@ -130,7 +135,7 @@
 .public-profile-section {
   flex: 1 1 280px;
   background-color: #f9f9f9;
-  border-radius: 6px;
+  border-radius: 16px;
   padding: 15px 20px;
   box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
 }
@@ -147,28 +152,36 @@
 .public-profile-section-content {
   max-height: 200px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 5px;
 }
 
 .public-profile-interest-item,
 .public-profile-organization-item {
-  background: rgba(99, 128, 111, 0.1);
+  background: var(--primary-color);
   margin-bottom: 12px;
   padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 0.95rem;
-  color: #1a2901;
-  font-weight: 500;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: white;
+  font-weight: 600;
   font-family: 'Poppins';
+  width: fit-content;
+  height: fit-content;
 }
 
 .public-profile-organization-item:hover {
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
 }
 
 .public-profile-interest-item:hover {
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
 }
 
 .public-profile-badges-grid {

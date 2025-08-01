@@ -340,6 +340,7 @@ select[multiple] {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  justify-content: center;
 }
 
 .pill {
@@ -361,4 +362,8 @@ select[multiple] {
   background-color: var(--primary-color);
   color: white;
   border-color: var(--primary-color);
+}
+
+.onb-info {
+  text-align: left;
 }

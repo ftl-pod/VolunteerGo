@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./PublicProfile.css";
 import { GiThreeLeaves } from "react-icons/gi";
@@ -9,12 +9,13 @@ import { useAuth } from "../../hooks/useAuth";
 
 function PublicProfile() {
   const { userId } = useParams();
+  const navigate = useNavigate();
   const { user, token, isSignedIn } = useAuth();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [friendStatus, setFriendStatus] = useState("not_friends"); // "not_friends", "request_sent", "request_received", "friends"
+  const [friendStatus, setFriendStatus] = useState("not_friends"); // states will be "not_friends", "request_sent", "request_received", "friends", dah dah dah
   const [loadingFriendStatus] = useState(false);
   const [friendActionLoading, setFriendActionLoading] = useState(false);
   const [receivedRequests, setReceivedRequests] = useState([]);
@@ -148,6 +149,13 @@ useEffect(() => {
   return (
     <div className="public-profile-page-container">
       <div className="public-profile-header-section">
+        <button
+          className="public-profile-back-button"
+          onClick={() => navigate(-1)}
+          aria-label="Go back"
+        >
+          &larr; Back
+        </button>
         <div className="public-profile-avatar-stack">
           <div className="public-profile-img-container">
             <img src={avatarUrl} alt="Profile" className="public-profile-img" />

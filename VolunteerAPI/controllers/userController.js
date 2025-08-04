@@ -129,24 +129,30 @@ exports.getUserByFirebaseUid = async (req, res) => {
   }
 };
 
+// Points and Level
 exports.updateUserPoints = async (req, res) => {
-    try {
-        const firebaseUid = req.user.uid;
-        const {points} = req.body;
-        if (!firebaseUid || points === undefined) {
-            return res.status(400).json({ error: "Missing user ID or points value." });
-        }
-        const user = await prisma.user.update ({
-            where : {firebaseUid},
-            data : {points}
-        })
-        res.json({ success: true, user });
-    } catch (error) {
-        console.error("Error Updating User Points ", error);
-        return res.status(500).json({ error: "Failed to update user points." });
-    }
-};
+  try {
+    const firebaseUid = req.user.uid;
+    const { points, level } = req.body;
 
+    if (!firebaseUid || points === undefined || level === undefined) {
+      return res.status(400).json({ error: "Missing user ID, points, or level." });
+    }
+
+    const user = await prisma.user.update({
+      where: { firebaseUid },
+      data: {
+        points,
+        level,
+      },
+    });
+
+    res.json({ success: true, user });
+  } catch (error) {
+    console.error("Error Updating User Points ", error);
+    return res.status(500).json({ error: "Failed to update user points." });
+  }
+};
 
 // Send information to database and firebase 
 exports.onboarding = async (req, res) => {

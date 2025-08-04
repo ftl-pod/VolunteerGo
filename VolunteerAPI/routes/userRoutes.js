@@ -30,4 +30,5 @@ router.post("/onboarding", verifyFirebaseToken, controller.onboarding); // login
 router.post('/send-confirmation-email', verifyFirebaseToken, controller.sendApplicationConfirmation);  // send user confirmation email
 
 
+
 module.exports = router;

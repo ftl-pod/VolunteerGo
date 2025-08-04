@@ -136,3 +136,21 @@
     width: 100%;
   }
 }
+
+.btn-tertiary {
+    background-color: #b29f90;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-family: 'Poppins';
+
+}
+
+.btn-tertiary:hover {
+  color: white;
+    background-color: var(--secondary-color);
+}

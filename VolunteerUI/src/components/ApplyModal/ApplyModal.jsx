@@ -16,6 +16,7 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity, setShowApplied, s
   const [applyLoading, setApplyLoading] = useState(false);
   const [earnedBadges, setEarnedBadges] = useState([]);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [shouldLevelUp, setShouldLevelUp] = useState(false);
 
 
   const { profile, refreshProfile } = useProfile();
@@ -28,8 +29,15 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity, setShowApplied, s
     if (hasSubmitted && earnedBadges.length === 0 && !applyLoading) {
       onClose();
       setHasSubmitted(false);
+      
+      if (shouldLevelUp) {
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent("levelUp"));
+          setShouldLevelUp(false);
+        }, 0); 
+      }
     }
-  }, [earnedBadges, applyLoading, hasSubmitted, onClose]);
+  }, [earnedBadges, applyLoading, hasSubmitted, onClose, shouldLevelUp]);
 
   const queueBadge = (badge) => {
     if (badge) {
@@ -91,7 +99,7 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity, setShowApplied, s
       const newLevel = getLevelData(updatedPoints).level;
 
       if (newLevel > oldLevel) {
-        window.dispatchEvent(new CustomEvent("levelUp"));
+        setShouldLevelUp(true);      
       }
       // Confirmation email
       await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/send-confirmation-email`, {
@@ -157,7 +165,15 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity, setShowApplied, s
               <BiSolidDonateHeart className="icon" />
               <span>Apply to Opportunity</span>
             </div>
-            <button className="close-btn" onClick={onClose} disabled={applyLoading}>
+              <button
+                className="close-btn"
+                onClick={() => {
+                  setName("");
+                  setMessage("");
+                  onClose();
+                }}
+                disabled={applyLoading}
+              >
               <IoClose />
             </button>
           </div>
@@ -193,9 +209,29 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity, setShowApplied, s
             </div>
 
             <div className="modal-actions">
-              <button type="button" className="btn-secondary" onClick={onClose} disabled={applyLoading}>
+                <button type="button"
+                  className="btn-secondary"
+                  onClick={() => {
+                    setName("");
+                    setMessage("");
+                    onClose();
+                  }}
+                  disabled={applyLoading}
+                >
                 Cancel
               </button>
+                <button
+                  type="button"
+                  className="btn-tertiary"
+                  onClick={() => {
+                    setName("Demo");
+                    setMessage("I'm excited to support this cause and make a meaningful impact!");
+                  }}
+                  disabled={applyLoading}
+                >
+                  Demo
+              </button>
+
               <button type="submit" className="btn-primary" disabled={applyLoading}>
                 {applyLoading ? "Submitting..." : "Submit Application"}
               </button>

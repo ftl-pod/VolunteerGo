@@ -29,15 +29,35 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity, setShowApplied, s
     if (hasSubmitted && earnedBadges.length === 0 && !applyLoading) {
       onClose();
       setHasSubmitted(false);
-      
+
       if (shouldLevelUp) {
         setTimeout(() => {
           window.dispatchEvent(new CustomEvent("levelUp"));
           setShouldLevelUp(false);
-        }, 0); 
+        }, 0);
       }
     }
-  }, [earnedBadges, applyLoading, hasSubmitted, onClose, shouldLevelUp]);
+
+    // Handle "d" keypress to auto-fill demo values
+    const handleKeyPress = (event) => {
+      if (event.key.toLowerCase() === 'd' && isOpen && !applyLoading) {
+        setName("Demo");
+        setMessage("I'm excited to support this cause and make a meaningful impact!");
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [
+    earnedBadges,
+    applyLoading,
+    hasSubmitted,
+    onClose,
+    shouldLevelUp,
+    isOpen, 
+  ]);
 
   const queueBadge = (badge) => {
     if (badge) {
@@ -220,18 +240,6 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity, setShowApplied, s
                 >
                 Cancel
               </button>
-                <button
-                  type="button"
-                  className="btn-tertiary"
-                  onClick={() => {
-                    setName("Demo");
-                    setMessage("I'm excited to support this cause and make a meaningful impact!");
-                  }}
-                  disabled={applyLoading}
-                >
-                  Demo
-              </button>
-
               <button type="submit" className="btn-primary" disabled={applyLoading}>
                 {applyLoading ? "Submitting..." : "Submit Application"}
               </button>

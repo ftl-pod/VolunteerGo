@@ -49,16 +49,18 @@ function ApplyModal({ isOpen, onClose, applicant, opportunity, setShowApplied, s
       const oldPoints = profile?.points || 0;
       const oldLevel = getLevelData(oldPoints).level;
 
-      // Update points
+      // Update points and level
       const pointsUrl = `${import.meta.env.VITE_API_BASE_URL}/users/points`;
       const updatedPoints = points + 10;
+      const updatedLevel = getLevelData(updatedPoints).level;
+
       const pointsRes = await fetch(pointsUrl, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ points: updatedPoints }),
+          body: JSON.stringify({ points: updatedPoints, level: updatedLevel }),
       });
       if (!pointsRes.ok) throw new Error("Failed to update points");
 

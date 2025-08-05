@@ -54,7 +54,7 @@ async function runDemoSetup() {
     const badgeIds = await prisma.badge.findMany({
       where: {
         name: {
-          in: ['Newcomer Badge', 'First Steps'],
+          in: ['Newcomer Badge'],
         },
       },
       select: { id: true },
